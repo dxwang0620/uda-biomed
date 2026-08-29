@@ -137,52 +137,10 @@
 }
 
 /* ---------- CTA 按鈕 ---------- */
+/* 樣式本身由 ui/Button 負責，這裡只處理它在 header 裡的位置。 */
 
 .ctaGap {
   margin-left: var(--space-2);
-}
-
-.cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0 var(--space-3);
-  font-family: var(--font-latin);
-  font-size: var(--text-nav);
-  font-weight: var(--weight-nav);
-  letter-spacing: var(--tracking-nav);
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  white-space: nowrap;
-  transition:
-    background-color var(--duration) var(--ease),
-    border-color var(--duration) var(--ease),
-    color var(--duration) var(--ease);
-}
-
-/* 白底頁面：藍底白字實心鈕 */
-.solid .cta {
-  background: var(--color-primary);
-  border: 1px solid var(--color-primary);
-  color: var(--color-white);
-}
-
-.solid .cta:hover {
-  background: var(--color-primary-600);
-  border-color: var(--color-primary-600);
-}
-
-/* 首頁 hero 上：白色外框、透明底 */
-.overHero .cta {
-  background: transparent;
-  border: 1px solid var(--color-on-navy);
-  color: var(--color-on-navy);
-}
-
-.overHero .cta:hover {
-  background: var(--color-on-navy);
-  color: var(--color-navy);
 }
 
 /* ---------- 漢堡按鈕 ---------- */
@@ -249,12 +207,7 @@
   font-weight: 700;
 }
 
-/* CTA 置於最下方、拉滿寬度、維持按鈕樣式 */
+/* CTA 置於選單最下方。寬度與配色由 ui/Button 負責。 */
 .panelCta {
   margin-top: var(--space-4);
-  width: 100%;
-  min-height: 52px;
-  background: var(--color-primary);
-  border: 1px solid var(--color-primary);
-  color: var(--color-white);
 }

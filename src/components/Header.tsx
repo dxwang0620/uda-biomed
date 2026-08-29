@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { CTA, NAV_ITEMS, SITE } from '../config/site.ts'
+import Button from './ui/Button.tsx'
 import { useHeroElement } from '../context/heroRegistry.ts'
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock.ts'
 import { useFocusTrap } from '../hooks/useFocusTrap.ts'
@@ -104,9 +105,14 @@ export default function Header() {
                 {item.label}
               </NavLink>
             ))}
-            <Link to={CTA.to} className={`${styles.cta} ${styles.ctaGap}`}>
+            <Button
+              to={CTA.to}
+              size="sm"
+              variant={overHero ? 'onDark' : 'primary'}
+              className={styles.ctaGap}
+            >
               {CTA.label}
-            </Link>
+            </Button>
           </nav>
 
           <button
@@ -139,9 +145,10 @@ export default function Header() {
               </NavLink>
             ))}
           </nav>
-          <Link to={CTA.to} className={`${styles.cta} ${styles.panelCta}`}>
+          {/* 選單永遠是白底，所以固定用 primary，不隨 overHero 變 */}
+          <Button to={CTA.to} variant="primary" fullWidth className={styles.panelCta}>
             {CTA.label}
-          </Link>
+          </Button>
         </div>
       )}
     </>

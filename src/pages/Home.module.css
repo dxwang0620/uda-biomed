@@ -7,25 +7,76 @@
 .heroSubhead {
   margin-top: var(--space-2);
   max-width: 44ch;
-  /* 影片遮罩上的次要文字。用 --color-on-navy-muted（78%）在遮罩上只有
+  /* 影片遮罩上的次要文字。--color-on-navy-muted（78%）在遮罩上只有
      3.93:1，不合格；這個 token 是 90%，4.90:1。見 tokens.css。 */
   color: var(--color-on-video-muted);
 }
 
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
 .heroSignature {
-  margin-top: var(--space-3);
+  margin-top: var(--space-4);
   font-size: var(--text-small);
   letter-spacing: 0.04em;
   color: var(--color-on-video-muted);
 }
 
-/* TODO Step 5：三欄圖示版面。目前只給區塊間距。 */
+/* ---------- 三欄 ---------- */
+/* 設計稿：欄與欄之間有 1px 直線。手機單欄時直線改為橫線。 */
+
 .pillars {
-  padding-block: var(--space-8);
+  display: grid;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
 }
 
-@media (min-width: 1024px) {
+.pillar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.pillar + .pillar {
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+
+@media (min-width: 768px) {
   .pillars {
-    padding-block: var(--space-12);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .pillar {
+    padding-inline: var(--space-3);
+  }
+
+  /* 換成直線分隔，並清掉手機版的橫線與上緣間距 */
+  .pillar + .pillar {
+    padding-top: 0;
+    border-top: 0;
+    border-left: 1px solid var(--color-border);
+  }
+}
+
+.pillarLabel {
+  font-family: var(--font-latin);
+  font-size: var(--text-nav);
+  font-weight: 700;
+  letter-spacing: var(--tracking-nav);
+  color: var(--color-navy);
+}
+
+@media (min-width: 768px) {
+  .pillarLabel {
+    font-size: 0.9375rem;
   }
 }

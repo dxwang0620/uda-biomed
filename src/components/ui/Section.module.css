@@ -1,0 +1,27 @@
+.section {
+  padding-block: var(--space-8);
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-block: var(--space-12);
+  }
+}
+
+.white {
+  background: var(--color-white);
+}
+
+.tint {
+  background: var(--color-surface);
+}
+
+.navy {
+  background: var(--color-navy);
+  color: var(--color-on-navy);
+}
+
+/* navy 區塊上的標題要反白，否則會沿用 global.css 的深藍 */
+.navy :is(h1, h2, h3, h4) {
+  color: var(--color-on-navy);
+}

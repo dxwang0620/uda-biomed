@@ -1,0 +1,26 @@
+.circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+}
+
+@media (min-width: 768px) {
+  .circle {
+    width: 88px;
+    height: 88px;
+  }
+}
+
+.filled {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.tint {
+  background: var(--color-tint);
+  color: var(--color-navy);
+}
