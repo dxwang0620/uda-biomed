@@ -127,10 +127,10 @@ export default function Home() {
 
       <Section tone="translucent" labelledBy="platform-heading">
         <div className={styles.intro}>
+        {/* 參考影片只拍到「… verifiable technology platform」，
+            前半段是依上下文擬的草稿，見 docs/content-home.md */}
         <h2 id="platform-heading" className={styles.sectionTitle}>
-          {/* 參考影片只拍到標題後半段 */}
-          <span className={styles.pendingInline}>[待補：標題前半]</span> verifiable
-          technology platform
+          Building a verifiable technology platform
         </h2>
         <p className={styles.lede}>
           UDA Biochip Technology integrates molecular recognition, material
@@ -192,20 +192,33 @@ export default function Home() {
         </ul>
       </Section>
 
-      <Section tone="translucent">
+      <Section tone="translucent" labelledBy="responsibility-heading">
+        <div className={styles.intro}>
+          <p className={styles.eyebrow}>CORPORATE RESPONSIBILITY</p>
+          <h2 id="responsibility-heading" className={styles.sectionTitle}>
+            Protecting every life through responsibility
+          </h2>
+          <p className={styles.lede}>
+            UDA builds long-term trust through scientific integrity, privacy
+            governance and respect for life, advancing R&amp;D value alongside
+            social responsibility.
+          </p>
+        </div>
+
         <div className={styles.todos}>
-          <Placeholder title="UDA Announcements ／ UDA Updates">
-            兩組「日期 + 標題」列表，含 Previous／Next 分頁。
-            參考影片裡的日期字級小又有摩爾紋，抄錯一個數字就是錯誤資訊，我不抄。
-            需要你提供真實的日期與標題。
+          <Placeholder title="UDA Announcements / UDA Updates">
+            Two dated lists with previous and next paging. The dates in the
+            reference recording are small and behind moiré, and a misread digit
+            would be misinformation, so none were transcribed. Real dates and
+            headlines needed.
           </Placeholder>
           <Placeholder title="R&D Portfolio Snapshot">
-            參考網站有三個大數字與一段免責說明。
-            數字我不從晃動的錄影裡讀，需要你提供，或直接不做這一區塊。
+            Three headline figures with a disclaimer. The figures were not read
+            off a handheld recording; supply them, or drop this block.
           </Placeholder>
-          <Placeholder title="Corporate Responsibility">
-            標題為「Protecting Every Life Through Responsibility」，
-            底下有 Science, Data &amp; Life 等子項，影片中讀不完整。
+          <Placeholder title="Corporate Responsibility — sub-items">
+            Sub-headings such as Science, Data &amp; Life sit under this section
+            in the reference but could not be read in full.
           </Placeholder>
         </div>
       </Section>

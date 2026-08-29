@@ -62,16 +62,6 @@
   color: var(--color-on-video-muted);
 }
 
-/* 待補的投影片：明顯標示，不讓它被誤認成正式文案 */
-.bodyPending {
-  composes: body;
-  padding: var(--space-1) var(--space-2);
-  border: 2px dashed var(--color-on-navy-border);
-  border-radius: var(--radius);
-}
-
-/* 「Explore cancer detection technology」這個標籤很長，Button 預設 nowrap
-   會在 375px 撐出橫向捲軸。窄螢幕改成整欄並允許換行，寬螢幕才並排。 */
 .actions {
   display: flex;
   flex-direction: column;

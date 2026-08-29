@@ -73,7 +73,8 @@
 
 ## 區塊二：技術平台 `[抄錄]`
 
-- **標題**：`[待補：標題開頭讀不出來]` … verifiable technology platform
+- **標題** `[草稿]`：Building a verifiable technology platform
+  > 參考影片只拍到「… verifiable technology platform」，前半段是依上下文擬的。
 - **內文**：UDA Biochip Technology integrates molecular recognition, material
   interfaces, biosensing, microscale engineering, signal transduction and data
   analysis as a key platform for life-signal research and cancer-detection technology.
@@ -124,12 +125,18 @@ Cross-Disciplinary R&D／Intellectual Property／Industry Collaboration
 
 ---
 
-## 區塊五：Corporate Responsibility `[待補]`
+## 區塊五：Corporate Responsibility `[抄錄]`
 
-影片中的標題：Corporate Responsibility | Protecting Every Life Through Responsibility
-副標開頭：UDA builds long-term trust through scientific integrity, privacy governance
-and respect for life, advancing R&D value alongside social responsibility.
-底下有子項如「Science, Data & Life」「Scientific & Data Integrity」，但讀不完整。
+- **Eyebrow**：CORPORATE RESPONSIBILITY
+- **標題**：Protecting every life through responsibility
+- **內文**：UDA builds long-term trust through scientific integrity, privacy
+  governance and respect for life, advancing R&D value alongside social
+  responsibility.
+
+底下的子項（Science, Data & Life、Scientific & Data Integrity 等）影片中讀不完整，
+仍為 `[待補]`。
+
+> 頁面上的說明文字一律用英文——本站已確認只做英文，這些字會顯示給訪客看。
 
 ---
 

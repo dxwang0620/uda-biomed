@@ -18,7 +18,7 @@ export default function Placeholder({
 }) {
   return (
     <div className={styles.placeholder}>
-      <p className={styles.tag}>待補</p>
+      <p className={styles.tag}>To add</p>
       <p className={styles.title}>{title}</p>
       <div className={styles.body}>{children}</div>
     </div>

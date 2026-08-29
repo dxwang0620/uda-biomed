@@ -6,7 +6,7 @@ import styles from './HeroCarousel.module.css'
  * 首頁 hero 輪播，依 index_video 參考影片重建。
  *
  * 文案來源 docs/content-home.md。標 [抄錄] 的是從錄影逐字讀出、待校對；
- * 讀不出來的用 slide.pending 標記，畫面上會顯示為待補。
+ * 五張的內容見 docs/content-home.md，前兩張抄錄自參考影片、後三張為草稿。
  *
  * 無障礙處理：
  *   - 自動輪播在 hover / 焦點進入時暫停，prefers-reduced-motion 時完全不啟動
@@ -24,7 +24,6 @@ type Slide = {
   eyebrow: string
   title: string
   body: string
-  pending?: boolean
 }
 
 const SLIDES: Slide[] = [
@@ -136,9 +135,7 @@ export default function HeroCarousel() {
               <div className={styles.title} aria-hidden="true">
                 {slide.title}
               </div>
-              <p className={slide.pending ? styles.bodyPending : styles.body}>
-                {slide.body}
-              </p>
+              <p className={styles.body}>{slide.body}</p>
             </div>
           )
         })}
