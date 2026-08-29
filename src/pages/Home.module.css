@@ -50,14 +50,17 @@
   }
 }
 
-/* 參考圖（index_img/part2.jpeg）的卡片是提亮的霧面玻璃。
-   共用的 ui/Card 是白色不透明（其他頁在用，不動它），這裡只在首頁覆寫。
+/* 卡片要「透」，不是一塊灰板。
 
-   單純疊白色提亮會讓次要文字掉到 4.11:1。改用 backdrop-filter 先把背後
-   壓暗再疊白：brightness(0.7) + 白 14%，最壞情況（影片純白畫面）下
-   白字約 6.9:1、次要文字約 4.95:1，同時保有霧面的透亮感。
+   先前用 blur(14px) + brightness(0.7) 是錯的方向：重模糊把背後的影片糊成
+   一片平塗，再壓暗就成了灰色面板，看不出後面有影片。
 
-   不支援 backdrop-filter 時退回加深版（疊 navy），對比更高但少了霧面效果。 */
+   重算後發現卡片其實不需要自己壓暗——區塊底（78% navy）本身就讓
+   次要文字有 4.84:1，已達 AA。卡片只要再疊 18% navy 就夠了：
+   一方面與區塊分得出層次，一方面保持藍調不發灰。
+   最壞情況（影片純白畫面）下白字 7.62:1、次要文字 5.38:1。
+
+   模糊降到 3px：夠有玻璃感，又不會把影片糊掉。 */
 .card {
   display: flex;
   flex-direction: column;
@@ -65,20 +68,18 @@
   gap: var(--space-2);
   height: 100%;
   padding: var(--space-3);
-  /* 參考圖的卡片圓角比站上其他卡片大一階 */
   border-radius: 16px;
   box-shadow: none;
   color: var(--color-on-navy);
-  background: rgba(0, 48, 104, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(0, 48, 104, 0.18);
+  /* 邊框對卡片 3.21:1，卡片邊界看得出來 */
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
   .card {
-    background: rgba(255, 255, 255, 0.14);
-    border-color: rgba(255, 255, 255, 0.55);
-    -webkit-backdrop-filter: blur(14px) brightness(0.7);
-    backdrop-filter: blur(14px) brightness(0.7);
+    -webkit-backdrop-filter: blur(3px) saturate(1.1);
+    backdrop-filter: blur(3px) saturate(1.1);
   }
 }
 
@@ -116,7 +117,7 @@
   letter-spacing: 0.02em;
   color: var(--color-on-navy);
   background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: 999px;
 }
 

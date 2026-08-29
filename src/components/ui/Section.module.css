@@ -35,3 +35,14 @@
 .translucent :is(h1, h2, h3, h4) {
   color: var(--color-on-navy);
 }
+
+/* 深色區塊上的待補框：淺色主題的灰字在這裡幾乎讀不到，改用反白。
+   78% 白對區塊底 4.84:1，達 AA。 */
+.navy,
+.translucent {
+  --placeholder-fg: var(--color-on-navy-muted);
+  --placeholder-title: var(--color-on-navy);
+  --placeholder-line: rgba(255, 255, 255, 0.4);
+  --placeholder-tag-bg: rgba(255, 255, 255, 0.18);
+  --placeholder-tag-fg: var(--color-on-navy);
+}

@@ -1,8 +1,13 @@
+/* 顏色走 CSS 變數，深色區塊（Section 的 navy / translucent）可以覆寫。
+
+   預設值必須寫在 var() 的第二引數，不能在 .placeholder 上自己宣告一次——
+   在同一個元素上宣告會遮蔽從祖先繼承下來的值，覆寫就永遠不會生效。 */
+
 .placeholder {
   padding: var(--space-3);
-  border: 2px dashed var(--color-border);
+  border: 2px dashed var(--placeholder-line, var(--color-border));
   border-radius: var(--radius);
-  color: var(--color-text-muted);
+  color: var(--placeholder-fg, var(--color-text-muted));
 }
 
 .tag {
@@ -12,15 +17,15 @@
   font-size: var(--text-eyebrow);
   font-weight: 700;
   letter-spacing: var(--tracking-eyebrow);
-  color: var(--color-white);
-  background: var(--color-text-muted);
+  color: var(--placeholder-tag-fg, var(--color-white));
+  background: var(--placeholder-tag-bg, var(--color-text-muted));
   border-radius: var(--radius-sm);
 }
 
 .title {
   margin-top: var(--space-1);
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--placeholder-title, var(--color-text));
 }
 
 .body {
