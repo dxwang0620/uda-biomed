@@ -1,6 +1,5 @@
 import { useRegisterHero } from '../context/heroRegistry.ts'
 import { useHeroVideoEnabled } from '../hooks/useHeroVideoEnabled.ts'
-import HeroWave from './HeroWave.tsx'
 import styles from './HeroVideo.module.css'
 
 /**
@@ -10,7 +9,6 @@ import styles from './HeroVideo.module.css'
  *   2. 影片             —— 只在 >=768px 且未要求減少動態時才掛上 DOM
  *   3. navy 遮罩        —— 72%，實測值，見 tokens.css 的說明
  *   4. 內容             —— 標題與 CTA，z-index 高於前三層
- * 波浪色帶疊在最上層的底部，蓋住影片下緣。
  *
  * 影片為純裝飾：aria-hidden，不承載任何靠它才能理解的資訊。
  */
@@ -50,8 +48,6 @@ export default function HeroVideo({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className={`container ${styles.content}`}>{children}</div>
-
-      <HeroWave className={styles.wave} />
     </section>
   )
 }

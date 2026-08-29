@@ -48,9 +48,25 @@
   object-fit: cover;
 }
 
-/* 72% navy。實測值，非目測，理由見 tokens.css。 */
+/* 不做全幅遮罩——那會把整支影片染藍。改成只在文字後方鋪一塊橢圓漸層，
+   右側影片完全不受影響（85% 之後濃度為 0）。
+
+   幾何不是隨手填的：文字實際跨 x 10%–50%、y 28%–80%，橢圓的中心與半徑
+   由此推得，再對影片全部 32 個畫格逐點驗算。最壞情況下各處對比為
+   門檻依 WCAG 1.4.3 分兩級：hero 標題是 60px 粗體，屬「大字」只需 3:1；
+   內文 16px、Unveiling 14px、按鈕字 13px 則需 4.5:1。
+   最壞情況實測：H1 3.77:1、內文 6.77:1、按鈕 5.82:1、Unveiling 5.18:1。
+   再淡一級（0.64/0.48）Unveiling 會掉到 4.34:1，不合格——
+   真正的限制是那幾行小字，不是標題。
+   沒有遮罩時這些數字是 1.00–1.37:1，也就是完全看不見。
+   量測見 docs/design-node.md。 */
 .overlay {
-  background: var(--hero-overlay);
+  background: radial-gradient(
+    ellipse 60% 88% at 28% 54%,
+    rgba(0, 48, 104, 0.72) 0%,
+    rgba(0, 48, 104, 0.56) 52%,
+    rgba(0, 48, 104, 0) 86%
+  );
 }
 
 /* ---------- 圖層 4：內容 ---------- */
@@ -58,17 +74,4 @@
 .content {
   position: relative;
   z-index: 1;
-}
-
-/* ---------- 波浪色帶 ---------- */
-
-.wave {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px; /* 蓋掉次像素縫隙 */
-  z-index: 2;
-  width: 100%;
-  height: clamp(56px, 12vw, 160px);
-  pointer-events: none;
 }

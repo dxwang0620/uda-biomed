@@ -100,24 +100,24 @@ export default function Header() {
   return (
     <>
       <header ref={headerRef} className={`${styles.header} ${appearance}`}>
-        <div className={`container ${styles.inner}`}>
-          {/* 兩個色版同時在 DOM 裡，用 CSS 切換。
-              改用 src 切換的話，第一次捲過 hero 會臨時抓圖而閃一下。
-              兩張合計約 23KB，換掉那個閃爍是划算的。
+        <div className={styles.inner}>
+          {/* 用含標語的完整鎖定圖，不裁掉右側的 Unveiling Dynamic Atoms。
+              兩個色版同時在 DOM 裡、用 CSS 切換：改用 src 切換的話，
+              第一次捲過 hero 會臨時抓圖而閃一下。
               連結本身有 aria-label，所以兩張圖都 alt=""，避免重複朗讀。 */}
           <Link to="/" className={styles.wordmark} aria-label={`${SITE.name} home`}>
             <img
               className={`${styles.logo} ${styles.logoNavy}`}
-              src={`${import.meta.env.BASE_URL}brand/logo-mark-navy.png`}
+              src={`${import.meta.env.BASE_URL}brand/logo-full-blue.png`}
               alt=""
-              width={445}
+              width={878}
               height={269}
             />
             <img
               className={`${styles.logo} ${styles.logoWhite}`}
-              src={`${import.meta.env.BASE_URL}brand/logo-mark-white.png`}
+              src={`${import.meta.env.BASE_URL}brand/logo-full-white.png`}
               alt=""
-              width={445}
+              width={878}
               height={269}
             />
           </Link>

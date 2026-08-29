@@ -31,12 +31,28 @@
   }
 }
 
+/* 不套 .container：header 要橫跨整個視窗寬度，logo 靠最左、CTA 靠最右，
+   而不是被 1200px 的容器夾在中間。左右改用 padding 留邊。 */
 .inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
   height: 100%;
+  padding-block: var(--space-1);
+  padding-inline: var(--space-2);
+}
+
+@media (min-width: 768px) {
+  .inner {
+    padding-inline: var(--space-4);
+  }
+}
+
+@media (min-width: 1440px) {
+  .inner {
+    padding-inline: var(--space-6);
+  }
 }
 
 /* ---------- 兩種外觀 ---------- */
@@ -49,13 +65,18 @@
 
 .overHero {
   background: transparent;
+  /* 不畫下緣線。分界由色帶本身在 header 下緣收邊來表達。 */
   border-bottom: 1px solid transparent;
   color: var(--color-on-navy);
 }
 
 /* 影片上的 header 鋪一道由上而下淡出的深藍漸層，而不是全透明。
-   影片亮處會讓純透明的 header 看起來沒有依託，加了之後導覽也更好讀
-   （白字最壞情況由 5.60:1 提升到 8.92:1，量測見 docs/design-node.md）。
+   由左至右的藍色漸層。左端較實、往右淡出。
+
+   濃度是掃過影片全部 32 個畫格算出來的：header 現在橫跨整個視窗寬度，
+   導覽會落到右側漸層最淡處，因此以 x 2%–98% 全範圍取最差值。
+   這一組最差 5.38:1；再淡一級（0.80/0.62/0.40）只剩 4.59:1，
+   餘裕不足 0.1，不採用。
 
    高度取 header 的 200%：漸層若只畫在 header 的 80px 之內，會在下緣
    被硬生生切斷、出現一條看得見的橫線，延伸出去才收得乾淨。
@@ -68,17 +89,18 @@
 .header::before {
   content: '';
   position: absolute;
-  inset: 0 0 auto 0;
-  height: 200%;
+  inset: 0;
   z-index: -1;
   pointer-events: none;
   opacity: 0;
   background: linear-gradient(
-    to bottom,
-    rgba(0, 48, 104, 0.8) 0%,
-    rgba(0, 48, 104, 0.45) 50%,
-    rgba(0, 48, 104, 0) 100%
+    to right,
+    rgba(0, 48, 104, 0.86) 0%,
+    rgba(0, 48, 104, 0.67) 55%,
+    rgba(0, 48, 104, 0.43) 100%
   );
+  /* 只覆蓋 header 自身高度，讓它讀起來是一條明確的橫幅，
+     而不是一片往下暈開、與 hero 分不清的色塊。 */
   transition: opacity var(--duration) var(--ease);
 }
 
@@ -98,14 +120,16 @@
   padding-block: var(--space-1);
 }
 
+/* 完整鎖定圖是 3.26:1，右側標語有三行，高度給不夠就會糊掉。
+   在扣掉上下 padding 後的空間內盡量吃滿。 */
 .logo {
-  height: 34px;
+  height: 36px;
   width: auto;
 }
 
 @media (min-width: 1024px) {
   .logo {
-    height: 42px;
+    height: 44px;
   }
 }
 
