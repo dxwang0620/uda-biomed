@@ -17,14 +17,14 @@
 .lede {
   margin-top: var(--space-3);
   max-width: 68ch;
-  color: var(--color-on-navy-muted);
+  color: var(--muted-on-section, var(--color-on-navy-muted));
 }
 
 .note {
   margin-top: var(--space-4);
   max-width: 76ch;
   font-size: var(--text-small);
-  color: var(--color-on-navy-muted);
+  color: var(--muted-on-section, var(--color-on-navy-muted));
 }
 
 .pendingInline {
@@ -95,7 +95,7 @@
 
 .cardBody {
   font-size: var(--text-small);
-  color: var(--color-on-navy-muted);
+  color: var(--muted-on-section, var(--color-on-navy-muted));
 }
 
 /* ---------- 標籤 ---------- */
@@ -176,7 +176,7 @@
   display: block;
   margin-top: 4px;
   font-size: var(--text-small);
-  color: var(--color-on-navy-muted);
+  color: var(--muted-on-section, var(--color-on-navy-muted));
 }
 
 /* ---------- 待補 ---------- */

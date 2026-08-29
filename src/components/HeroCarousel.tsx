@@ -26,6 +26,9 @@ type Slide = {
 }
 
 const SLIDES: Slide[] = [
+  /* 前兩張 [抄錄] 自參考影片，後三張 [草稿]：
+     依 UDA 自述的三個公開重點（見 docs/content-home.md 的核心定位）撰寫，
+     只做描述、不含任何成果、數據、期別或夥伴名稱。待你潤稿。 */
   {
     eyebrow: 'TECHNOLOGY & APPLICATIONS',
     title: 'Animal Oncology & Health Research',
@@ -37,22 +40,19 @@ const SLIDES: Slide[] = [
     body: 'From research exchange and proof of concept to co-development, UDA works with industry partners to advance biomedical innovation.',
   },
   {
-    eyebrow: '[待補：eyebrow]',
-    title: '[待補：第 3 張標題]',
-    body: '參考影片捲動太快沒拍到這一張，需要你提供標題與內文。',
-    pending: true,
+    eyebrow: 'CURRENT PUBLIC FOCUS',
+    title: 'Cancer Detection Technology',
+    body: 'Bringing molecular recognition and analytical validation together, so that early biological signals can be observed, compared and interpreted with confidence.',
   },
   {
-    eyebrow: '[待補：eyebrow]',
-    title: '[待補：第 4 張標題]',
-    body: '參考影片捲動太快沒拍到這一張，需要你提供標題與內文。',
-    pending: true,
+    eyebrow: 'KEY PLATFORM',
+    title: 'UDA Biochip Technology',
+    body: 'A miniaturized platform integrating molecular recognition, material interfaces, biosensing and data analysis for life-signal research.',
   },
   {
-    eyebrow: '[待補：eyebrow]',
-    title: '[待補：第 5 張標題]',
-    body: '參考影片捲動太快沒拍到這一張，需要你提供標題與內文。',
-    pending: true,
+    eyebrow: 'RESEARCH FRAMEWORK',
+    title: 'Proto-Structural Biology',
+    body: "UDA's original framework for reading life from atomic and molecular structure through to cellular state.",
   },
 ]
 

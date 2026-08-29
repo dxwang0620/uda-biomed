@@ -24,8 +24,15 @@
   UDA works with industry partners to advance biomedical innovation.
   > 這一段錄影較模糊，請特別校對。
 
-### 第 3–5 張 `[待補]`
-影片捲動太快沒拍到。需要你提供標題與內文。
+### 第 3–5 張 `[草稿]`
+影片捲動太快沒拍到，以下依 UDA 自述的三個公開重點（見下方核心定位）撰寫。
+純描述，不含任何成果、數據、試驗期別或夥伴名稱。**待你潤稿。**
+
+| # | Eyebrow | 標題 | 內文 |
+| --- | --- | --- | --- |
+| 3 | CURRENT PUBLIC FOCUS | Cancer Detection Technology | Bringing molecular recognition and analytical validation together, so that early biological signals can be observed, compared and interpreted with confidence. |
+| 4 | KEY PLATFORM | UDA Biochip Technology | A miniaturized platform integrating molecular recognition, material interfaces, biosensing and data analysis for life-signal research. |
+| 5 | RESEARCH FRAMEWORK | Proto-Structural Biology | UDA's original framework for reading life from atomic and molecular structure through to cellular state. |
 
 ### 按鈕（兩張共用）`[抄錄]`
 - 主要：Explore Cancer Detection Technology

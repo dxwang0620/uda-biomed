@@ -8,18 +8,31 @@
   display: grid;
 }
 
+/* 先淡出、再淡入，而不是兩張同時交叉。
+   文字疊文字的交叉淡入在中途會看到兩段標題重疊，很亂；
+   讓進場的那張等上一張退乾淨再進來。 */
 .slide {
   grid-area: 1 / 1;
   opacity: 0;
   visibility: hidden;
   transition:
-    opacity var(--duration) var(--ease),
-    visibility var(--duration) var(--ease);
+    opacity 140ms var(--ease),
+    visibility 0s linear 140ms;
 }
 
 .slideActive {
   opacity: 1;
   visibility: visible;
+  transition:
+    opacity 220ms var(--ease) 140ms,
+    visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide,
+  .slideActive {
+    transition: none;
+  }
 }
 
 .eyebrow {
@@ -79,36 +92,48 @@
 }
 
 /* ---------- 圓點 ---------- */
+/* 按鈕本身就是 44x44 的觸控目標，圓點用 ::before 畫在正中央。
+
+   先前的做法是 10px 的按鈕再用 ::after 往外擴 -17px 撐出熱區，但相鄰圓點
+   只隔 18px，擴出來的熱區大幅重疊，後面的兄弟元素蓋住前面的，
+   於是點左邊的點會打到右邊那一個。改成按鈕實際佔滿 44x44、gap 為 0，
+   熱區彼此不重疊，點哪個就是哪個。 */
 
 .dots {
   display: flex;
-  gap: var(--space-1);
-  margin-top: var(--space-4);
+  gap: 0;
+  /* 按鈕有自己的 44px 寬度，往左收回讓整排對齊內容左緣 */
+  margin: var(--space-3) 0 0 -17px;
 }
 
 .dot {
-  /* 視覺上是小圓點，但點擊區域撐到 44px 滿足觸控目標 */
-  position: relative;
-  width: 10px;
-  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.dot::before {
+  content: '';
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--color-on-navy-border);
-  cursor: pointer;
-  transition: background-color var(--duration) var(--ease);
+  transition:
+    background-color var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
 }
 
-.dot::after {
-  content: '';
-  position: absolute;
-  inset: -17px;
-}
-
-.dot:hover {
+.dot:hover::before {
   background: var(--color-on-video-muted);
 }
 
-.dotActive {
+.dotActive::before {
   background: var(--color-on-navy);
+  transform: scale(1.3);
 }
