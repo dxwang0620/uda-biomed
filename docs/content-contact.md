@@ -10,6 +10,12 @@
 
 ## Hero
 
+- **Eyebrow** `[草稿]`
+  GET IN TOUCH
+
+  設計稿沒有 CONTACT 頁，這個 eyebrow 是為了與其他內頁的 hero 結構一致而補的。
+  不想要的話 `PageHero` 的 eyebrow 是可選的，拿掉即可。
+
 - **H1** `[草稿]`
   Contact
 

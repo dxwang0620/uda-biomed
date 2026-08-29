@@ -1,0 +1,53 @@
+.details {
+  margin-top: var(--space-3);
+  max-width: 60ch;
+}
+
+.lede {
+  margin-top: var(--space-2);
+  max-width: 52ch;
+}
+
+.enquiries {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+}
+
+@media (min-width: 768px) {
+  .enquiries {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.enquiry {
+  padding-top: var(--space-2);
+  border-top: 2px solid var(--color-navy);
+}
+
+.enquiryTitle {
+  font-family: var(--font-latin);
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+.enquiryBody {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-small);
+}
+
+.note {
+  margin-top: var(--space-4);
+  max-width: 60ch;
+}
+
+.todos {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .todos {
+    grid-template-columns: 1fr 1fr;
+  }
+}

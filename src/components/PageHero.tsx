@@ -16,7 +16,8 @@ export default function PageHero({
   lede,
   media,
 }: {
-  eyebrow: string
+  /** 可選。設計稿三個內頁都有，但不是每一頁都適合硬掰一個。 */
+  eyebrow?: string
   title: string
   titleId: string
   lede: string
@@ -27,7 +28,7 @@ export default function PageHero({
       {media && <div className={styles.media}>{media}</div>}
 
       <div className={`container ${styles.content}`}>
-        <p className={styles.eyebrow}>{eyebrow}</p>
+        {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
         <h1 id={titleId} className={styles.title}>
           {title}
         </h1>

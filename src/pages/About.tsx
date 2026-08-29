@@ -1,5 +1,6 @@
 import PageHero from '../components/PageHero.tsx'
 import Card from '../components/ui/Card.tsx'
+import CtaBand from '../components/ui/CtaBand.tsx'
 import Placeholder from '../components/ui/Placeholder.tsx'
 import Section from '../components/ui/Section.tsx'
 import styles from './About.module.css'
@@ -95,6 +96,12 @@ export default function About() {
           </Placeholder>
         </div>
       </Section>
+
+      <CtaBand
+        titleId="about-cta"
+        title="Let's look at it together."
+        body="Our work depends on the questions other people bring us."
+      />
     </>
   )
 }
