@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.DS_Store
+*.local
+.env
+.env.*
+!.env.example
+.vscode/*
+!.vscode/extensions.json
+
+# 影片原始檔不進版控，只收壓縮後的 public/media/
+background_video/
