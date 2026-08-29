@@ -158,7 +158,7 @@
   position: relative;
   font-family: var(--font-latin);
   font-size: var(--text-nav);
-  font-weight: var(--weight-nav);
+  font-weight: 700;
   letter-spacing: var(--tracking-nav);
   color: inherit;
   text-decoration: none;
@@ -185,10 +185,12 @@
 }
 
 /* ---------- CTA 按鈕 ---------- */
-/* 樣式本身由 ui/Button 負責，這裡只處理它在 header 裡的位置。 */
+/* 樣式本身由 ui/Button 負責，這裡只處理它在 header 裡的位置與字重。
+   字重寫在這裡而不是改 --weight-nav，否則全站的按鈕都會跟著變粗。 */
 
 .ctaGap {
   margin-left: var(--space-2);
+  font-weight: 700;
 }
 
 /* ---------- 漢堡按鈕 ---------- */
@@ -244,18 +246,22 @@
   min-height: 56px;
   font-family: var(--font-latin);
   font-size: 1rem;
-  font-weight: var(--weight-nav);
+  font-weight: 700;
   letter-spacing: var(--tracking-nav);
   color: var(--color-navy);
   text-decoration: none;
   border-bottom: 1px solid var(--color-border);
 }
 
+/* 連結全部轉粗體後，當前頁不能再靠字重區分，改用底線。 */
 .panelLink[aria-current='page'] {
-  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
 }
 
-/* CTA 置於選單最下方。寬度與配色由 ui/Button 負責。 */
+/* CTA 置於選單最下方。寬度與配色由 ui/Button 負責，字重與桌機 CTA 一致。 */
 .panelCta {
   margin-top: var(--space-4);
+  font-weight: 700;
 }
