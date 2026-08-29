@@ -43,8 +43,8 @@ router 的 `basename` 由 `src/config/site.ts` 從 `import.meta.env.BASE_URL` �
 
 | 情況 | `BASE` |
 | --- | --- |
-| 一般 repo（如 `uda-biomed`） | `'/uda-biomed/'` ← 目前設定 |
-| 自訂網域（如 `uda-biomed.com`） | `'/'` |
+| 一般 repo（如 `dua-biomed`） | `'/dua-biomed/'` ← 目前設定 |
+| 自訂網域（如 `dua-biomed.com`） | `'/'` |
 | `<帳號>.github.io` repo | `'/'` |
 
 設錯的症狀是部署後畫面全白、CSS 與 JS 全部 404。

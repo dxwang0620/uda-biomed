@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 /* ══════════════════════════════════════════════════════════════
    部署形態的唯一切換點 —— 改這一行就好。
 
-     一般 repo（如 github.com/<帳號>/uda-biomed）   '/uda-biomed/'
+     一般 repo（如 github.com/<帳號>/dua-biomed）   '/dua-biomed/'
      自訂網域（如 uda-biomed.com）                  '/'
      <帳號>.github.io repo                          '/'
 
@@ -14,7 +14,7 @@ import react from '@vitejs/plugin-react'
    設錯的症狀：部署後畫面全白、CSS 與 JS 全部 404。
    部署前務必跑 `npm run preview` 驗過，`npm run dev` 不會重現這個問題。
    ══════════════════════════════════════════════════════════════ */
-const BASE = '/uda-biomed/'
+const BASE = '/dua-biomed/'
 
 export default defineConfig({
   base: BASE,
