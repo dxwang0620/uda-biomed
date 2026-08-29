@@ -31,3 +31,10 @@
   background: var(--color-white);
   color: var(--color-navy);
 }
+
+/* 霧面卡片上的圖示圓。白圖示對這個底約 6:1，遠高於圖形物件所需的 3:1。 */
+.glass {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: var(--color-on-navy);
+}

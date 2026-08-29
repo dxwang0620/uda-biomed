@@ -50,31 +50,46 @@
   }
 }
 
-/* 參考網站的卡片是透光的。共用的 ui/Card 是白色不透明（其他頁在用，不動它），
-   這裡只在首頁覆寫成半透明。
+/* 參考圖（index_img/part2.jpeg）的卡片是提亮的霧面玻璃。
+   共用的 ui/Card 是白色不透明（其他頁在用，不動它），這裡只在首頁覆寫。
 
-   加深而非提亮：疊白色提亮的話，次要文字在每一級都低於 4.5:1；
-   再疊一層 navy 反而讓對比往上走。最壞情況（影片純白畫面）下
-   白字 9.15:1、次要文字 6.29:1。
-   邊框用白色 45%，對卡片底 3.20:1，卡片邊界才看得出來。 */
+   單純疊白色提亮會讓次要文字掉到 4.11:1。改用 backdrop-filter 先把背後
+   壓暗再疊白：brightness(0.7) + 白 14%，最壞情況（影片純白畫面）下
+   白字約 6.9:1、次要文字約 4.95:1，同時保有霧面的透亮感。
+
+   不支援 backdrop-filter 時退回加深版（疊 navy），對比更高但少了霧面效果。 */
 .card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-2);
   height: 100%;
-  background: rgba(0, 48, 104, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  padding: var(--space-3);
+  /* 參考圖的卡片圓角比站上其他卡片大一階 */
+  border-radius: 16px;
   box-shadow: none;
   color: var(--color-on-navy);
+  background: rgba(0, 48, 104, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .card {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.55);
+    -webkit-backdrop-filter: blur(14px) brightness(0.7);
+    backdrop-filter: blur(14px) brightness(0.7);
+  }
 }
 
 .card h3 {
   color: var(--color-on-navy);
 }
 
+/* 參考圖的卡片標題明顯比內文大一階 */
 .cardTitle {
-  font-size: 1.0625rem;
+  font-size: 1.375rem;
+  line-height: 1.25;
 }
 
 .cardBody {
@@ -92,16 +107,17 @@
   padding: 0;
 }
 
-/* 白字疊在 16% 白的標籤底上 → 5.93:1 */
+/* 參考圖的標籤是膠囊形、帶淺色外框 */
 .tag {
-  padding: 4px var(--space-1);
+  padding: 5px var(--space-2);
   font-family: var(--font-latin);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--color-on-navy);
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
 }
 
 /* 核心定位區塊的標籤列。與卡內的 .tags 分開，兩者的間距規則不同。 */

@@ -95,7 +95,7 @@ export default function Home() {
           {FOCUS.map(({ icon: Icon, title, body, tags }) => (
             <li key={title}>
               <Card className={styles.card}>
-                <IconCircle tone="onDark">
+                <IconCircle tone="glass">
                   <Icon size={28} strokeWidth={1.5} />
                 </IconCircle>
                 <h3 className={styles.cardTitle}>{title}</h3>
