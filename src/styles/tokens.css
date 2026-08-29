@@ -30,6 +30,8 @@
   /* 影片遮罩上的次要文字。遮罩底色比純 navy 亮，78% 只有 3.93:1 會不合格，
      故另立一個較白的值（4.90:1）。量測見 docs/design-node.md。 */
   --color-on-video-muted: rgba(255, 255, 255, 0.9);
+  /* 深底上的分隔線，例如 CTA 帶與 footer 之間 */
+  --color-on-navy-border: rgba(255, 255, 255, 0.15);
 
   /* ---- 首頁 hero 影片遮罩 ---- */
   /* 72% 是實測結果，不是 CLAUDE.md 建議的 55%–65%：

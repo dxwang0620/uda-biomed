@@ -1,0 +1,95 @@
+.footer {
+  padding-block: var(--space-6);
+  background: var(--color-navy);
+  color: var(--color-on-navy);
+  /* 前面是 CTA 帶時，兩塊 navy 之間需要一條界線 */
+  border-top: 1px solid var(--color-on-navy-border);
+}
+
+@media (min-width: 1024px) {
+  .footer {
+    padding-block: var(--space-8);
+  }
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .inner {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+}
+
+.wordmark {
+  display: block;
+  line-height: var(--leading-tight);
+  color: inherit;
+  text-decoration: none;
+}
+
+.wordmarkTop {
+  display: block;
+  font-family: var(--font-latin);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.wordmarkBottom {
+  display: block;
+  font-family: var(--font-latin);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-wordmark);
+  color: var(--color-on-navy-muted);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+@media (min-width: 768px) {
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  /* 觸控目標 */
+  min-height: 44px;
+  font-family: var(--font-latin);
+  font-size: var(--text-nav);
+  font-weight: var(--weight-nav);
+  letter-spacing: var(--tracking-nav);
+  color: var(--color-on-navy);
+  text-decoration: none;
+  transition: opacity var(--duration) var(--ease);
+}
+
+.link:hover {
+  opacity: 0.7;
+}
+
+.link[aria-current='page'] {
+  font-weight: 700;
+}
+
+.legal {
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-on-navy-border);
+  font-size: var(--text-small);
+  color: var(--color-on-navy-muted);
+}

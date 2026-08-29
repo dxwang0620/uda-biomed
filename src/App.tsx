@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
+import Footer from './components/Footer.tsx'
 import Header from './components/Header.tsx'
+import { usePageMeta } from './hooks/usePageMeta.ts'
 import { useScrollToTop } from './hooks/useScrollToTop.ts'
 import {
   HeroElementContext,
@@ -25,6 +27,9 @@ export default function App() {
   /* SPA 換頁不會重設捲動位置，從長頁底部點導覽會落在新頁的頁尾 */
   useScrollToTop()
 
+  /* SPA 換頁不會重載 HTML，title 與 description 得自己換 */
+  usePageMeta()
+
   return (
     <HeroRegistryContext.Provider value={setHeroEl}>
       <HeroElementContext.Provider value={heroEl}>
@@ -48,7 +53,7 @@ export default function App() {
           </Routes>
         </main>
 
-        {/* TODO Step 7：Footer */}
+        <Footer />
       </HeroElementContext.Provider>
     </HeroRegistryContext.Provider>
   )
