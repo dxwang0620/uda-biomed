@@ -71,6 +71,10 @@ GitHub Pages 沒有 SPA fallback，直接開 `/about` 或重新整理會拿到 4
 
 原始檔規格：`1270×720`、8 秒、24fps、H.264 2.06 Mbps、含 AAC 音軌、2.15 MB。
 
+**轉檔時裁掉底部 60px**（輸出 `1270×660`）：原始檔右下角有 Veo 生成浮水印，
+全片掃描確認範圍是 `x 1200–1238, y 671–686`。裁切比用 CSS 放大好——
+影片只有 720p，在 1440 寬的視窗上本來就在放大，再疊一層縮放只會更糊。
+
 > `CLAUDE.md` 要求 1920×1080，但原始檔只有 720p，**無法無損放大**，故維持原解析度。
 > 三個產物合計約 1.5 MB，遠低於 5 MB 上限。
 
@@ -85,27 +89,27 @@ SRC="background_video/809605740.118819.mp4"
 #   -preset slow     多花編碼時間換較小的檔案
 #   -pix_fmt yuv420p Safari 與舊裝置的相容性要求
 #   -movflags +faststart  把 moov atom 移到檔頭，讓瀏覽器邊下載邊播
-ffmpeg -y -i "$SRC" -an -c:v libx264 -profile:v high -crf 26 -preset slow \
+ffmpeg -y -i "$SRC" -vf "crop=1270:660:0:0" -an -c:v libx264 -profile:v high -crf 26 -preset slow \
   -pix_fmt yuv420p -movflags +faststart public/media/hero.mp4
 
 # VP9 webm —— 支援的瀏覽器會優先取用，同畫質下比 mp4 小
 #   -b:v 0           搭配 -crf 啟用 constant quality 模式，缺這個 crf 不會生效
 #   -row-mt 1        開啟 row-based 多執行緒，加快編碼
-ffmpeg -y -i "$SRC" -an -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 \
+ffmpeg -y -i "$SRC" -vf "crop=1270:660:0:0" -an -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 \
   -pix_fmt yuv420p public/media/hero.webm
 
 # poster —— 取第 1 秒的畫格
 #   影片載入前、載入失敗、768px 以下、以及 prefers-reduced-motion 時都靠它撐場
-ffmpeg -y -ss 1 -i "$SRC" -frames:v 1 -q:v 4 public/media/hero-poster.jpg
+ffmpeg -y -ss 1 -i "$SRC" -vf "crop=1270:660:0:0" -frames:v 1 -q:v 4 public/media/hero-poster.jpg
 ```
 
 產出：
 
 | 檔案 | 大小 |
 | --- | --- |
-| `hero.mp4` | 761 KB |
-| `hero.webm` | 687 KB |
-| `hero-poster.jpg` | 63 KB |
+| `hero.mp4` | 689 KB |
+| `hero.webm` | 616 KB |
+| `hero-poster.jpg` | 57 KB |
 
 驗證產物確實沒有音軌：
 

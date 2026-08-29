@@ -7,9 +7,11 @@ import styles from './Section.module.css'
  * （白 / --color-tint / --color-navy）建立層次，不要靠加陰影或漸層補救。」
  * tone 就是那個交錯用的旋鈕。
  *
+ * translucent 是給首頁用的：底下有固定的背景影片，區塊要半透明才看得到它。
+ *
  * 因為底色要滿版，Section 必須是 container 的外層，不能包在 container 裡。
  */
-type Tone = 'white' | 'tint' | 'navy'
+type Tone = 'white' | 'tint' | 'navy' | 'translucent'
 
 type Props = {
   children: React.ReactNode

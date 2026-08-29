@@ -24,3 +24,10 @@
   background: var(--color-tint);
   color: var(--color-navy);
 }
+
+/* 深色或半透明區塊上：白圓 navy 圖示。
+   白圓對 78% navy 底的邊界對比 7.63:1，圖示對白圓 12.94:1。 */
+.onDark {
+  background: var(--color-white);
+  color: var(--color-navy);
+}

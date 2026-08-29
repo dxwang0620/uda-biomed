@@ -38,14 +38,14 @@ export default function Home() {
         <p className={styles.heroSignature}>Unveiling Dynamic Atoms</p>
       </HeroVideo>
 
-      <Section labelledBy="pillars-heading">
+      <Section tone="translucent" labelledBy="pillars-heading">
         <h2 id="pillars-heading" className="visually-hidden">
           What we do
         </h2>
         <ul role="list" className={styles.pillars}>
           {PILLARS.map(({ icon: Icon, label }) => (
             <li key={label} className={styles.pillar}>
-              <IconCircle>
+              <IconCircle tone="onDark">
                 <Icon size={36} strokeWidth={1.5} />
               </IconCircle>
               <h3 className={styles.pillarLabel}>{label}</h3>
@@ -54,7 +54,7 @@ export default function Home() {
         </ul>
       </Section>
 
-      <Section tone="tint">
+      <Section tone="translucent">
         {/* <p>[TODO: 首頁各區塊摘要與 CTA，設計稿只畫到三欄圖示為止]</p> */}
         <p>[TODO: 首頁各區塊摘要]</p>
       </Section>

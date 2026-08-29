@@ -21,7 +21,17 @@
   color: var(--color-on-navy);
 }
 
+/* 首頁專用：底下是固定的背景影片，半透明才看得到。
+   78% 是實測平衡點——影片仍可辨識，白字 6.74:1、次要文字 4.84:1，
+   兩者都以影片最亮的畫面（相對亮度 1.000）為最壞情況計算。
+   再淡一級（70%）次要文字會掉到 3.93:1，不合格。 */
+.translucent {
+  background: rgba(0, 48, 104, 0.78);
+  color: var(--color-on-navy);
+}
+
 /* navy 區塊上的標題要反白，否則會沿用 global.css 的深藍 */
-.navy :is(h1, h2, h3, h4) {
+.navy :is(h1, h2, h3, h4),
+.translucent :is(h1, h2, h3, h4) {
   color: var(--color-on-navy);
 }
