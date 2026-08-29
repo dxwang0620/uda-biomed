@@ -22,6 +22,15 @@
     color var(--duration) var(--ease);
 }
 
+/* 桌機加高。這條規則原本跟 wordmark 的字級擠在同一個 media query 裡，
+   換 logo 時被一起刪掉過一次，導致桌機 header 停在 64px。放在 .header
+   旁邊比較不會再被誤刪。 */
+@media (min-width: 1024px) {
+  .header {
+    height: var(--header-h);
+  }
+}
+
 .inner {
   display: flex;
   align-items: center;
@@ -45,50 +54,32 @@
 }
 
 /* ---------- wordmark ---------- */
+/* logo 為圖檔，兩個色版疊在同一個連結內，依 header 外觀切換。
+   width/height 屬性標的是圖檔原始尺寸（445x269），瀏覽器據此保留空間避免 CLS；
+   實際顯示尺寸由下面的 height 決定。 */
 
 .wordmark {
   display: block;
-  line-height: var(--leading-tight);
   color: inherit;
   text-decoration: none;
-  /* 兩行視覺上是一個單位，整塊可點 */
   padding-block: var(--space-1);
 }
 
-.wordmarkTop {
-  display: block;
-  font-family: var(--font-latin);
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-}
-
-.wordmarkBottom {
-  display: block;
-  font-family: var(--font-latin);
-  font-size: 0.625rem;
-  font-weight: 500;
-  letter-spacing: var(--tracking-wordmark);
-  /* 顏色降一階。深底與淺底各自取值，不用同一個半透明疊色。 */
-  color: var(--color-navy-70);
-}
-
-.overHero .wordmarkBottom {
-  color: var(--color-on-navy-muted);
+.logo {
+  height: 34px;
+  width: auto;
 }
 
 @media (min-width: 1024px) {
-  .header {
-    height: var(--header-h);
+  .logo {
+    height: 42px;
   }
+}
 
-  .wordmarkTop {
-    font-size: 1.5rem;
-  }
-
-  .wordmarkBottom {
-    font-size: 0.6875rem;
-  }
+/* 白底 header 用 navy 版，影片上的透明 header 用白版 */
+.solid .logoWhite,
+.overHero .logoNavy {
+  display: none;
 }
 
 /* ---------- 桌機導覽 ---------- */

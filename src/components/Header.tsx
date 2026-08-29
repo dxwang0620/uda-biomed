@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { CTA, NAV_ITEMS, SITE } from '../config/site.ts'
@@ -26,12 +26,21 @@ export default function Header() {
 
   /* header 高度會隨中斷點變（64 / 80），rootMargin 得跟著變，
      所以量出來而不是寫死。ResizeObserver 只在中斷點跨越時觸發。 */
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = headerRef.current
     if (!el) return
-    const ro = new ResizeObserver(([entry]) => {
-      setHeaderHeight(entry.contentRect.height)
-    })
+
+    /* 用 border-box 高度：header 視覺上就是佔這麼多，rootMargin 要對齊它。 */
+    const measure = () => setHeaderHeight(el.getBoundingClientRect().height)
+
+    /* 先同步量一次，不要只靠 ResizeObserver。
+       RO 的通知是在「更新繪製」階段送出的，而背景分頁不執行該階段——
+       在背景分頁開啟連結時，第一次通知會延到分頁被切到前景才送達。
+       在那之前 headerHeight 是 0，底下的 IntersectionObserver 不會建立，
+       首頁 header 就會卡在透明狀態，捲過 hero 也不變白底。 */
+    measure()
+
+    const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
@@ -92,11 +101,25 @@ export default function Header() {
     <>
       <header ref={headerRef} className={`${styles.header} ${appearance}`}>
         <div className={`container ${styles.inner}`}>
+          {/* 兩個色版同時在 DOM 裡，用 CSS 切換。
+              改用 src 切換的話，第一次捲過 hero 會臨時抓圖而閃一下。
+              兩張合計約 23KB，換掉那個閃爍是划算的。
+              連結本身有 aria-label，所以兩張圖都 alt=""，避免重複朗讀。 */}
           <Link to="/" className={styles.wordmark} aria-label={`${SITE.name} home`}>
-            <span className={styles.wordmarkTop}>UDA</span>
-            <span className={styles.wordmarkBottom} aria-hidden="true">
-              UDA BIOMED
-            </span>
+            <img
+              className={`${styles.logo} ${styles.logoNavy}`}
+              src={`${import.meta.env.BASE_URL}brand/logo-mark-navy.png`}
+              alt=""
+              width={445}
+              height={269}
+            />
+            <img
+              className={`${styles.logo} ${styles.logoWhite}`}
+              src={`${import.meta.env.BASE_URL}brand/logo-mark-white.png`}
+              alt=""
+              width={445}
+              height={269}
+            />
           </Link>
 
           <nav className={styles.desktopNav} aria-label="Main">

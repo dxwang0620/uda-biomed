@@ -29,25 +29,20 @@
 
 .wordmark {
   display: block;
-  line-height: var(--leading-tight);
   color: inherit;
   text-decoration: none;
 }
 
-.wordmarkTop {
-  display: block;
-  font-family: var(--font-latin);
-  font-size: 1.25rem;
-  font-weight: 800;
+/* 完整鎖定圖含三行標語，需要比 header 的字標高一些才讀得到 */
+.logo {
+  height: 52px;
+  width: auto;
 }
 
-.wordmarkBottom {
-  display: block;
-  font-family: var(--font-latin);
-  font-size: 0.625rem;
-  font-weight: 500;
-  letter-spacing: var(--tracking-wordmark);
-  color: var(--color-on-navy-muted);
+@media (min-width: 768px) {
+  .logo {
+    height: 60px;
+  }
 }
 
 .nav {
