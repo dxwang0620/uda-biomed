@@ -53,6 +53,39 @@
   color: var(--color-on-navy);
 }
 
+/* 影片上的 header 鋪一道由上而下淡出的深藍漸層，而不是全透明。
+   影片亮處會讓純透明的 header 看起來沒有依託，加了之後導覽也更好讀
+   （白字最壞情況由 5.60:1 提升到 8.92:1，量測見 docs/design-node.md）。
+
+   高度取 header 的 200%：漸層若只畫在 header 的 80px 之內，會在下緣
+   被硬生生切斷、出現一條看得見的橫線，延伸出去才收得乾淨。
+
+   pointer-events 必須關掉——它超出 header 覆蓋到 hero 上，
+   否則會擋住底下 CTA 按鈕的點擊。
+
+   漸層是 background-image，沒辦法像 background-color 那樣平滑轉場，
+   所以固定畫在 .header 上、改用 opacity 過渡。 */
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 200%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 48, 104, 0.8) 0%,
+    rgba(0, 48, 104, 0.45) 50%,
+    rgba(0, 48, 104, 0) 100%
+  );
+  transition: opacity var(--duration) var(--ease);
+}
+
+.overHero::before {
+  opacity: 1;
+}
+
 /* ---------- wordmark ---------- */
 /* logo 為圖檔，兩個色版疊在同一個連結內，依 header 外觀切換。
    width/height 屬性標的是圖檔原始尺寸（445x269），瀏覽器據此保留空間避免 CLS；
