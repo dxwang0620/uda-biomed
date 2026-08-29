@@ -6,11 +6,8 @@
   min-height: 100svh;
   /* 上方讓開 header（header 是 fixed，不佔版面），下方讓開波浪色帶 */
   padding-block: calc(var(--header-h-mobile) + var(--space-6)) var(--space-12);
-  overflow: hidden;
-  isolation: isolate;
   color: var(--color-on-navy);
-  /* 影片與 poster 都還沒畫出來時的底色，避免白閃 */
-  background: var(--color-navy);
+  /* 不設底色：固定層的影片要能透出來 */
 }
 
 @media (min-width: 1024px) {
@@ -19,20 +16,31 @@
   }
 }
 
-/* ---------- 圖層 1–3：媒體與遮罩 ---------- */
+/* ---------- 固定背景層 ---------- */
+/* z-index 為負 → 落在所有一般內容之下。body 的底色屬於畫布背景，
+   在更下面，不會蓋掉這一層。折線以下的區塊有自己的不透明底色，
+   捲動時就是它們滑上來蓋住影片。 */
 
-.media {
-  position: absolute;
+.backdrop {
+  position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
+  overflow: hidden;
+  /* 影片尚未畫出來時的底色，避免白閃 */
+  background: var(--color-navy);
 }
 
-/* poster 永遠在最底，影片沒載入時就是它在撐 */
 .poster,
-.video,
+.video {
+  position: absolute;
+  inset: 0;
+}
+
+/* 文字遮罩留在 hero 內，隨文字一起捲動 */
 .overlay {
   position: absolute;
   inset: 0;
+  z-index: 0;
 }
 
 /* background-image 由元件以 import.meta.env.BASE_URL 注入，
