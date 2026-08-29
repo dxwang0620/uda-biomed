@@ -8,8 +8,11 @@ import styles from './HeroVideo.module.css'
  * 影片與 poster 是**固定在視窗上的**（position: fixed），捲動時不會跟著走，
  * 內容區塊從它上面滑過去。折線以下的區塊有自己的不透明底色，會蓋住影片。
  *
- * 文字遮罩刻意「不」放進固定層，而是留在 hero 裡跟著文字一起捲動——
- * 否則文字往上捲、遮罩留在原地，兩者錯開後對比就不成立了。
+ * 藍色調鋪在這一層，整個頁面的背景因此都是藍的，各區塊不必再各自
+ * 在文字後面放遮罩（那會看得出一塊方框）。
+ *
+ * hero 標題自己另有一塊局部漸層，跟著文字一起捲動——固定住的話文字
+ * 往上捲、遮罩留在原地，兩者錯開對比就不成立了。
  *
  * 影片為純裝飾：aria-hidden，不承載任何靠它才能理解的資訊。
  */
@@ -46,6 +49,9 @@ export default function HeroVideo({ children }: { children: React.ReactNode }) {
             <source src={`${import.meta.env.BASE_URL}media/hero.mp4`} type="video/mp4" />
           </video>
         )}
+
+        {/* 整片背景的藍色調，見 module.css 的說明 */}
+        <div className={styles.tint} />
       </div>
 
       <section ref={registerHero} className={styles.hero} aria-labelledby="hero-heading">

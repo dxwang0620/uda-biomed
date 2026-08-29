@@ -1,30 +1,8 @@
-/* 區塊本身已無底色，影片直接透出來。
-   區塊自己的白色文字若沒有遮罩，在影片亮處是 1:1，完全看不見，
-   所以文字區自己帶一塊由左至右淡出的遮罩。實測門檻：
-   白色大標需 50%、白色內文需 65%，這裡取 74% 留餘裕。 */
+/* 文字區不再需要自己的遮罩——藍色調已鋪在固定背景層上，
+   整片背景就是藍的，文字後面不會有一塊看得出來的方框。 */
 .intro {
-  position: relative;
-  padding: var(--space-4) var(--space-4) var(--space-4) 0;
-  margin-left: calc(var(--space-4) * -1);
-  padding-left: var(--space-4);
+  padding-block: var(--space-2);
 }
-
-.intro::before {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 -50vw;
-  width: 150vw;
-  z-index: -1;
-  pointer-events: none;
-  background: linear-gradient(
-    to right,
-    rgba(0, 48, 104, 0.74) 0%,
-    rgba(0, 48, 104, 0.74) 55%,
-    rgba(0, 48, 104, 0) 78%
-  );
-}
-
-/* 首頁區塊皆為半透明深藍，底下是固定的背景影片，因此文字一律反白 */
 
 .eyebrow {
   font-family: var(--font-latin);
@@ -79,9 +57,9 @@
 /* 白色霧面卡片，依 index_img/part2.jpeg。
 
    卡片自己帶淺色底，所以卡上文字翻成深色，不再受區塊那層的限制。
-   62% 是能透到的極限：卡片疊在影片最暗的畫面上會被拉暗，
-   navy 標題 4.8:1、內文 4.7:1，剛好過 AA；再透一級（55%）掉到 3.9:1。
-   影片最亮時兩者都是 12.9:1。
+   58% 是能淡到的極限：背景已鋪 66% 藍，卡片疊在影片最暗處時
+   navy 標題 4.9:1、內文 4.8:1，剛好過 AA；再淡一級（52%）掉到 4.2:1。
+   影片最亮處為 7.4:1。
 
    backdrop-filter 只負責模糊，不做亮度調整——白色底本身就夠亮了，
    再壓亮度只會讓它發灰（上一版的錯）。 */
@@ -94,7 +72,7 @@
   padding: var(--space-3);
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 24, 56, 0.18);
-  background: rgba(255, 255, 255, 0.62);
+  background: rgba(255, 255, 255, 0.58);
   border: 1px solid rgba(255, 255, 255, 0.8);
   color: var(--color-text);
 }
@@ -156,7 +134,6 @@
 /* 直接放在半透明底上，需要反白樣式 */
 .tagLarge {
   padding: var(--space-1) var(--space-2);
-  background: rgba(0, 48, 104, 0.74);
   font-family: var(--font-latin);
   font-size: var(--text-nav);
   font-weight: 500;
@@ -184,8 +161,7 @@
 /* 區塊已無底色，這些膠囊自己要帶底才讀得到 */
 .pill {
   padding: var(--space-2);
-  background: rgba(0, 48, 104, 0.74);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-lg);
 }
 
