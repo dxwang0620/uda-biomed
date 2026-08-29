@@ -24,7 +24,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          # 22 是現行 LTS。20 已在退場，且本機是 18（已 EOL），
+          # CI 用新一點的版本比較不會突然壞掉。
+          node-version: 22
           cache: npm
 
       - run: npm ci
@@ -40,7 +42,12 @@ jobs:
       - name: Add .nojekyll
         run: touch dist/.nojekyll
 
+      # enablement 讓 workflow 自己開啟 repo 的 Pages。
+      # 少了它，第一次跑會失敗在「Get Pages site failed ... Not Found」，
+      # 因為 Pages 還沒被啟用，這個 action 沒有東西可以設定。
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
