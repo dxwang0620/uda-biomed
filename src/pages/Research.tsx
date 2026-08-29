@@ -1,6 +1,6 @@
 export default function Research() {
   return (
-    <>
+    <div className="container">
       <section aria-labelledby="research-heading">
         <p>OUR RESEARCH</p>
         <h1 id="research-heading">Researching Disease at Its Foundations</h1>
@@ -41,6 +41,6 @@ export default function Research() {
         <p>[TODO: 發表 —— 需要真實的論文清單，不編造]</p>
         <p>[TODO: 臨床進展 —— 需要你確認可公開的階段敘述，不編造試驗期別]</p>
       </section>
-    </>
+    </div>
   )
 }

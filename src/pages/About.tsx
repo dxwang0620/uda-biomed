@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <>
+    <div className="container">
       <section aria-labelledby="about-heading">
         <p>WHO WE ARE</p>
         <h1 id="about-heading">About UDA BIOMED</h1>
@@ -28,6 +28,6 @@ export default function About() {
         <p>[TODO: 公司簡介全文]</p>
         <p>[TODO: 團隊 —— 需要姓名、職稱、照片。在你提供之前不放任何人名]</p>
       </section>
-    </>
+    </div>
   )
 }

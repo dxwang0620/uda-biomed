@@ -1,0 +1,260 @@
+/* ══════════════════════════════════════════════════════════════
+   Header
+
+   兩種外觀：
+     .solid       白底、深藍字、底部 1px 邊線 —— 除首頁 hero 範圍外一律如此
+     .overHero    透明底、白字、CTA 改白色外框 —— 只在首頁且 hero 仍在背後時
+
+   切換由 IntersectionObserver 觀察 hero 元素決定，不用 scroll 監聽。
+
+   position 用 fixed 而非 sticky：首頁 header 必須疊在 hero 影片之上，
+   sticky 會佔掉版面高度把 hero 往下推。非首頁由 main 補 padding-top。
+   ══════════════════════════════════════════════════════════════ */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  height: var(--header-h-mobile);
+  transition:
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    color var(--duration) var(--ease);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  height: 100%;
+}
+
+/* ---------- 兩種外觀 ---------- */
+
+.solid {
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-navy);
+}
+
+.overHero {
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  color: var(--color-on-navy);
+}
+
+/* ---------- wordmark ---------- */
+
+.wordmark {
+  display: block;
+  line-height: var(--leading-tight);
+  color: inherit;
+  text-decoration: none;
+  /* 兩行視覺上是一個單位，整塊可點 */
+  padding-block: var(--space-1);
+}
+
+.wordmarkTop {
+  display: block;
+  font-family: var(--font-latin);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.wordmarkBottom {
+  display: block;
+  font-family: var(--font-latin);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-wordmark);
+  /* 顏色降一階。深底與淺底各自取值，不用同一個半透明疊色。 */
+  color: var(--color-navy-70);
+}
+
+.overHero .wordmarkBottom {
+  color: var(--color-on-navy-muted);
+}
+
+@media (min-width: 1024px) {
+  .header {
+    height: var(--header-h);
+  }
+
+  .wordmarkTop {
+    font-size: 1.5rem;
+  }
+
+  .wordmarkBottom {
+    font-size: 0.6875rem;
+  }
+}
+
+/* ---------- 桌機導覽 ---------- */
+
+.desktopNav {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .desktopNav {
+    display: flex;
+    align-items: center;
+    /* CTA 與前面的連結之間另外加 --space-3 以上，見 .ctaGap */
+    gap: var(--space-3);
+  }
+}
+
+.navLink {
+  position: relative;
+  font-family: var(--font-latin);
+  font-size: var(--text-nav);
+  font-weight: var(--weight-nav);
+  letter-spacing: var(--tracking-nav);
+  color: inherit;
+  text-decoration: none;
+  /* 觸控目標高度靠這個撐到 44px 以上 */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  transition: opacity var(--duration) var(--ease);
+}
+
+.navLink:hover {
+  opacity: 0.7;
+}
+
+/* 目前所在頁面：底部橫線。用 ::after 才不會在切換時擠動版面。 */
+.navLink[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(50% - 0.9rem);
+  height: var(--nav-underline);
+  background: currentColor;
+}
+
+/* ---------- CTA 按鈕 ---------- */
+
+.ctaGap {
+  margin-left: var(--space-2);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font-family: var(--font-latin);
+  font-size: var(--text-nav);
+  font-weight: var(--weight-nav);
+  letter-spacing: var(--tracking-nav);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    color var(--duration) var(--ease);
+}
+
+/* 白底頁面：藍底白字實心鈕 */
+.solid .cta {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-white);
+}
+
+.solid .cta:hover {
+  background: var(--color-primary-600);
+  border-color: var(--color-primary-600);
+}
+
+/* 首頁 hero 上：白色外框、透明底 */
+.overHero .cta {
+  background: transparent;
+  border: 1px solid var(--color-on-navy);
+  color: var(--color-on-navy);
+}
+
+.overHero .cta:hover {
+  background: var(--color-on-navy);
+  color: var(--color-navy);
+}
+
+/* ---------- 漢堡按鈕 ---------- */
+
+.hamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+  .hamburger {
+    display: none;
+  }
+}
+
+/* ---------- 展開的選單 ---------- */
+
+.panel {
+  position: fixed;
+  inset: var(--header-h-mobile) 0 0 0;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3) var(--space-2) var(--space-4);
+  background: var(--color-white);
+  overflow-y: auto;
+  /* 選單永遠是白底深字，即使是在首頁 hero 上開啟 */
+  color: var(--color-navy);
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    display: none;
+  }
+}
+
+.panelNav {
+  display: flex;
+  flex-direction: column;
+}
+
+.panelLink {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  font-family: var(--font-latin);
+  font-size: 1rem;
+  font-weight: var(--weight-nav);
+  letter-spacing: var(--tracking-nav);
+  color: var(--color-navy);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panelLink[aria-current='page'] {
+  font-weight: 700;
+}
+
+/* CTA 置於最下方、拉滿寬度、維持按鈕樣式 */
+.panelCta {
+  margin-top: var(--space-4);
+  width: 100%;
+  min-height: 52px;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-white);
+}

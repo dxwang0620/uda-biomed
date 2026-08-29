@@ -1,6 +1,6 @@
 export default function Contact() {
   return (
-    <>
+    <div className="container">
       {/* 已確認：這一版不做表單，只放聯絡資訊。 */}
       <section aria-labelledby="contact-heading">
         <h1 id="contact-heading">Contact</h1>
@@ -17,6 +17,6 @@ export default function Contact() {
           <dd>[TODO: 地址]</dd>
         </dl>
       </section>
-    </>
+    </div>
   )
 }

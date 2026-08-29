@@ -1,0 +1,32 @@
+/* TODO Step 3：這一整個 hero 佔位樣式會被真正的影片 hero 取代 */
+
+.heroPlaceholder {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  padding-block: var(--header-h-mobile) var(--space-8);
+  background: var(--color-navy);
+  color: var(--color-on-navy);
+}
+
+@media (min-width: 1024px) {
+  .heroPlaceholder {
+    padding-block: var(--header-h) var(--space-12);
+  }
+}
+
+.heroTitle {
+  font-size: var(--text-hero);
+  color: var(--color-on-navy);
+  max-width: 16ch;
+}
+
+.heroSubhead {
+  margin-top: var(--space-2);
+  max-width: 44ch;
+  color: var(--color-on-navy-muted);
+}
+
+.scrollSpacer {
+  height: 120vh;
+}

@@ -1,6 +1,6 @@
 export default function Technology() {
   return (
-    <>
+    <div className="container">
       <section aria-labelledby="tech-heading">
         <p>OUR TECHNOLOGY</p>
         <h1 id="tech-heading">From Sample to Scientific Insight</h1>
@@ -35,6 +35,6 @@ export default function Technology() {
       <section>
         <p>[TODO: 核心技術與平台細節 —— 不編造專利或儀器規格]</p>
       </section>
-    </>
+    </div>
   )
 }

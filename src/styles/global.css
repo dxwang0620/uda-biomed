@@ -143,3 +143,17 @@ ol[role='list'] {
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------- header 讓位 ---------- */
+/* header 是 position: fixed，不佔版面高度。首頁的 hero 要疊到它底下，
+   所以只有非首頁需要補回這段高度。 */
+
+.mainOffset {
+  padding-top: var(--header-h-mobile);
+}
+
+@media (min-width: 1024px) {
+  .mainOffset {
+    padding-top: var(--header-h);
+  }
+}

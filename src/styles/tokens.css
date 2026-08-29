@@ -21,6 +21,7 @@
   --color-text: #2e3440;        /* [取樣] 內文段落 */
   --color-text-muted: #5a6472;  /* [推導] 四張稿中沒有出現真正的灰字，
                                    連 eyebrow 都是深藍。此值待你確認或棄用。 */
+  --color-navy-70: rgba(0, 48, 104, 0.7); /* navy 降一階，供 wordmark 下排等次要文字 */
 
   /* ---- 深底上的反白 ---- */
   --color-on-navy: #ffffff;

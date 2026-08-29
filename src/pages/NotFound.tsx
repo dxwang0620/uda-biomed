@@ -6,10 +6,12 @@ import { Link } from 'react-router-dom'
  */
 export default function NotFound() {
   return (
-    <section aria-labelledby="notfound-heading">
-      <h1 id="notfound-heading">Page not found</h1>
-      <p>The page you are looking for does not exist.</p>
-      <Link to="/">Back to home</Link>
-    </section>
+    <div className="container">
+      <section aria-labelledby="notfound-heading">
+        <h1 id="notfound-heading">Page not found</h1>
+        <p>The page you are looking for does not exist.</p>
+        <Link to="/">Back to home</Link>
+      </section>
+    </div>
   )
 }
