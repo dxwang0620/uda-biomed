@@ -1,0 +1,114 @@
+.carousel {
+  position: relative;
+}
+
+/* 投影片疊在同一個位置，用 grid 讓容器高度取決於最高的那一張，
+   切換時版面不會跳動 */
+.viewport {
+  display: grid;
+}
+
+.slide {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duration) var(--ease),
+    visibility var(--duration) var(--ease);
+}
+
+.slideActive {
+  opacity: 1;
+  visibility: visible;
+}
+
+.eyebrow {
+  font-family: var(--font-latin);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--color-on-video-muted);
+}
+
+.title {
+  margin-top: var(--space-2);
+  font-size: var(--text-hero);
+  color: var(--color-on-navy);
+  max-width: 18ch;
+}
+
+.body {
+  margin-top: var(--space-2);
+  max-width: 52ch;
+  color: var(--color-on-video-muted);
+}
+
+/* 待補的投影片：明顯標示，不讓它被誤認成正式文案 */
+.bodyPending {
+  composes: body;
+  padding: var(--space-1) var(--space-2);
+  border: 2px dashed var(--color-on-navy-border);
+  border-radius: var(--radius);
+}
+
+/* 「Explore cancer detection technology」這個標籤很長，Button 預設 nowrap
+   會在 375px 撐出橫向捲軸。窄螢幕改成整欄並允許換行，寬螢幕才並排。 */
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.actions > * {
+  white-space: normal;
+  text-align: center;
+}
+
+@media (min-width: 560px) {
+  .actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .actions > * {
+    white-space: nowrap;
+  }
+}
+
+/* ---------- 圓點 ---------- */
+
+.dots {
+  display: flex;
+  gap: var(--space-1);
+  margin-top: var(--space-4);
+}
+
+.dot {
+  /* 視覺上是小圓點，但點擊區域撐到 44px 滿足觸控目標 */
+  position: relative;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-on-navy-border);
+  cursor: pointer;
+  transition: background-color var(--duration) var(--ease);
+}
+
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: -17px;
+}
+
+.dot:hover {
+  background: var(--color-on-video-muted);
+}
+
+.dotActive {
+  background: var(--color-on-navy);
+}

@@ -1,83 +1,176 @@
-.heroTitle {
-  font-size: var(--text-hero);
-  color: var(--color-on-navy);
-  max-width: 16ch;
-}
+/* 首頁區塊皆為半透明深藍，底下是固定的背景影片，因此文字一律反白 */
 
-.heroSubhead {
-  margin-top: var(--space-2);
-  max-width: 44ch;
-  /* 影片遮罩上的次要文字。--color-on-navy-muted（78%）在遮罩上只有
-     3.93:1，不合格；這個 token 是 90%，4.90:1。見 tokens.css。 */
+.eyebrow {
+  font-family: var(--font-latin);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
   color: var(--color-on-video-muted);
 }
 
-.heroActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-top: var(--space-4);
+.sectionTitle {
+  margin-top: var(--space-1);
+  font-size: var(--text-h2);
+  max-width: 26ch;
 }
 
-.heroSignature {
+.lede {
+  margin-top: var(--space-3);
+  max-width: 68ch;
+  color: var(--color-on-navy-muted);
+}
+
+.note {
   margin-top: var(--space-4);
+  max-width: 76ch;
   font-size: var(--text-small);
-  letter-spacing: 0.04em;
-  color: var(--color-on-video-muted);
+  color: var(--color-on-navy-muted);
 }
 
-/* ---------- 三欄 ---------- */
-/* 設計稿：欄與欄之間有 1px 直線。手機單欄時直線改為橫線。 */
+.pendingInline {
+  padding-inline: var(--space-1);
+  border: 2px dashed var(--color-on-navy-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-small);
+  vertical-align: middle;
+}
 
-.pillars {
+/* ---------- 卡片列 ---------- */
+
+.cards {
   display: grid;
-  gap: var(--space-6);
-  margin: 0;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
   padding: 0;
 }
 
-.pillar {
+@media (min-width: 768px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 參考網站的卡片是透光的。共用的 ui/Card 是白色不透明（其他頁在用，不動它），
+   這裡只在首頁覆寫成半透明。
+
+   加深而非提亮：疊白色提亮的話，次要文字在每一級都低於 4.5:1；
+   再疊一層 navy 反而讓對比往上走。最壞情況（影片純白畫面）下
+   白字 9.15:1、次要文字 6.29:1。
+   邊框用白色 45%，對卡片底 3.20:1，卡片邊界才看得出來。 */
+.card {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-2);
-  text-align: center;
-}
-
-.pillar + .pillar {
-  padding-top: var(--space-6);
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
-}
-
-@media (min-width: 768px) {
-  .pillars {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-  }
-
-  .pillar {
-    padding-inline: var(--space-3);
-  }
-
-  /* 換成直線分隔，並清掉手機版的橫線與上緣間距 */
-  .pillar + .pillar {
-    padding-top: 0;
-    border-top: 0;
-    border-left: 1px solid rgba(255, 255, 255, 0.22);
-  }
-}
-
-.pillarLabel {
-  font-family: var(--font-latin);
-  font-size: var(--text-nav);
-  font-weight: 700;
-  letter-spacing: var(--tracking-nav);
-  /* 區塊是半透明深藍底，標籤要反白 */
+  height: 100%;
+  background: rgba(0, 48, 104, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: none;
   color: var(--color-on-navy);
 }
 
+.card h3 {
+  color: var(--color-on-navy);
+}
+
+.cardTitle {
+  font-size: 1.0625rem;
+}
+
+.cardBody {
+  font-size: var(--text-small);
+  color: var(--color-on-navy-muted);
+}
+
+/* ---------- 標籤 ---------- */
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: auto 0 0;
+  padding: 0;
+}
+
+/* 白字疊在 16% 白的標籤底上 → 5.93:1 */
+.tag {
+  padding: 4px var(--space-1);
+  font-family: var(--font-latin);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-on-navy);
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-sm);
+}
+
+/* 核心定位區塊的標籤列。與卡內的 .tags 分開，兩者的間距規則不同。 */
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+}
+
+/* 直接放在半透明底上，需要反白樣式 */
+.tagLarge {
+  padding: var(--space-1) var(--space-2);
+  font-family: var(--font-latin);
+  font-size: var(--text-nav);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-on-navy);
+  border: 1px solid var(--color-on-navy-border);
+  border-radius: 999px;
+}
+
+/* ---------- 浮動標籤（技術平台） ---------- */
+
+.pills {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+}
+
 @media (min-width: 768px) {
-  .pillarLabel {
-    font-size: 0.9375rem;
+  .pills {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pill {
+  padding: var(--space-2);
+  border: 1px solid var(--color-on-navy-border);
+  border-radius: var(--radius-lg);
+}
+
+.pillTitle {
+  display: block;
+  font-family: var(--font-latin);
+  font-size: var(--text-nav);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-on-navy);
+}
+
+.pillBody {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--text-small);
+  color: var(--color-on-navy-muted);
+}
+
+/* ---------- 待補 ---------- */
+
+.todos {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 1024px) {
+  .todos {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
