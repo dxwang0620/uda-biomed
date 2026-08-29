@@ -78,18 +78,20 @@ export default function Home() {
       </HeroVideo>
 
       <Section tone="translucent" labelledBy="focus-heading">
-        <p className={styles.eyebrow}>CURRENT R&amp;D FOCUS</p>
-        <h2 id="focus-heading" className={styles.sectionTitle}>
-          From cancer research to detection technology, building a continuously
-          validated R&amp;D pathway
-        </h2>
-        <p className={styles.lede}>
-          UDA maintains broad cross-disciplinary exploration, while its current
-          public R&amp;D and industry focus is cancer detection technology. We
-          connect cancer biology, life-signal research and structural science with
-          recognition, validation, intellectual property and translational
-          development.
-        </p>
+        <div className={styles.intro}>
+          <p className={styles.eyebrow}>CURRENT R&amp;D FOCUS</p>
+          <h2 id="focus-heading" className={styles.sectionTitle}>
+            From cancer research to detection technology, building a continuously
+            validated R&amp;D pathway
+          </h2>
+          <p className={styles.lede}>
+            UDA maintains broad cross-disciplinary exploration, while its current
+            public R&amp;D and industry focus is cancer detection technology. We
+            connect cancer biology, life-signal research and structural science
+            with recognition, validation, intellectual property and translational
+            development.
+          </p>
+        </div>
 
         <ul role="list" className={styles.cards}>
           {FOCUS.map(({ icon: Icon, title, body, tags }) => (
@@ -112,7 +114,7 @@ export default function Home() {
           ))}
         </ul>
 
-        <p className={styles.note}>
+        <p className={`${styles.note} ${styles.intro}`}>
           R&amp;D can be broad, while market strategy must remain focused. UDA
           currently starts with cancer detection; animal oncology, advanced
           molecules, signal analysis, animal health and other cross-disciplinary
@@ -124,6 +126,7 @@ export default function Home() {
       </Section>
 
       <Section tone="translucent" labelledBy="platform-heading">
+        <div className={styles.intro}>
         <h2 id="platform-heading" className={styles.sectionTitle}>
           {/* 參考影片只拍到標題後半段 */}
           <span className={styles.pendingInline}>[待補：標題前半]</span> verifiable
@@ -140,6 +143,7 @@ export default function Home() {
           form are disclosed progressively in line with R&amp;D and
           intellectual-property strategy.
         </p>
+        </div>
 
         <ul role="list" className={styles.pills}>
           {PLATFORM_PILLS.map(({ title, body }) => (
@@ -163,6 +167,7 @@ export default function Home() {
       </Section>
 
       <Section tone="translucent" labelledBy="positioning-heading">
+        <div className={styles.intro}>
         <h2 id="positioning-heading" className={styles.sectionTitle}>
           UDA BIOMED core positioning
         </h2>
@@ -177,6 +182,7 @@ export default function Home() {
           technology can progress from concepts and data toward co-development and
           licensing partnerships.
         </p>
+        </div>
         <ul role="list" className={styles.tagRow}>
           {POSITIONING_TAGS.map((tag) => (
             <li key={tag} className={styles.tagLarge}>

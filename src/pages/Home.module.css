@@ -1,3 +1,29 @@
+/* 區塊本身已無底色，影片直接透出來。
+   區塊自己的白色文字若沒有遮罩，在影片亮處是 1:1，完全看不見，
+   所以文字區自己帶一塊由左至右淡出的遮罩。實測門檻：
+   白色大標需 50%、白色內文需 65%，這裡取 74% 留餘裕。 */
+.intro {
+  position: relative;
+  padding: var(--space-4) var(--space-4) var(--space-4) 0;
+  margin-left: calc(var(--space-4) * -1);
+  padding-left: var(--space-4);
+}
+
+.intro::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 -50vw;
+  width: 150vw;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(0, 48, 104, 0.74) 0%,
+    rgba(0, 48, 104, 0.74) 55%,
+    rgba(0, 48, 104, 0) 78%
+  );
+}
+
 /* 首頁區塊皆為半透明深藍，底下是固定的背景影片，因此文字一律反白 */
 
 .eyebrow {
@@ -53,8 +79,9 @@
 /* 白色霧面卡片，依 index_img/part2.jpeg。
 
    卡片自己帶淺色底，所以卡上文字翻成深色，不再受區塊那層的限制。
-   兩種極端影片畫面都驗過（最亮 / 最暗）：navy 標題 8.8:1 / 7.1:1、
-   內文 8.5:1 / 6.9:1，都遠高於 AA。
+   62% 是能透到的極限：卡片疊在影片最暗的畫面上會被拉暗，
+   navy 標題 4.8:1、內文 4.7:1，剛好過 AA；再透一級（55%）掉到 3.9:1。
+   影片最亮時兩者都是 12.9:1。
 
    backdrop-filter 只負責模糊，不做亮度調整——白色底本身就夠亮了，
    再壓亮度只會讓它發灰（上一版的錯）。 */
@@ -67,15 +94,15 @@
   padding: var(--space-3);
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 24, 56, 0.18);
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   color: var(--color-text);
 }
 
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
   .card {
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
   }
 }
 
@@ -129,6 +156,7 @@
 /* 直接放在半透明底上，需要反白樣式 */
 .tagLarge {
   padding: var(--space-1) var(--space-2);
+  background: rgba(0, 48, 104, 0.74);
   font-family: var(--font-latin);
   font-size: var(--text-nav);
   font-weight: 500;
@@ -153,9 +181,11 @@
   }
 }
 
+/* 區塊已無底色，這些膠囊自己要帶底才讀得到 */
 .pill {
   padding: var(--space-2);
-  border: 1px solid var(--color-on-navy-border);
+  background: rgba(0, 48, 104, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: var(--radius-lg);
 }
 

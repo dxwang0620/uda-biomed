@@ -43,11 +43,17 @@
   color: var(--color-on-video-muted);
 }
 
+/* 這是 div 不是 h1，global.css 給標題的字體、字重、行高都要自己補上，
+   否則和站上其他標題長得不一樣 */
 .title {
   margin-top: var(--space-2);
+  font-family: var(--font-display);
   font-size: var(--text-hero);
+  font-weight: var(--weight-heading);
+  line-height: var(--leading-tight);
   color: var(--color-on-navy);
   max-width: 18ch;
+  text-wrap: balance;
 }
 
 .body {

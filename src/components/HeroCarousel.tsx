@@ -13,7 +13,8 @@ import styles from './HeroCarousel.module.css'
  *   - 使用者一旦自己選過投影片就永久停止自動輪播，不會把他選的那張換掉
  *   - 圓點是真正的 <button>，可鍵盤操作，並以 aria-current 標示目前這張
  *   - 非當前的投影片 inert，避免鍵盤 tab 進看不見的內容
- *   - 只有當前投影片的標題是 h1，維持每頁單一 h1
+ *   - 標題不隨切換更換元素型別，避免字型閃動；語意由單一的
+ *     visually-hidden h1 承載，維持每頁一個 h1
  *   - 切換時用 aria-live 告知，但只在使用者手動切換時（自動輪播不打擾）
  */
 
@@ -128,18 +129,13 @@ export default function HeroCarousel() {
               inert={!active}
             >
               <p className={styles.eyebrow}>{slide.eyebrow}</p>
-              {/* 只有當前這張是 h1。五張都寫成 h1 的話，原始碼裡就有五個
-                  h1——非當前的雖然 inert + aria-hidden 不會被朗讀，
-                  但「每頁一個 h1」這條還是破了。 */}
-              {active ? (
-                <h1 className={styles.title} id="hero-heading">
-                  {slide.title}
-                </h1>
-              ) : (
-                <div className={styles.title} aria-hidden="true">
-                  {slide.title}
-                </div>
-              )}
+              {/* 一律用 div，不隨 active 在 h1／div 之間切換。
+                  切換元素型別會讓 React 替換 DOM 節點，而 div 拿不到
+                  global.css 給 h1 的字重與行高，切換瞬間字會閃一下變形。
+                  語意由下方那個 visually-hidden 的 h1 承載。 */}
+              <div className={styles.title} aria-hidden="true">
+                {slide.title}
+              </div>
               <p className={slide.pending ? styles.bodyPending : styles.body}>
                 {slide.body}
               </p>
@@ -175,6 +171,12 @@ export default function HeroCarousel() {
         </Button>
       </div>
 
+
+      {/* 頁面唯一的 h1，內容跟著當前投影片走。視覺上的大標由上方的 div
+          呈現（已 aria-hidden），兩者不會重複朗讀。 */}
+      <h1 className="visually-hidden" id="hero-heading">
+        {SLIDES[index].title}
+      </h1>
 
       {/* 手動切換時才朗讀，自動輪播不打擾螢幕閱讀器 */}
       <p className="visually-hidden" aria-live="polite">

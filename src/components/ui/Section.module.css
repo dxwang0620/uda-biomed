@@ -1,5 +1,8 @@
 .section {
   padding-block: var(--space-8);
+  /* 內部的滿版出血（例如首頁文字區的遮罩）會超出視窗右緣造成橫向捲軸。
+     用 clip 而非 hidden：clip 不會建立捲動容器，也不影響 sticky／fixed 後代。 */
+  overflow-x: clip;
 }
 
 @media (min-width: 1024px) {
@@ -21,22 +24,15 @@
   color: var(--color-on-navy);
 }
 
-/* 首頁專用：底下是固定的背景影片，半透明才看得到。
-
-   66% 是能淡到的極限，前提是這一層的文字全部用純白而非半透明白：
-   純白在 66% 底上是 4.68:1，90% 白只有 4.14:1，不合格。
-   再淡一級（62%）連純白都掉到 4.16:1。
-   以影片最亮的畫面（相對亮度 1.000）為最壞情況計算。
-
-   卡片自己是白色霧面、帶深色文字，不吃這一層的限制。 */
+/* 首頁專用：不鋪底色，讓固定的背景影片完整露出來。
+   區塊自己的文字改由 Home 的 .intro 局部遮罩負責——白字直接疊在影片上
+   是 1:1，完全看不見。卡片自己帶白底，不受這裡影響。 */
 .translucent {
-  background: rgba(0, 48, 104, 0.66);
+  background: transparent;
   color: var(--color-on-navy);
-  /* 這一層的次要文字用純白，才換得到更淡的底 */
   --muted-on-section: var(--color-on-navy);
 }
 
-/* navy 區塊上的標題要反白，否則會沿用 global.css 的深藍 */
 .navy :is(h1, h2, h3, h4),
 .translucent :is(h1, h2, h3, h4) {
   color: var(--color-on-navy);
