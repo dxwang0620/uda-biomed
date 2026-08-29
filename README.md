@@ -54,8 +54,16 @@ router 的 `basename` 由 `src/config/site.ts` 從 `import.meta.env.BASE_URL` �
 ### SPA 路由
 
 GitHub Pages 沒有 SPA fallback，直接開 `/about` 或重新整理會拿到 404。
-`.github/workflows/deploy.yml` 在 build 後把 `dist/index.html` 複製成 `dist/404.html`
-來解決，並產生 `.nojekyll`。**不使用 HashRouter**（形象網站的網址會出現在名片與搜尋結果上）。
+**不使用 HashRouter**（形象網站的網址會出現在名片與搜尋結果上）。
+
+兩層處理：
+
+1. **每個路由產生實體 `index.html`**（`scripts/prerender-routes.mjs`，已掛在 `npm run build`）。
+   只靠 404.html 的話畫面雖然正確，**狀態碼卻是 404**，搜尋引擎會把 `/about`
+   這類網址當成不存在——那樣就失去不用 HashRouter 的意義了。
+   產生 `dist/about/index.html` 之後 Pages 會以 200 回應。
+   路由清單直接從 `src/config/site.ts` 取，不另記一份。
+2. **`404.html`**（workflow 在 build 後複製），處理真正不存在的路徑。
 
 ### 額度
 
