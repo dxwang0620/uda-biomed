@@ -1,0 +1,62 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  background: var(--color-white);
+  /* 下緣要讓開波浪色帶，否則文字會被蓋住 */
+  padding-block: var(--space-6) calc(clamp(56px, 12vw, 160px) + var(--space-6));
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding-block: var(--space-8) calc(clamp(56px, 12vw, 160px) + var(--space-8));
+  }
+}
+
+/* 設計稿的情境照放在右側，左緣白色漸隱。目前沒有照片，這一層不會渲染。 */
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+}
+
+.content {
+  position: relative;
+}
+
+.eyebrow {
+  font-family: var(--font-latin);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--color-navy);
+}
+
+.title {
+  margin-top: var(--space-1);
+  font-size: var(--text-h1);
+  max-width: 18ch;
+}
+
+.lede {
+  margin-top: var(--space-2);
+  max-width: 46ch;
+}
+
+.wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  z-index: 1;
+  width: 100%;
+  height: clamp(56px, 12vw, 160px);
+  pointer-events: none;
+}

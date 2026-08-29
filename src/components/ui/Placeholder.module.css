@@ -1,0 +1,29 @@
+.placeholder {
+  padding: var(--space-3);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text-muted);
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px var(--space-1);
+  font-family: var(--font-latin);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--color-white);
+  background: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+}
+
+.title {
+  margin-top: var(--space-1);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.body {
+  margin-top: var(--space-1);
+  font-size: var(--text-small);
+}

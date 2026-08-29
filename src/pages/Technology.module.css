@@ -1,17 +1,23 @@
-.cards {
+.steps {
   display: grid;
   gap: var(--space-3);
   margin: var(--space-4) 0 0;
   padding: 0;
+  list-style: none;
 }
 
 @media (min-width: 768px) {
-  .cards {
+  .steps {
+    /* 卡片與箭頭交錯：卡 箭 卡 箭 卡 */
     grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
   }
 }
 
-/* 卡片等高時內容仍靠上 */
+.step {
+  position: relative;
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -30,6 +36,24 @@
 
 .cardDetail {
   font-size: var(--text-small);
+}
+
+/* 手機：箭頭在卡片之間置中朝下。桌機：移到卡片右側間隙、朝右。 */
+.arrow {
+  display: block;
+  margin: var(--space-2) auto 0;
+  color: var(--color-accent);
+  transform: rotate(90deg);
+}
+
+@media (min-width: 768px) {
+  .arrow {
+    position: absolute;
+    top: 50%;
+    right: calc(var(--space-4) / -2);
+    margin: 0;
+    transform: translate(50%, -50%);
+  }
 }
 
 .sectionCta {

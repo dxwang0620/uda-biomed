@@ -1,0 +1,78 @@
+.split {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 1024px) {
+  .split {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+}
+
+.lede {
+  margin-top: var(--space-2);
+  font-size: 1.125rem;
+  max-width: 46ch;
+}
+
+.body {
+  margin-top: var(--space-2);
+  max-width: 60ch;
+}
+
+.perspective {
+  display: flex;
+  flex-direction: column;
+}
+
+.signature {
+  margin-top: var(--space-3);
+  font-size: var(--text-small);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-primary);
+}
+
+/* ---------- Our Approach ---------- */
+
+.approach {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .approach {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+}
+
+.approachNumber {
+  display: block;
+  font-family: var(--font-latin);
+  font-size: var(--text-small);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--color-accent);
+}
+
+.approachTitle {
+  margin-top: var(--space-1);
+  font-size: 1.0625rem;
+}
+
+.todos {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .todos {
+    grid-template-columns: 1fr 1fr;
+  }
+}

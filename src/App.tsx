@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Header from './components/Header.tsx'
+import { useScrollToTop } from './hooks/useScrollToTop.ts'
 import {
   HeroElementContext,
   HeroRegistryContext,
@@ -20,6 +21,9 @@ export default function App() {
 
   const { pathname } = useLocation()
   const isHome = pathname === '/'
+
+  /* SPA 換頁不會重設捲動位置，從長頁底部點導覽會落在新頁的頁尾 */
+  useScrollToTop()
 
   return (
     <HeroRegistryContext.Provider value={setHeroEl}>

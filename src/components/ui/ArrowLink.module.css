@@ -1,0 +1,22 @@
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  /* 觸控目標 */
+  min-height: 44px;
+  font-family: var(--font-latin);
+  font-size: var(--text-nav);
+  font-weight: 700;
+  letter-spacing: var(--tracking-nav);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+.arrow {
+  transition: transform var(--duration) var(--ease);
+}
+
+.link:hover .arrow {
+  transform: translateX(3px);
+}
