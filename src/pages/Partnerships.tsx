@@ -1,11 +1,11 @@
-import { FlaskConical, Microscope, Users } from 'lucide-react'
-import PageHero from '../components/PageHero.tsx'
-import Card from '../components/ui/Card.tsx'
-import CtaBand from '../components/ui/CtaBand.tsx'
-import IconCircle from '../components/ui/IconCircle.tsx'
-import Placeholder from '../components/ui/Placeholder.tsx'
-import Section from '../components/ui/Section.tsx'
-import styles from './Partnerships.module.css'
+import { FlaskConical, Microscope, Users } from "lucide-react";
+import PageHero from "../components/PageHero.tsx";
+import Card from "../components/ui/Card.tsx";
+import CtaBand from "../components/ui/CtaBand.tsx";
+import IconCircle from "../components/ui/IconCircle.tsx";
+import Placeholder from "../components/ui/Placeholder.tsx";
+import Section from "../components/ui/Section.tsx";
+import styles from "./Partnerships.module.css";
 
 /* 文案來源 docs/content-partnerships.md —— 設計稿沒有這一頁，
    版面比照 RESEARCH / TECHNOLOGY 的 hero + 卡片結構。
@@ -14,35 +14,35 @@ import styles from './Partnerships.module.css'
 const MODELS = [
   {
     icon: FlaskConical,
-    title: 'Research Collaboration',
-    body: 'Joint investigation on a shared scientific question, with scope, contributions and publication expectations agreed at the outset.',
+    title: "Research Collaboration",
+    body: "Joint investigation on a shared scientific question, with scope, contributions and publication expectations agreed at the outset.",
   },
   {
     icon: Users,
-    title: 'Clinical Collaboration',
-    body: 'Working with clinical groups to shape research questions around problems encountered in practice, and to interpret findings in that context.',
+    title: "Clinical Collaboration",
+    body: "Working with clinical groups to shape research questions around problems encountered in practice, and to interpret findings in that context.",
   },
   {
     icon: Microscope,
-    title: 'Technology Collaboration',
-    body: 'Applying our laboratory and analytical workflow to questions brought by external research groups.',
+    title: "Technology Collaboration",
+    body: "Applying our laboratory and analytical workflow to questions brought by external research groups.",
   },
-]
+];
 
 const STEPS = [
   {
-    title: 'Get in touch',
-    body: 'Tell us the question you are working on and what you are looking for in a collaborator.',
+    title: "Get in touch",
+    body: "Tell us the question you are working on and what you are looking for in a collaborator.",
   },
   {
-    title: 'Scope the work',
-    body: 'We discuss feasibility, what each side contributes, and what a useful outcome would look like.',
+    title: "Scope the work",
+    body: "We discuss feasibility, what each side contributes, and what a useful outcome would look like.",
   },
   {
-    title: 'Formalise',
-    body: 'Scope, responsibilities and terms are agreed before work begins.',
+    title: "Formalise",
+    body: "Scope, responsibilities and terms are agreed before work begins.",
   },
-]
+];
 
 export default function Partnerships() {
   return (
@@ -78,7 +78,7 @@ export default function Partnerships() {
           {STEPS.map(({ title, body }, i) => (
             <li key={title}>
               <span className={styles.stepNumber} aria-hidden="true">
-                {String(i + 1).padStart(2, '0')}
+                {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className={styles.stepTitle}>{title}</h3>
               <p className={styles.cardBody}>{body}</p>
@@ -89,11 +89,7 @@ export default function Partnerships() {
 
       <Section tone="tint">
         {/* 這一區塊法律風險最高：未經授權不能列名，也不能放 logo。 */}
-        <Placeholder title="Current Partners">
-          需要夥伴的正式名稱，以及對方的公開授權。未經同意不能列名，也不能放 logo。
-          若合作內容受保密協議約束，連「與某醫學中心合作」這種模糊寫法都要先確認。
-          在你給名單與授權之前，這裡不會有任何內容，包括示意用的假 logo。
-        </Placeholder>
+        <Placeholder title="Current Partners">夥伴的名稱</Placeholder>
       </Section>
 
       <CtaBand
@@ -102,5 +98,5 @@ export default function Partnerships() {
         body="If you are working on a question about disease at the molecular level, we would like to hear about it."
       />
     </>
-  )
+  );
 }

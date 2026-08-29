@@ -1,37 +1,37 @@
-import { Dna, ScanSearch, Users } from 'lucide-react'
-import PageHero from '../components/PageHero.tsx'
-import ArrowLink from '../components/ui/ArrowLink.tsx'
-import Card from '../components/ui/Card.tsx'
-import IconCircle from '../components/ui/IconCircle.tsx'
-import Placeholder from '../components/ui/Placeholder.tsx'
-import Section from '../components/ui/Section.tsx'
-import styles from './Research.module.css'
+import { Dna, ScanSearch, Users } from "lucide-react";
+import PageHero from "../components/PageHero.tsx";
+import ArrowLink from "../components/ui/ArrowLink.tsx";
+import Card from "../components/ui/Card.tsx";
+import IconCircle from "../components/ui/IconCircle.tsx";
+import Placeholder from "../components/ui/Placeholder.tsx";
+import Section from "../components/ui/Section.tsx";
+import styles from "./Research.module.css";
 
 /* 文案來源 docs/content-research.md */
 
 const FOCUS = [
   {
     icon: Dna,
-    title: 'Molecular Insights',
-    body: 'Investigating molecular changes that may contribute to disease.',
+    title: "Molecular Insights",
+    body: "Investigating molecular changes that may contribute to disease.",
     detail:
-      'Disease begins as a change in molecular behaviour long before it becomes measurable by conventional means. We study how those changes arise, how they propagate, and which of them carry enough signal to be worth detecting.',
+      "Disease begins as a change in molecular behaviour long before it becomes measurable by conventional means. We study how those changes arise, how they propagate, and which of them carry enough signal to be worth detecting.",
   },
   {
     icon: ScanSearch,
-    title: 'Cancer Detection Research',
-    body: 'Exploring analytical approaches for earlier and more precise detection.',
+    title: "Cancer Detection Research",
+    body: "Exploring analytical approaches for earlier and more precise detection.",
     detail:
-      'Earlier detection is not only a matter of looking sooner — it is a matter of distinguishing a real signal from ordinary biological variation. Our research examines analytical approaches that aim to make that distinction more reliable.',
+      "Earlier detection is not only a matter of looking sooner — it is a matter of distinguishing a real signal from ordinary biological variation. Our research examines analytical approaches that aim to make that distinction more reliable.",
   },
   {
     icon: Users,
-    title: 'Clinical Collaboration',
-    body: 'Working with research and clinical partners to translate scientific questions.',
+    title: "Clinical Collaboration",
+    body: "Working with research and clinical partners to translate scientific questions.",
     detail:
-      'A laboratory result becomes meaningful when it answers a question someone actually has. We shape our research alongside clinical and academic partners so that what we investigate stays connected to what is needed.',
+      "A laboratory result becomes meaningful when it answers a question someone actually has. We shape our research alongside clinical and academic partners so that what we investigate stays connected to what is needed.",
   },
-]
+];
 
 export default function Research() {
   return (
@@ -79,16 +79,13 @@ export default function Research() {
         {/* 絕對不編造。見 CLAUDE.md 工作方式第 3 條。 */}
         <div className={styles.todos}>
           <Placeholder title="Publications">
-            需要真實清單，每筆包含作者、標題、期刊或會議、年份、DOI 或連結。
-            沒有發表就不做這一區塊，比放假的好。
+            作者、標題、期刊或會議、年份、DOI 或連結。
           </Placeholder>
           <Placeholder title="Clinical Progress">
-            風險最高的一區。試驗期別（Phase I / II / III）不能推測或近似；
-            「臨床驗證中」「已進入試驗」都有法規意涵。若目前僅為研究階段、
-            尚未進入任何臨床試驗，直接這樣寫最安全。等你給明確說法。
+            試驗期別（Phase I / II / III）
           </Placeholder>
         </div>
       </Section>
     </>
-  )
+  );
 }

@@ -1,17 +1,17 @@
-import { Dna, ScanSearch, Users } from 'lucide-react'
-import HeroVideo from '../components/HeroVideo.tsx'
-import Button from '../components/ui/Button.tsx'
-import IconCircle from '../components/ui/IconCircle.tsx'
-import Section from '../components/ui/Section.tsx'
-import { SITE } from '../config/site.ts'
-import styles from './Home.module.css'
+import { Dna, ScanSearch, Users } from "lucide-react";
+import HeroVideo from "../components/HeroVideo.tsx";
+import Button from "../components/ui/Button.tsx";
+import IconCircle from "../components/ui/IconCircle.tsx";
+import Section from "../components/ui/Section.tsx";
+import { SITE } from "../config/site.ts";
+import styles from "./Home.module.css";
 
 /* 設計稿首頁折線下方的三欄。圖示依序為分子、放大鏡、人物群組。 */
 const PILLARS = [
-  { icon: Dna, label: 'MOLECULAR INSIGHTS' },
-  { icon: ScanSearch, label: 'DETECTION RESEARCH' },
-  { icon: Users, label: 'CLINICAL COLLABORATION' },
-]
+  { icon: Dna, label: "MOLECULAR INSIGHTS" },
+  { icon: ScanSearch, label: "DETECTION RESEARCH" },
+  { icon: Users, label: "CLINICAL COLLABORATION" },
+];
 
 export default function Home() {
   return (
@@ -55,8 +55,9 @@ export default function Home() {
       </Section>
 
       <Section tone="tint">
-        <p>[TODO: 首頁各區塊摘要與 CTA，設計稿只畫到三欄圖示為止]</p>
+        {/* <p>[TODO: 首頁各區塊摘要與 CTA，設計稿只畫到三欄圖示為止]</p> */}
+        <p>[TODO: 首頁各區塊摘要]</p>
       </Section>
     </>
-  )
+  );
 }
