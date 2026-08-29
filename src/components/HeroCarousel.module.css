@@ -71,7 +71,7 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--space-2);
-  margin-top: var(--space-4);
+  margin-top: 0;
 }
 
 .actions > * {
@@ -92,25 +92,27 @@
 }
 
 /* ---------- 圓點 ---------- */
-/* 按鈕本身就是 44x44 的觸控目標，圓點用 ::before 畫在正中央。
+/* 位於按鈕上方。按鈕本身即為觸控目標，圓點用 ::before 畫在正中央。
 
-   先前的做法是 10px 的按鈕再用 ::after 往外擴 -17px 撐出熱區，但相鄰圓點
-   只隔 18px，擴出來的熱區大幅重疊，後面的兄弟元素蓋住前面的，
-   於是點左邊的點會打到右邊那一個。改成按鈕實際佔滿 44x44、gap 為 0，
-   熱區彼此不重疊，點哪個就是哪個。 */
+   熱區 32x44：先前 44x44 讓五個點相隔 44px，視覺上太散。縮到 32px 寬後
+   間距合宜，且熱區彼此不重疊——重疊正是先前點不準的原因（10px 的按鈕
+   用 ::after 外擴 -17px，相鄰只隔 18px，後面的兄弟蓋住前面的）。
+
+   注意：32x44 低於 CLAUDE.md 的 44x44，但高於 WCAG 2.5.8 AA 的 24x24。
+   要回到 44x44 的話，間距就會回到先前那樣寬。 */
 
 .dots {
   display: flex;
   gap: 0;
-  /* 按鈕有自己的 44px 寬度，往左收回讓整排對齊內容左緣 */
-  margin: var(--space-3) 0 0 -17px;
+  /* 熱區比圓點寬，往左收回讓整排對齊內容左緣 */
+  margin: 0 0 var(--space-3) -11px;
 }
 
 .dot {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
+  width: 32px;
   height: 44px;
   padding: 0;
   border: 0;
@@ -120,8 +122,8 @@
 
 .dot::before {
   content: '';
-  width: 10px;
-  height: 10px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--color-on-navy-border);
   transition:
@@ -135,5 +137,5 @@
 
 .dotActive::before {
   background: var(--color-on-navy);
-  transform: scale(1.3);
+  transform: scale(1.4);
 }

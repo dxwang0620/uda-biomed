@@ -23,16 +23,17 @@
 
 /* 首頁專用：底下是固定的背景影片，半透明才看得到。
 
-   70% 是能淡到的極限，前提是次要文字用 90% 白而非 78%——
-   78% 白正是先前卡住的地方（在 70% 底上只有 3.93:1）。
-   換成 90% 白後：白字 5.27:1、次要文字 4.63:1，都達 AA。
-   再淡一級（64%）次要文字掉到 3.92:1，不合格。
-   以影片最亮的畫面（相對亮度 1.000）為最壞情況計算。 */
+   66% 是能淡到的極限，前提是這一層的文字全部用純白而非半透明白：
+   純白在 66% 底上是 4.68:1，90% 白只有 4.14:1，不合格。
+   再淡一級（62%）連純白都掉到 4.16:1。
+   以影片最亮的畫面（相對亮度 1.000）為最壞情況計算。
+
+   卡片自己是白色霧面、帶深色文字，不吃這一層的限制。 */
 .translucent {
-  background: rgba(0, 48, 104, 0.7);
+  background: rgba(0, 48, 104, 0.66);
   color: var(--color-on-navy);
-  /* 這一層的次要文字統一提到 90% 白 */
-  --muted-on-section: var(--color-on-video-muted);
+  /* 這一層的次要文字用純白，才換得到更淡的底 */
+  --muted-on-section: var(--color-on-navy);
 }
 
 /* navy 區塊上的標題要反白，否則會沿用 global.css 的深藍 */
@@ -45,7 +46,7 @@
    78% 白對區塊底 4.84:1，達 AA。 */
 .navy,
 .translucent {
-  --placeholder-fg: var(--color-on-video-muted);
+  --placeholder-fg: var(--color-on-navy);
   --placeholder-title: var(--color-on-navy);
   --placeholder-line: rgba(255, 255, 255, 0.4);
   --placeholder-tag-bg: rgba(255, 255, 255, 0.18);

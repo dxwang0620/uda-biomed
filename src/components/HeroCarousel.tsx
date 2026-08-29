@@ -10,6 +10,7 @@ import styles from './HeroCarousel.module.css'
  *
  * 無障礙處理：
  *   - 自動輪播在 hover / 焦點進入時暫停，prefers-reduced-motion 時完全不啟動
+ *   - 使用者一旦自己選過投影片就永久停止自動輪播，不會把他選的那張換掉
  *   - 圓點是真正的 <button>，可鍵盤操作，並以 aria-current 標示目前這張
  *   - 非當前的投影片 inert，避免鍵盤 tab 進看不見的內容
  *   - 只有當前投影片的標題是 h1，維持每頁單一 h1
@@ -60,6 +61,9 @@ export default function HeroCarousel() {
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const [manual, setManual] = useState(false)
+  /* 使用者一旦自己選過投影片，就不再自動輪播——否則他挑的那張會被
+     自動換掉，這正是「點了卻跳走」的來源。 */
+  const [stopped, setStopped] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
 
   const go = useCallback((next: number) => {
@@ -69,19 +73,21 @@ export default function HeroCarousel() {
   /* 自動輪播。reduced-motion 時整個不啟動——自動變動的內容對前庭敏感的
      使用者是實質困擾，不是裝飾。 */
   useEffect(() => {
-    if (paused) return
+    if (stopped || paused) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const id = window.setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), AUTOPLAY_MS)
     return () => window.clearInterval(id)
-  }, [paused])
+  }, [paused, stopped])
 
   /* 左右方向鍵切換，焦點在輪播內時才生效 */
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
       setManual(true)
+      setStopped(true)
       go(index - 1)
     } else if (e.key === 'ArrowRight') {
       setManual(true)
+      setStopped(true)
       go(index + 1)
     }
   }
@@ -96,8 +102,14 @@ export default function HeroCarousel() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
-      onBlur={(e) => {
-        if (!rootRef.current?.contains(e.relatedTarget as Node)) setPaused(false)
+      onBlur={() => {
+        /* 不看 e.relatedTarget：程式化移動焦點（以及部分瀏覽器的
+           Tab 行為）它會是 null，會被誤判成焦點離開了輪播，
+           自動輪播就在使用者還在操作圓點時又跑起來。
+           等焦點落定後直接看 activeElement 才可靠。 */
+        window.setTimeout(() => {
+          if (!rootRef.current?.contains(document.activeElement)) setPaused(false)
+        }, 0)
       }}
       onKeyDown={onKeyDown}
     >
@@ -136,15 +148,6 @@ export default function HeroCarousel() {
         })}
       </div>
 
-      <div className={styles.actions}>
-        <Button to="/technology" variant="onDarkSolid">
-          Explore cancer detection technology
-        </Button>
-        <Button to="/partnerships" variant="onDark">
-          Business collaboration
-        </Button>
-      </div>
-
       <div className={styles.dots} role="tablist" aria-label="Choose slide">
         {SLIDES.map((slide, i) => (
           <button
@@ -156,11 +159,22 @@ export default function HeroCarousel() {
             aria-label={`Slide ${i + 1}: ${slide.title}`}
             onClick={() => {
               setManual(true)
+              setStopped(true)
               go(i)
             }}
           />
         ))}
       </div>
+
+      <div className={styles.actions}>
+        <Button to="/technology" variant="onDarkSolid">
+          Explore cancer detection technology
+        </Button>
+        <Button to="/partnerships" variant="onDark">
+          Business collaboration
+        </Button>
+      </div>
+
 
       {/* 手動切換時才朗讀，自動輪播不打擾螢幕閱讀器 */}
       <p className="visually-hidden" aria-live="polite">
