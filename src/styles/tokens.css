@@ -1,0 +1,92 @@
+/* ============================================================
+   UDA BIOMED — Design Tokens
+   色值全部取樣自 web_img/ 的四張設計稿，非目測。
+   取樣方法與逐項依據見 docs/design-node.md。
+   標 [取樣] = 從設計稿實際量到；標 [推導] = 稿中未出現，待確認。
+   ============================================================ */
+
+:root {
+  /* ---- 藍：主色階 ---- */
+  --color-navy: #003068;        /* [取樣] hero 波浪色帶、所有標題 */
+  --color-primary: #00377e;     /* [取樣] 實心 CTA 按鈕、圖示圓底 */
+  --color-primary-600: #002a63; /* [推導] navy 再壓暗，供 hover / active */
+  --color-accent: #0072ea;      /* [取樣] hero 右下分子網格連線 */
+  --color-accent-bright: #00bef8; /* [取樣] 網格節點亮點 */
+
+  /* ---- 白與灰 ---- */
+  --color-white: #ffffff;       /* [取樣] 卡片底、header 底 */
+  --color-surface: #fbfbfc;     /* [取樣] 折線以下區塊底色 */
+  --color-tint: #f5f6f8;        /* [取樣] 圖示圓襯底（TECHNOLOGY 流程） */
+  --color-border: #d2d2d8;      /* [取樣] 首頁三欄之間的分隔直線 */
+  --color-text: #2e3440;        /* [取樣] 內文段落 */
+  --color-text-muted: #5a6472;  /* [推導] 四張稿中沒有出現真正的灰字，
+                                   連 eyebrow 都是深藍。此值待你確認或棄用。 */
+
+  /* ---- 深底上的反白 ---- */
+  --color-on-navy: #ffffff;
+  --color-on-navy-muted: rgba(255, 255, 255, 0.78);
+
+  /* ---- 字體 ---- */
+  /* 設計稿為算圖，無法反查字檔。字形為雙層 a、單層 g、水平收筆的
+     人文無襯線，與 Inter 高度接近。語言確認為「只做英文」。 */
+  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-latin: "Inter", system-ui, -apple-system, sans-serif;
+
+  /* ---- 字級 ---- */
+  --text-hero: clamp(2rem, 5vw, 3.75rem);     /* [取樣] 稿中 hero H1 ≈ 62px */
+  --text-h1: clamp(1.75rem, 3.5vw, 2.75rem);
+  --text-h2: clamp(1.375rem, 2.5vw, 1.875rem);
+  --text-body: 1rem;                          /* [取樣] 稿中內文 ≈ 16px */
+  --text-small: 0.875rem;
+  --text-nav: 0.8125rem;                      /* [取樣] 稿中導覽 ≈ 13px */
+  --text-eyebrow: 0.75rem;                    /* [取樣] "WHO WE ARE" 一類小標 */
+
+  /* ---- 字重與字距 ---- */
+  --weight-heading: 700;
+  --weight-nav: 500;
+  --tracking-nav: 0.08em;
+  --tracking-wordmark: 0.18em;   /* 下排 UDA BIOMED */
+  --tracking-eyebrow: 0.12em;
+  --leading-body: 1.75;
+  --leading-tight: 1.1;
+
+  /* ---- 間距（8px 基準） ---- */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-6: 3rem;
+  --space-8: 4rem;
+  --space-12: 6rem;
+
+  /* ---- 圓角 ---- */
+  /* 設計稿的圓角比 CLAUDE.md 佔位值小很多，實測見 design-node.md */
+  --radius-sm: 2px;   /* [取樣] 按鈕，實測 2–3px */
+  --radius: 4px;      /* [取樣] 卡片，實測 4–5px */
+  --radius-lg: 8px;   /* [推導] 稿中未出現更大的圓角，保守值 */
+
+  /* ---- 陰影 ---- */
+  /* [取樣] 卡片沒有 1px border，靠約 10px 的柔和漸層與底色分離。
+     實測最深處僅比底色暗約 3.5%，因此 alpha 壓得很低。 */
+  --shadow-card: 0 1px 3px rgba(0, 48, 104, 0.05),
+                 0 6px 16px rgba(0, 48, 104, 0.05);
+  --shadow-card-hover: 0 2px 6px rgba(0, 48, 104, 0.08),
+                       0 10px 24px rgba(0, 48, 104, 0.07);
+
+  /* ---- 版面 ---- */
+  --container: 1200px;   /* CLAUDE.md 規範值。設計稿實測約 1275px，見 design-node.md */
+  --header-h: 80px;      /* CLAUDE.md 規範值。設計稿實測約 110–130px，見 design-node.md */
+  --header-h-mobile: 64px;
+  --nav-underline: 3px;  /* [取樣] 當前頁底線，實測 3px（規範寫 2px） */
+
+  /* ---- 動態 ---- */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration: 0ms;
+  }
+}
