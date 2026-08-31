@@ -30,6 +30,26 @@
   background: var(--color-navy);
 }
 
+/* 由左至右的色調：左側實、右側全透明，貫穿整個頁面。
+   內容都排在左欄，所以左側需要夠濃才讀得到，右側則讓影片完整露出。
+
+   濃度是算出來的，不是挑好看的。以影片最亮的畫面（相對亮度 1.000）
+   為最壞情況，左欄文字所在的 x=14% 處遮罩 91.6%、白字 9.56:1；
+   左欄文字最右緣 x=50% 處仍有 71.5%、5.19:1。
+   x=92% 之後完全透明。 */
+.tint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(var(--color-primary-rgb), 0.94) 0%,
+    rgba(var(--color-primary-rgb), 0.88) 35%,
+    rgba(var(--color-primary-rgb), 0.55) 65%,
+    rgba(var(--color-primary-rgb), 0) 92%
+  );
+}
+
 
 .poster,
 .video {

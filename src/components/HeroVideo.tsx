@@ -46,6 +46,9 @@ export default function HeroVideo({ children }: { children: React.ReactNode }) {
             <source src={`${import.meta.env.BASE_URL}media/hero.mp4`} type="video/mp4" />
           </video>
         )}
+
+        {/* 左藍右透明的色調，貫穿整個頁面。見 module.css 的說明。 */}
+        <div className={styles.tint} />
       </div>
 
       <section ref={registerHero} className={styles.hero} aria-labelledby="hero-heading">

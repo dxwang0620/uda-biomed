@@ -73,6 +73,8 @@
 .actions > * {
   white-space: normal;
   text-align: center;
+  /* 首頁的兩顆主要按鈕用較大的圓角，與站上其他按鈕（2px）刻意不同 */
+  border-radius: 15px;
 }
 
 @media (min-width: 560px) {
@@ -131,7 +133,16 @@
   background: var(--color-on-video-muted);
 }
 
+/* 當前這一張用橘色標示。橘色對左側色調底的對比 3.65:1，
+   高於圖形物件所需的 3:1。 */
 .dotActive::before {
-  background: var(--color-on-navy);
+  background: var(--color-orange);
   transform: scale(1.4);
+}
+
+/* 鍵盤焦點也用橘色，與選取狀態一致 */
+.dot:focus-visible {
+  outline: 3px solid var(--color-orange);
+  outline-offset: -6px;
+  border-radius: 50%;
 }

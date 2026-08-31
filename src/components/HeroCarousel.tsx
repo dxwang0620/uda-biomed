@@ -160,7 +160,7 @@ export default function HeroCarousel() {
       </div>
 
       <div className={styles.actions}>
-        <Button to="/technology" variant="onDarkSolid">
+        <Button to="/technology" variant="accent">
           Explore cancer detection technology
         </Button>
         <Button to="/partnerships" variant="onDark">

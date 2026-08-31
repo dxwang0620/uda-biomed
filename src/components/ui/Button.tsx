@@ -7,6 +7,7 @@ import styles from './Button.module.css'
  *   outline  白底藍框藍字（首頁 hero 次要動作）
  *   onDark       透明底白框白字 —— 深底上的次要動作
  *   onDarkSolid  白底深藍字 —— 深底上的主要動作
+ *   accent       橘底深藍字 —— 首頁主要 CTA
  *
  * 深底上不沿用設計稿的實心藍鈕：primary 疊在 hero 遮罩底色 #476a92 上
  * 邊界只有 2.03:1，不符 WCAG 1.4.11 對 UI 元件的 3:1 要求。
@@ -15,7 +16,7 @@ import styles from './Button.module.css'
  * 圓角用 --radius-sm（2px）。設計稿實測按鈕幾乎是方角，
  * 不是 CLAUDE.md 佔位值的 8px。
  */
-type Variant = 'primary' | 'outline' | 'onDark' | 'onDarkSolid'
+type Variant = 'primary' | 'outline' | 'onDark' | 'onDarkSolid' | 'accent'
 type Size = 'md' | 'sm'
 
 type Props = {
