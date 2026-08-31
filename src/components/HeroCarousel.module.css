@@ -56,10 +56,16 @@
   text-wrap: balance;
 }
 
+/* 19px + 600 → 符合 WCAG 的「大字」定義（≥18.66px 且粗體），
+   對比門檻由 4.5:1 降為 3:1，背景才能調到目前的濃度。
+   改回一般字級的話，背景必須回到 66.6% 以上。 */
 .body {
   margin-top: var(--space-2);
   max-width: 52ch;
-  color: var(--color-on-video-muted);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--color-white);
 }
 
 .actions {

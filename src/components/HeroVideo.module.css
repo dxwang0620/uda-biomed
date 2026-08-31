@@ -33,23 +33,25 @@
 /* 由左至右的色調：左側實、右側全透明，貫穿整個頁面。
    內容都排在左欄，所以左側需要夠濃才讀得到，右側則讓影片完整露出。
 
-   濃度是算出來的，不是挑好看的。以影片最亮的畫面（相對亮度 1.000）
-   為最壞情況，左欄文字所在的 x=14% 處遮罩 74.9%、白字 5.74:1；
-   左欄文字最右緣 x=50% 處 72.0%、5.26:1。
-   **66.6% 是硬底線**——再低白色內文就低於 4.5:1。
-   x=92% 之後完全透明。
+   以影片最亮的畫面（相對亮度 1.000）為最壞情況，左欄文字所在的
+   x=14% 處遮罩 61.0%、白字 3.89:1。
 
-   ⚠ 這個濃度下橘色按鈕與圓點對背景只有約 2.2:1，低於 UI 元件／圖形物件
-   所需的 3:1。依指示不加白色外框，故此項不合規，記錄於 docs/design-node.md。 */
+   能淡到這裡的前提是**內文改用「大字」規格**（≥18.66px 且粗體），
+   門檻因此從 4.5:1 降為 3:1。若內文改回一般字級，這個濃度就不合格——
+   一般字級的硬底線是 66.6%。
+
+   ⚠ 已知不合規（依指示採用，見 docs/design-node.md）：
+   12px 的 eyebrow 仍屬小字，此濃度下為 3.89:1；
+   橘色按鈕與圓點對背景約 1.9:1。 */
 .tint {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: linear-gradient(
     to right,
-    rgba(var(--color-primary-rgb), 0.76) 0%,
-    rgba(var(--color-primary-rgb), 0.72) 50%,
-    rgba(var(--color-primary-rgb), 0.42) 72%,
+    rgba(var(--color-primary-rgb), 0.62) 0%,
+    rgba(var(--color-primary-rgb), 0.58) 50%,
+    rgba(var(--color-primary-rgb), 0.34) 72%,
     rgba(var(--color-primary-rgb), 0) 92%
   );
 }
