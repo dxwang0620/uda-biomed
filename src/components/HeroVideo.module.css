@@ -34,18 +34,22 @@
    內容都排在左欄，所以左側需要夠濃才讀得到，右側則讓影片完整露出。
 
    濃度是算出來的，不是挑好看的。以影片最亮的畫面（相對亮度 1.000）
-   為最壞情況，左欄文字所在的 x=14% 處遮罩 91.6%、白字 9.56:1；
-   左欄文字最右緣 x=50% 處仍有 71.5%、5.19:1。
-   x=92% 之後完全透明。 */
+   為最壞情況，左欄文字所在的 x=14% 處遮罩 74.9%、白字 5.74:1；
+   左欄文字最右緣 x=50% 處 72.0%、5.26:1。
+   **66.6% 是硬底線**——再低白色內文就低於 4.5:1。
+   x=92% 之後完全透明。
+
+   ⚠ 這個濃度下橘色按鈕與圓點對背景只有約 2.2:1，低於 UI 元件／圖形物件
+   所需的 3:1。依指示不加白色外框，故此項不合規，記錄於 docs/design-node.md。 */
 .tint {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: linear-gradient(
     to right,
-    rgba(var(--color-primary-rgb), 0.94) 0%,
-    rgba(var(--color-primary-rgb), 0.88) 35%,
-    rgba(var(--color-primary-rgb), 0.55) 65%,
+    rgba(var(--color-primary-rgb), 0.76) 0%,
+    rgba(var(--color-primary-rgb), 0.72) 50%,
+    rgba(var(--color-primary-rgb), 0.42) 72%,
     rgba(var(--color-primary-rgb), 0) 92%
   );
 }

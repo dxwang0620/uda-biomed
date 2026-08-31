@@ -133,8 +133,7 @@
   background: var(--color-orange);
 }
 
-/* 當前這一張用橘色標示。橘色對左側色調底的對比 3.65:1，
-   高於圖形物件所需的 3:1。 */
+/* 當前這一張用橘色標示 */
 .dotActive::before {
   background: var(--color-orange);
   transform: scale(1.4);
