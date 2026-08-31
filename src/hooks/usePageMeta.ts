@@ -16,8 +16,14 @@ export function usePageMeta() {
 
   useEffect(() => {
     /* basename 已被 router 去掉，pathname 是站內路徑。
-       首頁在某些情況下會是 '' 或 '/'，一併處理。 */
-    const key = pathname === '' ? '/' : pathname
+       首頁在某些情況下會是 '' 或 '/'，一併處理。
+
+       尾斜線一定要去掉。預渲染產出的是 about/index.html，GitHub Pages
+       會把 /about 301 轉到 /about/；Route 會正規化尾斜線所以畫面正確，
+       但這裡若拿 '/about/' 直接查表就會查不到而落到 NOT_FOUND_META——
+       線上五個內頁的 title 與 og 標籤全部變成「Page not found」。
+       本機 preview 不做這個轉址，所以只有部署後才看得到。 */
+    const key = pathname.replace(/\/+$/, '') || '/'
     const meta = PAGE_META[key] ?? NOT_FOUND_META
 
     document.title = meta.title
