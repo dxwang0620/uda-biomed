@@ -12,7 +12,18 @@
   }
 }
 
-/* 設計稿的情境照放在右側，左緣白色漸隱。目前沒有照片，這一層不會渲染。 */
+/* 有照片時給 hero 一個下限高度，否則照片被壓成一條 */
+.hero:has(.media) {
+  min-height: 420px;
+}
+
+@media (min-width: 1024px) {
+  .hero:has(.media) {
+    min-height: 560px;
+  }
+}
+
+/* 設計稿的情境照放在右側，左緣白色漸隱。沒有傳 media 時這一層不會渲染。 */
 .media {
   position: absolute;
   inset: 0;
@@ -20,11 +31,68 @@
   overflow: hidden;
 }
 
+/* <picture> 預設是 inline 且沒有高度，img 的 height:100% 會無從解析而退回
+   auto——照片只佔容器上緣一條，object-fit 形同沒設。必須讓 picture 撐滿。 */
+.media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: right center;
+  /* 桌機是寬扁的裁切框，只會裁掉上下。垂直取 25% 而非置中，
+     是為了保住建物屋頂與招牌——置中會把上緣切掉。
+     窄寬度時裁切改由左右主導，這個值不影響結果。 */
+  object-position: right 25%;
+}
+
+/* 白色漸隱。手機沒有左右可分——文字橫跨整個寬度——所以改成上白下透：
+   文字待在頂端的白區，照片在文字下方露出來，正好填掉原本的空白。
+   文字底部約落在 hero 高度的 36%，白色實色留到 42% 是留了餘裕。
+   實際對比度見 docs/design-node.md「ABOUT hero 照片」。 */
+.media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--color-white) 0%,
+    var(--color-white) 42%,
+    rgba(255, 255, 255, 0.55) 58%,
+    rgba(255, 255, 255, 0.15) 70%,
+    rgba(255, 255, 255, 0) 80%
+  );
+}
+
+@media (min-width: 768px) {
+  .media::after {
+    background: linear-gradient(
+      to right,
+      var(--color-white) 0%,
+      var(--color-white) 26%,
+      rgba(255, 255, 255, 0.88) 40%,
+      rgba(255, 255, 255, 0.45) 54%,
+      rgba(255, 255, 255, 0.12) 68%,
+      rgba(255, 255, 255, 0) 78%
+    );
+  }
+}
+
+/* 設計稿量到：純白延伸到 33%，照片在 43–46% 完全顯現。 */
+@media (min-width: 1024px) {
+  .media::after {
+    background: linear-gradient(
+      to right,
+      var(--color-white) 0%,
+      var(--color-white) 32%,
+      rgba(255, 255, 255, 0.82) 40%,
+      rgba(255, 255, 255, 0.32) 50%,
+      rgba(255, 255, 255, 0) 60%
+    );
+  }
 }
 
 .content {

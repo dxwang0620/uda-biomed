@@ -31,6 +31,23 @@ export default function About() {
         title="About UDA BIOMED"
         titleId="about-heading"
         lede="We investigate disease through the molecular foundations of life."
+        media={
+          /* 設計稿的情境照。純裝飾——標題已經說完這張圖能說的事，
+             所以 alt=""，不描述畫面內容。width/height 是原圖尺寸，避免 CLS。 */
+          <picture>
+            <source
+              srcSet={`${import.meta.env.BASE_URL}media/about-hero.webp`}
+              type="image/webp"
+            />
+            <img
+              src={`${import.meta.env.BASE_URL}media/about-hero.jpg`}
+              alt=""
+              width={1600}
+              height={900}
+              fetchPriority="high"
+            />
+          </picture>
+        }
       />
 
       {/* 設計稿：左欄 Our Purpose 文字，右欄 Our Perspective 白卡。
