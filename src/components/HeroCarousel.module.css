@@ -130,7 +130,7 @@
 }
 
 .dot:hover::before {
-  background: var(--color-on-video-muted);
+  background: var(--color-orange);
 }
 
 /* 當前這一張用橘色標示。橘色對左側色調底的對比 3.65:1，

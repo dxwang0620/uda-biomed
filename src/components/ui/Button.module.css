@@ -83,16 +83,18 @@
   border-color: var(--color-tint);
 }
 
-/* 橘色主要 CTA。文字用 --color-primary-600 而非白色：
-   白字在 #fd7c06 上只有 2.60:1，深藍是 5.70:1。 */
+/* 橘色主要 CTA。
+   ⚠ 白字疊在 #fd7c06 上只有 2.60:1，低於 WCAG AA 的 4.5:1（依指示採用）。
+   要合格的話，橘色得壓到 #bc5c04 以下才行，但那已經是褐色。
+   替代方案是文字改回 --color-primary-600（5.70:1）。 */
 .accent {
   background: var(--color-orange);
   border-color: var(--color-orange);
-  color: var(--color-primary-600);
+  color: var(--color-white);
 }
 
 .accent:hover {
   background: var(--color-primary-600);
   border-color: var(--color-primary-600);
-  color: var(--color-orange);
+  color: var(--color-white);
 }
