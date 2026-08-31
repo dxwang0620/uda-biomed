@@ -2,13 +2,18 @@
   position: relative;
   isolation: isolate;
   background: var(--color-white);
+  /* 波浪高度只在這裡定義一次。先前 padding 與 .wave 各寫一份相同的 clamp，
+     改其中一個就會走位。下限 96px 是為了手機——12vw 在 375 寬只有 45px，
+     波浪會細成一條邊。 */
+  --wave-h: clamp(96px, 12vw, 160px);
+
   /* 下緣要讓開波浪色帶，否則文字會被蓋住 */
-  padding-block: var(--space-6) calc(clamp(56px, 12vw, 160px) + var(--space-6));
+  padding-block: var(--space-6) calc(var(--wave-h) + var(--space-6));
 }
 
 @media (min-width: 1024px) {
   .hero {
-    padding-block: var(--space-8) calc(clamp(56px, 12vw, 160px) + var(--space-8));
+    padding-block: var(--space-8) calc(var(--wave-h) + var(--space-8));
   }
 }
 
@@ -42,11 +47,20 @@
 .media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  /* 桌機是寬扁的裁切框，只會裁掉上下。垂直取 25% 而非置中，
-     是為了保住建物屋頂與招牌——置中會把上緣切掉。
-     窄寬度時裁切改由左右主導，這個值不影響結果。 */
-  object-position: right 25%;
+  /* 手機用 contain：cover 在 375 寬會把 16:9 的照片裁掉一半寬度，
+     只剩右側的水景，建物完全看不到。contain 讓整張縮進來，
+     貼齊底部，波浪從它下緣壓過去。 */
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+@media (min-width: 768px) {
+  .media img {
+    object-fit: cover;
+    /* 桌機是寬扁的裁切框，只會裁掉上下。垂直取 25% 而非置中，
+       是為了保住建物屋頂與招牌——置中會把上緣切掉。 */
+    object-position: right 25%;
+  }
 }
 
 /* 白色漸隱。手機沒有左右可分——文字橫跨整個寬度——所以改成上白下透：
@@ -60,10 +74,9 @@
   background: linear-gradient(
     to bottom,
     var(--color-white) 0%,
-    var(--color-white) 42%,
-    rgba(255, 255, 255, 0.55) 58%,
-    rgba(255, 255, 255, 0.15) 70%,
-    rgba(255, 255, 255, 0) 80%
+    var(--color-white) 40%,
+    rgba(255, 255, 255, 0.5) 52%,
+    rgba(255, 255, 255, 0) 66%
   );
 }
 
@@ -125,6 +138,6 @@
   bottom: -1px;
   z-index: 1;
   width: 100%;
-  height: clamp(56px, 12vw, 160px);
+  height: var(--wave-h);
   pointer-events: none;
 }
