@@ -8,8 +8,11 @@
 :root {
   /* ---- 藍：主色階 ---- */
   --color-navy: #003068;        /* [取樣] hero 波浪色帶、所有標題 */
-  --color-primary: #00377e;     /* [取樣] 實心 CTA 按鈕、圖示圓底 */
-  --color-primary-600: #002a63; /* [推導] navy 再壓暗，供 hover / active */
+  --color-primary: #0f3661;     /* [指定] 主色。原取樣值為 #00377e，依指示改用此色 */
+  --color-primary-600: #0b2849; /* [推導] 主色壓暗一階，供 hover / active */
+  /* 主色的 RGB 分量，供需要帶 alpha 的地方使用（例如 header 漸層）。
+     CSS 無法對 hex 直接套 alpha，拆成分量才能寫 rgba()。 */
+  --color-primary-rgb: 15, 54, 97;
   --color-accent: #0072ea;      /* [取樣] hero 右下分子網格連線 */
   --color-accent-bright: #00bef8; /* [取樣] 網格節點亮點 */
 

@@ -95,9 +95,9 @@
   opacity: 0;
   background: linear-gradient(
     to right,
-    rgba(0, 48, 104, 0.95) 0%,
-    rgba(0, 48, 104, 0.82) 55%,
-    rgba(0, 48, 104, 0.6) 100%
+    rgba(var(--color-primary-rgb), 0.95) 0%,
+    rgba(var(--color-primary-rgb), 0.82) 55%,
+    rgba(var(--color-primary-rgb), 0.6) 100%
   );
   /* 只覆蓋 header 自身高度，讓它讀起來是一條明確的橫幅，
      而不是一片往下暈開、與 hero 分不清的色塊。 */
