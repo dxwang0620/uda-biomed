@@ -1,6 +1,7 @@
 .footer {
   padding-block: var(--space-6);
-  background: var(--color-navy);
+  /* 主色，與 header 同一個色。footer 是頁面的收尾，與 header 呼應。 */
+  background: var(--color-primary);
   color: var(--color-on-navy);
   /* 前面是 CTA 帶時，兩塊 navy 之間需要一條界線 */
   border-top: 1px solid var(--color-on-navy-border);
