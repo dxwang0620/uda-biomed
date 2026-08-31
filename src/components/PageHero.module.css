@@ -28,12 +28,35 @@
   }
 }
 
-/* 設計稿的情境照放在右側，左緣白色漸隱。沒有傳 media 時這一層不會渲染。 */
+/* 設計稿的情境照放在右側，左緣白色漸隱。沒有傳 media 時這一層不會渲染。
+
+   手機把這一層縮成「照片本身的形狀」並貼齊底部，桌機才展開成滿版。
+   這樣做的理由是 mask 的對齊：照片上緣在 hero 裡的位置會隨寬度跑
+   （320 寬是 57%、375 是 50%、414 是 44%），mask 若用 hero 的座標就
+   永遠對不準，上緣會留一道階梯。讓這一層等於照片本身，mask 的 0%
+   就恆等於照片上緣。 */
 .media {
   position: absolute;
-  inset: 0;
+  inset: auto 0 0;
+  /* 56.25vw 就是滿版寬度下 16:9 的高度，照片剛好不裁切。
+     不要改用 aspect-ratio + max-height：高度被夾住時 aspect-ratio 會連
+     寬度一起縮，767 寬時照片只剩左半邊。
+     58% 這個上限是給接近 768 的寬度用的，否則照片會高過 hero 壓到標題。 */
+  height: min(56.25vw, 58%);
   z-index: -1;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 46%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 46%);
+}
+
+@media (min-width: 768px) {
+  .media {
+    inset: 0;
+    height: auto;
+    /* 桌機的漸隱是左右向，由 ::after 那層負責 */
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }
 
 /* <picture> 預設是 inline 且沒有高度，img 的 height:100% 會無從解析而退回
@@ -47,41 +70,25 @@
 .media img {
   width: 100%;
   height: 100%;
-  /* 手機用 contain：cover 在 375 寬會把 16:9 的照片裁掉一半寬度，
-     只剩右側的水景，建物完全看不到。contain 讓整張縮進來，
-     貼齊底部，波浪從它下緣壓過去。 */
-  object-fit: contain;
+  object-fit: cover;
   object-position: center bottom;
 }
 
 @media (min-width: 768px) {
   .media img {
-    object-fit: cover;
     /* 桌機是寬扁的裁切框，只會裁掉上下。垂直取 25% 而非置中，
        是為了保住建物屋頂與招牌——置中會把上緣切掉。 */
     object-position: right 25%;
   }
 }
 
-/* 白色漸隱。手機沒有左右可分——文字橫跨整個寬度——所以改成上白下透：
-   文字待在頂端的白區，照片在文字下方露出來，正好填掉原本的空白。
-   文字底部約落在 hero 高度的 36%，白色實色留到 42% 是留了餘裕。
-   實際對比度見 docs/design-node.md「ABOUT hero 照片」。 */
-.media::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    var(--color-white) 0%,
-    var(--color-white) 40%,
-    rgba(255, 255, 255, 0.5) 52%,
-    rgba(255, 255, 255, 0) 66%
-  );
-}
-
+/* 白色漸隱只有桌機需要：手機的融合交給上面的 mask，
+   再疊一層白紗會把建物洗掉。 */
 @media (min-width: 768px) {
   .media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
     background: linear-gradient(
       to right,
       var(--color-white) 0%,
