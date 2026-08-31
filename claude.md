@@ -224,9 +224,15 @@ Mobile-first，先寫手機樣式，再用 `min-width` 往上加。
 
 - `muted` 與 `playsInline` 缺一不可，否則 iOS Safari 不會自動播放
 - **必備 poster 圖**：影片載入前、載入失敗、行動裝置皆靠它撐場
-- **768px 以下不載入影片**，只顯示 poster 圖
+- **所有寬度都載入影片**，手機也播（原本訂為 768px 以下只顯示 poster，後來改掉）
+  - 代價是每個手機訪客多約 616KB。要改回去，在 `src/hooks/useHeroVideoEnabled.ts`
+    的 `allowed()` 加回 `window.matchMedia('(min-width: 768px)').matches`
 - **`prefers-reduced-motion: reduce` 時不播放**，顯示 poster 靜態圖
-- 影片上覆蓋遮罩（`--color-navy` 搭配 55%–65% 透明度或線性漸層），確保白色文字與透明 header 的導覽文字對比度達 WCAG AA 4.5:1。做完實測，不要目測
+- 影片上覆蓋遮罩，確保白色文字與透明 header 的導覽文字對比度達 WCAG AA 4.5:1。做完實測，不要目測
+  - 原訂 `--color-navy` 55%–65%，但實測不合格：影片文字區存在純白畫面（相對亮度 1.000），
+    55% 只有 3.42:1、65% 也才 4.54:1，達 AA 的臨界值是 64.7%
+  - 現況：hero 標題用局部橢圓漸層（`0.72/0.56`），header 用由左至右的漸層（`0.95/0.82/0.60`）
+  - 量測方法與各處數值見 `docs/design-node.md`
 - 影片為純裝飾，`aria-hidden="true"`，不放任何靠影片才能理解的資訊
 - 文字與 CTA 放獨立圖層，`z-index` 高於影片與遮罩
 
