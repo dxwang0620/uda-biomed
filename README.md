@@ -86,6 +86,13 @@ GitHub Pages 沒有 SPA fallback，直接開 `/about` 或重新整理會拿到 4
 > `CLAUDE.md` 要求 1920×1080，但原始檔只有 720p，**無法無損放大**，故維持原解析度。
 > 三個產物合計約 1.5 MB，遠低於 5 MB 上限。
 
+**手機也播放影片**：`CLAUDE.md` 原本要求「768px 以下不載入影片」，依後續指示改為
+所有寬度都播。代價是每個手機訪客多約 616KB（webm）流量。
+要改回去，在 `src/hooks/useHeroVideoEnabled.ts` 的 `allowed()` 加回
+`window.matchMedia('(min-width: 768px)').matches` 即可。
+
+`prefers-reduced-motion: reduce` 時仍然不載入影片，只顯示 poster。
+
 ### 轉檔指令
 
 ```bash
@@ -107,7 +114,7 @@ ffmpeg -y -i "$SRC" -vf "crop=1270:660:0:0" -an -c:v libvpx-vp9 -crf 36 -b:v 0 -
   -pix_fmt yuv420p public/media/hero.webm
 
 # poster —— 取第 1 秒的畫格
-#   影片載入前、載入失敗、768px 以下、以及 prefers-reduced-motion 時都靠它撐場
+#   影片載入前、載入失敗、以及 prefers-reduced-motion 時都靠它撐場
 ffmpeg -y -ss 1 -i "$SRC" -vf "crop=1270:660:0:0" -frames:v 1 -q:v 4 public/media/hero-poster.jpg
 ```
 
