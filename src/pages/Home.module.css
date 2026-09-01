@@ -235,12 +235,6 @@
   composes: card;
 }
 
-.blockHead {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-}
-
 .blockTitle {
   font-size: 1.375rem;
   line-height: 1.25;
@@ -368,12 +362,20 @@
   background: currentColor;
 }
 
+/* 日期做成實心色塊而不是換文字顏色。
+   在 --glass 0.25 的卡片上實測，換任何一種文字顏色都比現在的近黑更差
+   （主色 1.17:1、強調藍 1.60:1、橘 1.03:1——橘是中間調，亮暗背景兩邊都輸）。
+   實心底不透明，對比不受影片明暗影響：白字 on --color-primary 是 12.21:1。
+   數值見 docs/content-home.md。 */
 .newsDate {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  padding: 3px 9px;
   white-space: nowrap;
-  opacity: 0.85;
+  color: var(--color-white);
+  background: var(--color-primary);
+  border-radius: 999px;
 }
 
 .newsTitle {
@@ -390,31 +392,6 @@
   opacity: 0.85;
 }
 
-
-/* 草稿標記。刻意顯眼，理由同 Placeholder：不能讓草稿悄悄上線。 */
-.draftChip {
-  display: inline-block;
-  /* 不換行留在自己一列，跟著標題最後一個字走 */
-  white-space: nowrap;
-  margin-left: var(--space-1);
-  padding: 1px 8px;
-  font-family: var(--font-latin);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  vertical-align: middle;
-  color: var(--color-text-on-glass);
-  border: 2px dashed var(--color-text-on-glass);
-  border-radius: var(--radius-sm);
-}
-
-.draftNote {
-  margin-top: var(--space-2);
-  font-size: var(--text-small);
-  line-height: 1.6;
-  color: var(--color-text-on-glass);
-}
 
 /* ---------- 董事長 ---------- */
 

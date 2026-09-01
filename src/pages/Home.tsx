@@ -12,46 +12,45 @@ import styles from './Home.module.css'
 
 /* 最新消息。版面依 index_img/part1.jpeg：縮圖 +（分類・日期）+ 標題 + 兩行摘要。
 
-   分類、標題、摘要是草稿；日期一律寫成 DD MMM YYYY 模板。
-   「某日發生某事」是事實主張，依 CLAUDE.md 工作方式第 3 條不編造，
-   模板讓日期欄的版面完整成立，又不可能被誤認成真日期。
+   分類、標題、摘要、**日期**全部是佔位用的假資料，你指定要填的。
+   上線前務必整批換掉——這一區已經沒有任何畫面上的草稿標記了，
+   看起來就跟正式內容一樣。哪些欄位是假的記錄在 docs/content-home.md。
 
-   縮圖沒有素材，走佔位框而不是拿其他頁的照片充數——照片配上草稿標題，
-   只會讓假內容看起來更像真的。你給圖之後把 <NewsThumb> 換掉即可。 */
+   縮圖沒有素材，走佔位框。你給圖之後把 .newsThumb 換成 <img> 即可。 */
 const NEWS = [
   {
     category: 'Research',
-    date: 'DD MMM YYYY',
+    date: '21 Aug 2026',
     title: 'Research direction update for cancer-detection technology',
     excerpt: 'How UDA frames the questions it is currently pursuing, and what it is deliberately leaving open.',
   },
   {
     category: 'Technology',
-    date: 'DD MMM YYYY',
+    date: '04 Aug 2026',
     title: 'UDA Biochip platform development progress',
     excerpt: 'Where the platform stands across recognition, sensing and data analysis.',
   },
   {
     category: 'Collaboration',
-    date: 'DD MMM YYYY',
+    date: '17 Jul 2026',
     title: 'Academic and industry collaboration announcement',
     excerpt: 'The kinds of partners we are looking for, and what a first conversation usually covers.',
   },
   {
     category: 'Framework',
-    date: 'DD MMM YYYY',
+    date: '29 Jun 2026',
     title: 'Proto-Structural Biology research framework update',
     excerpt: 'Reading change from atomic and molecular structure through to cellular state.',
   },
   {
     category: 'Intellectual Property',
-    date: 'DD MMM YYYY',
+    date: '12 Jun 2026',
     title: 'Intellectual property and translational development notice',
     excerpt: 'What gets disclosed at each stage of R&D maturity, and why the rest waits.',
   },
   {
     category: 'Responsibility',
-    date: 'DD MMM YYYY',
+    date: '26 May 2026',
     title: 'Corporate responsibility and data governance statement',
     excerpt: 'Scientific integrity, privacy governance and respect for life as working constraints.',
   },
@@ -137,12 +136,9 @@ export default function Home() {
       <Section tone="translucent">
         <div className={styles.split}>
           <div className={`${styles.newsBlock} ${styles.reveal}`}>
-            <div className={styles.blockHead}>
-              <h2 id="news-heading" className={styles.blockTitle}>
-                Latest News
-              </h2>
-              <span className={styles.draftChip}>Draft</span>
-            </div>
+            <h2 id="news-heading" className={styles.blockTitle}>
+              Latest News
+            </h2>
 
             {/* 捲動區必須自己能拿到焦點，否則只用鍵盤的人捲不動它——
                 Firefox 會自動給焦點，Chrome 不會，所以明寫 tabIndex。 */}
@@ -175,14 +171,6 @@ export default function Home() {
                 ))}
               </ol>
             </div>
-
-            <p className={styles.draftNote}>
-              Layout follows index_img/part1.jpeg. Categories, headlines and
-              excerpts are drafts; dates are DD MMM YYYY templates, not real
-              ones; thumbnails are empty slots. Send the real items and images
-              and all three come off together. No news page exists yet, so
-              there is no link out.
-            </p>
           </div>
 
           <blockquote className={`${styles.card} ${styles.chairman} ${styles.reveal}`}>
