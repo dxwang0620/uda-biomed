@@ -196,7 +196,28 @@ CURRENT R&D FOCUS 之前，原本的區塊順序不變、整體往下移。
 卡片，而卡片是這一列最高的那個，於是 `max-height: none` 反而讓整列撐到
 970px 且完全不再有捲軸。`basis: 0` 讓它只吃剩餘空間，高度改由旁邊那張決定。
 
-捲軸與日期色塊同色（`--color-primary`）。消息會一直累積，
+### 捲軸只在 hover / focus 時出現
+
+thumb 預設 `transparent`，`.newsBlock:hover` 或 `:focus-within` 時才變成
+`--color-primary`（與日期色塊同色）。
+
+兩個不能省的細節：
+
+- **`::-webkit-scrollbar` 的 6px 寬度永遠保留**，只切換顏色。若改成 hover
+  才給寬度，捲軸出現的瞬間可視寬度會少 6px，整列內容跟著位移。
+  實測 hover 前後都是 6px。
+- **`:focus-within` 必須一起寫**。用鍵盤 tab 進捲動區的人不會有 hover，
+  沒有它就完全看不到捲軸在哪。
+
+### 每一列的 hover
+
+底色比卡片濃一階（`--glass + 0.14`，與 `.tag` 同一組級距）、標題加底線。
+圓角底色蓋不住直線分隔線，所以 hover 時把 `border-bottom-color` 收成
+transparent。`prefers-reduced-motion: reduce` 時移除 transition。
+
+> 目前每一列不是連結（還沒有 news 頁），所以沒有給 `cursor: pointer`——
+> 有 hover 卻點不動已經有點怪，再加上手型游標會更誤導。
+> 之後包成 `<Link>` 時把游標一起補上。消息會一直累積，
 讓它自己捲，區塊高度就不會跟著清單長。
 
 兩個實作上的坑：

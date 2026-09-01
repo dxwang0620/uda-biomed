@@ -271,9 +271,13 @@
   }
 }
 
-/* 捲軸要「看得見」，不能用 macOS 預設的 overlay 捲軸——那種只有正在捲的
-   時候才浮現，靜止時使用者根本不知道這裡可以捲。
-   自訂 ::-webkit-scrollbar 會讓 Chrome/Safari 改用常駐捲軸（會佔版面寬度）。
+/* 捲軸只在滑到區塊上時出現。
+
+   寬度（6px）永遠保留，只切換 thumb 的顏色——若改成 hover 才給寬度，
+   捲軸出現的瞬間可視寬度會少 6px，整列內容跟著位移。
+
+   :focus-within 不能省：用鍵盤 tab 進捲動區的人不會有 hover，
+   沒有它就完全看不到捲軸在哪。
 
    關鍵：不能同時寫標準的 scrollbar-width，Chrome 只要看到它就會走標準
    路徑而整組忽略 ::-webkit-scrollbar。所以標準屬性放進
@@ -287,13 +291,23 @@
 }
 
 .newsScroll::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
+  background: transparent;
   border-radius: 999px;
+}
+
+.newsBlock:hover .newsScroll::-webkit-scrollbar-thumb,
+.newsBlock:focus-within .newsScroll::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
 }
 
 @supports not selector(::-webkit-scrollbar) {
   .newsScroll {
     scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+
+  .newsBlock:hover .newsScroll,
+  .newsBlock:focus-within .newsScroll {
     scrollbar-color: var(--color-primary) transparent;
   }
 }
@@ -321,7 +335,32 @@
   gap: var(--space-2);
   align-items: start;
   padding-block: var(--space-2);
+  /* 左右留一點，hover 的底色才不會貼著字 */
+  padding-inline: var(--space-1);
+  border-radius: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.15));
+  transition: background-color 160ms ease;
+}
+
+.newsItem:hover {
+  /* 比卡片濃一階，跟 .tag 用同一組級距 */
+  background: rgba(255, 255, 255, calc(var(--glass) + 0.14));
+}
+
+/* 圓角底色蓋不住直線分隔線，hover 時把它收掉 */
+.newsItem:hover {
+  border-bottom-color: transparent;
+}
+
+.newsItem:hover .newsTitle {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .newsItem {
+    transition: none;
+  }
 }
 
 .newsItem:first-child {
