@@ -1,4 +1,4 @@
-import { Dna, Microscope, Share2 } from 'lucide-react'
+import { Calendar, Dna, ImageIcon, Microscope, Share2 } from 'lucide-react'
 import HeroCarousel from '../components/HeroCarousel.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
 import Card from '../components/ui/Card.tsx'
@@ -10,17 +10,51 @@ import styles from './Home.module.css'
 /* 版面與文案依 index_video 參考影片重建，逐字內容見 docs/content-home.md。
    標 [抄錄] 的是從錄影讀出、待你校對；日期與數字一律不抄，走 <Placeholder>。 */
 
-/* 最新消息。
-   標題是草稿，日期一律寫成 YYYY.MM.DD 模板——「某日發生某事」是事實主張，
-   依 CLAUDE.md 工作方式第 3 條不編造。模板讓時間欄的版面完整呈現，
-   又不可能被誤認成真日期。你給實際消息後把 year / day 換掉即可。 */
+/* 最新消息。版面依 index_img/part1.jpeg：縮圖 +（分類・日期）+ 標題 + 兩行摘要。
+
+   分類、標題、摘要是草稿；日期一律寫成 DD MMM YYYY 模板。
+   「某日發生某事」是事實主張，依 CLAUDE.md 工作方式第 3 條不編造，
+   模板讓日期欄的版面完整成立，又不可能被誤認成真日期。
+
+   縮圖沒有素材，走佔位框而不是拿其他頁的照片充數——照片配上草稿標題，
+   只會讓假內容看起來更像真的。你給圖之後把 <NewsThumb> 換掉即可。 */
 const NEWS = [
-  { year: 'YYYY', day: 'MM.DD', title: 'Research direction update for cancer-detection technology' },
-  { year: 'YYYY', day: 'MM.DD', title: 'UDA Biochip platform development progress' },
-  { year: 'YYYY', day: 'MM.DD', title: 'Academic and industry collaboration announcement' },
-  { year: 'YYYY', day: 'MM.DD', title: 'Proto-Structural Biology research framework update' },
-  { year: 'YYYY', day: 'MM.DD', title: 'Intellectual property and translational development notice' },
-  { year: 'YYYY', day: 'MM.DD', title: 'Corporate responsibility and data governance statement' },
+  {
+    category: 'Research',
+    date: 'DD MMM YYYY',
+    title: 'Research direction update for cancer-detection technology',
+    excerpt: 'How UDA frames the questions it is currently pursuing, and what it is deliberately leaving open.',
+  },
+  {
+    category: 'Technology',
+    date: 'DD MMM YYYY',
+    title: 'UDA Biochip platform development progress',
+    excerpt: 'Where the platform stands across recognition, sensing and data analysis.',
+  },
+  {
+    category: 'Collaboration',
+    date: 'DD MMM YYYY',
+    title: 'Academic and industry collaboration announcement',
+    excerpt: 'The kinds of partners we are looking for, and what a first conversation usually covers.',
+  },
+  {
+    category: 'Framework',
+    date: 'DD MMM YYYY',
+    title: 'Proto-Structural Biology research framework update',
+    excerpt: 'Reading change from atomic and molecular structure through to cellular state.',
+  },
+  {
+    category: 'Intellectual Property',
+    date: 'DD MMM YYYY',
+    title: 'Intellectual property and translational development notice',
+    excerpt: 'What gets disclosed at each stage of R&D maturity, and why the rest waits.',
+  },
+  {
+    category: 'Responsibility',
+    date: 'DD MMM YYYY',
+    title: 'Corporate responsibility and data governance statement',
+    excerpt: 'Scientific integrity, privacy governance and respect for life as working constraints.',
+  },
 ]
 
 /* 董事長談話草稿。
@@ -119,22 +153,35 @@ export default function Home() {
               aria-labelledby="news-heading"
             >
               <ol className={styles.newsList}>
-                {NEWS.map(({ year, day, title }) => (
+                {NEWS.map(({ category, date, title, excerpt }) => (
                   <li key={title} className={styles.newsItem}>
-                    <time className={styles.newsDate}>
-                      <span className={styles.newsYear}>{year}</span>
-                      <span className={styles.newsDay}>{day}</span>
-                    </time>
-                    <span className={styles.newsTitle}>{title}</span>
+                    {/* 縮圖佔位。純裝飾，圖進來之後換成 <img>，版面不動。 */}
+                    <div className={styles.newsThumb} aria-hidden="true">
+                      <ImageIcon size={20} strokeWidth={1.5} />
+                    </div>
+
+                    <div className={styles.newsBody}>
+                      <p className={styles.newsMeta}>
+                        <span className={styles.newsCategory}>{category}</span>
+                        <span className={styles.newsDate}>
+                          <Calendar size={13} strokeWidth={2} aria-hidden="true" />
+                          {date}
+                        </span>
+                      </p>
+                      <h3 className={styles.newsTitle}>{title}</h3>
+                      <p className={styles.newsExcerpt}>{excerpt}</p>
+                    </div>
                   </li>
                 ))}
               </ol>
             </div>
 
             <p className={styles.draftNote}>
-              Headlines are drafts and the dates are YYYY.MM.DD templates, not
-              real ones. Send the actual items and both come off in one edit.
-              No news page exists yet, so there is no link out.
+              Layout follows index_img/part1.jpeg. Categories, headlines and
+              excerpts are drafts; dates are DD MMM YYYY templates, not real
+              ones; thumbnails are empty slots. Send the real items and images
+              and all three come off together. No news page exists yet, so
+              there is no link out.
             </p>
           </div>
 

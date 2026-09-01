@@ -251,7 +251,8 @@
    讓它自己捲，區塊高度就不會跟著清單長。 */
 .newsScroll {
   width: 100%;
-  max-height: 19rem;
+  /* 25rem 約放得下三則（參考稿的可視筆數），第四則露出上緣當作可捲的提示 */
+  max-height: 25rem;
   overflow-y: auto;
   /* 捲到底不要把整頁一起帶著捲 */
   overscroll-behavior: contain;
@@ -300,12 +301,12 @@
   list-style: none;
 }
 
-/* 時間欄固定寬度，標題才會對齊成一直行 */
+/* 一列 = 縮圖 + 內容，依 index_img/part1.jpeg */
 .newsItem {
   display: grid;
-  grid-template-columns: 3.5rem 1fr;
+  grid-template-columns: 5.5rem 1fr;
   gap: var(--space-2);
-  align-items: baseline;
+  align-items: start;
   padding-block: var(--space-2);
   border-bottom: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.15));
 }
@@ -318,35 +319,77 @@
   border-bottom: 0;
 }
 
-/* 年份小、月日大：純文字清單靠這個層級差建立節奏，不必再加裝飾 */
-.newsDate {
-  display: flex;
-  flex-direction: column;
-  font-family: var(--font-latin);
-  line-height: 1.1;
+@media (min-width: 1024px) {
+  .newsItem {
+    grid-template-columns: 6.5rem 1fr;
+  }
+}
+
+/* 縮圖佔位。刻意留白而不是塞其他頁的照片：草稿標題配上真照片，
+   只會讓假內容更像真的。圖進來之後換成 <img>，尺寸與圓角不用動。 */
+.newsThumb {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
   color: var(--color-text-on-glass);
-  white-space: nowrap;
+  background: rgba(255, 255, 255, calc(var(--glass) + 0.12));
+  border: 1px dashed rgba(5, 16, 31, 0.35);
 }
 
-.newsYear {
-  font-size: 0.6875rem;
+.newsBody {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* 分類靠左、日期靠右，同一列 */
+.newsMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  font-family: var(--font-latin);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  opacity: 0.75;
+  color: var(--color-text-on-glass);
 }
 
-.newsDay {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+/* 參考稿的分類前面有個小圓點 */
+.newsCategory::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 6px;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.newsDate {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  opacity: 0.85;
 }
 
 .newsTitle {
-  font-size: 1.0625rem;
-  font-weight: 600;
-  line-height: 1.45;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.35;
   color: var(--color-text-on-glass);
 }
+
+.newsExcerpt {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-on-glass);
+  opacity: 0.85;
+}
+
 
 /* 草稿標記。刻意顯眼，理由同 Placeholder：不能讓草稿悄悄上線。 */
 .draftChip {
