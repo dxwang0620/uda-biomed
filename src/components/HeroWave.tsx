@@ -1,33 +1,28 @@
 /**
- * hero 底部的 navy 波浪色帶 —— 全站簽名元素，四張設計稿都有。
+ * hero 底部的波浪色帶 —— 全站簽名元素，四張設計稿都有。
  *
- * 路徑不是手捏的：座標取自 ABOUT 頁設計稿實測的 16 個取樣點
- * （見 docs/design-node.md「波浪色帶」），再用 Catmull-Rom 轉 cubic bezier
- * 通過每一點。形狀為左薄右厚，右端急揚。
+ * 改用 common_img/wave.jpg。原檔是白底 JPEG，白色區域必須去背，
+ * 否則會蓋掉波浪上方的照片。去背方式與量測見 docs/design-node.md。
  *
- * preserveAspectRatio="none" 讓它隨容器寬度拉伸，維持「貼齊底部」的行為。
+ * 原本是手繪的 SVG 路徑（座標取自 ABOUT 設計稿的 16 個取樣點），
+ * 但那個版本沒有素材本身的分子與實驗器材紋理。
+ *
+ * 圖片是純裝飾，aria-hidden。拉伸行為（object-fit: fill）等同原先
+ * SVG 的 preserveAspectRatio="none"。
  */
-
-const WAVE_PATH =
-  'M 0,226 C 16,227.8 64,233.3 96,237 C 128,240.7 160,245.2 192,248 ' +
-  'C 224,250.8 256,252.7 288,254 C 320,255.3 352,256 384,256 ' +
-  'C 416,256 448,255 480,254 C 512,253 544,251.8 576,250 ' +
-  'C 608,248.2 640,245.5 672,243 C 704,240.5 736,237.8 768,235 ' +
-  'C 800,232.2 832,229.5 864,226 C 896,222.5 928,218.8 960,214 ' +
-  'C 992,209.2 1024,202 1056,197 C 1088,192 1120,189.3 1152,184 ' +
-  'C 1184,178.7 1200,187.3 1248,165 C 1296,142.7 1392,75.8 1440,50 ' +
-  'C 1488,24.2 1520,16.7 1536,10 L 1536,293 L 0,293 Z'
-
 export default function HeroWave({ className }: { className?: string }) {
   return (
-    <svg
-      className={className}
-      viewBox="0 0 1536 293"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <path d={WAVE_PATH} fill="var(--color-navy)" />
-    </svg>
+    <picture className={className} aria-hidden="true">
+      <source
+        srcSet={`${import.meta.env.BASE_URL}media/wave.webp`}
+        type="image/webp"
+      />
+      <img
+        src={`${import.meta.env.BASE_URL}media/wave.png`}
+        alt=""
+        width={1898}
+        height={411}
+      />
+    </picture>
   )
 }

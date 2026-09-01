@@ -145,7 +145,17 @@
   right: 0;
   bottom: -1px;
   z-index: 1;
+  display: block;
   width: 100%;
   height: var(--wave-h);
   pointer-events: none;
+}
+
+/* fill 而非 cover：等同原本 SVG 的 preserveAspectRatio="none"，
+   讓色帶永遠貼齊容器兩側與下緣。cover 會為了保比例把曲線頂端裁掉。 */
+.wave img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
 }
