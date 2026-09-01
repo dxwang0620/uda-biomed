@@ -345,3 +345,41 @@ navy 標題 4.56:1、內文 4.67:1，仍達 AA。
 桌機的裁切框是寬扁的，只會裁上下，所以 `object-position` 用 `right 25%`
 而非 `right center`——置中會把建物屋頂與招牌切掉。窄寬度時裁切改由左右主導，
 這個值不影響結果。
+
+
+## RESEARCH / TECHNOLOGY / PARTNERSHIPS hero 照片
+
+與 ABOUT 同一套做法（見上一節），素材與轉檔結果：
+
+| 頁面 | 原始檔 | 產出 | jpg | webp |
+| ---- | ------ | ---- | --- | ---- |
+| RESEARCH | `web_img/research/S__213983245.jpg` | `research-hero.*` | 174K | 130K |
+| TECHNOLOGY | `web_img/technology/pic.jpg` | `technology-hero.*` | 183K | 139K |
+| PARTNERSHIPS | `web_img/partnership/pic.jpg` | `partnerships-hero.*` | 145K | 99K |
+
+三張都是 1672×941，維持原生尺寸。`web_img/` 的原始檔沒有更動。
+
+### 取景點必須逐頁設定
+
+ABOUT 用的是 `object-position: right 25%`，那是為了保住建物的屋頂與招牌。
+這三張是**室內走廊照，主體在畫面中段**，沿用 25% 會讓天花板佔掉一半。
+
+所以 `PageHero` 新增 `focal` 參數，寫進 `--hero-focal`，CSS 那側改成
+`object-position: var(--hero-focal, right 25%)`。三頁傳 `center`，
+ABOUT 不傳、沿用預設值。實測：三頁 `50% 50%`、ABOUT 仍是 `100% 25%`。
+
+桌機的裁切只發生在垂直方向（1440 寬時圖被縮到 1456×820、裁成 560 高，
+水平沒有裁切空間），所以水平值在桌機不影響結果；768 附近才會有水平裁切。
+
+### 實測對比度
+
+| 頁面 | 區塊 | 背景 | 對比 | 門檻 |
+| ---- | ---- | ---- | ---- | ---- |
+| RESEARCH | eyebrow | `#ecf7f5` | 11.83:1 | 4.5 |
+| RESEARCH | H1 | `#fbf7f0` | 12.12:1 | 3.0 |
+| RESEARCH | lede | `#fcfcfc` | 12.17:1 | 4.5 |
+| TECHNOLOGY | eyebrow | `#e7f9ff` | 11.95:1 | 4.5 |
+| TECHNOLOGY | H1 | `#f9f9f9` | 12.29:1 | 3.0 |
+| TECHNOLOGY | lede | `#f8faf9` | 11.91:1 | 4.5 |
+
+375 三頁皆走 mask 分支（media 375×211），無橫向捲軸。

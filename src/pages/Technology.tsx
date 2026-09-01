@@ -41,6 +41,26 @@ export default function Technology() {
         title="From Sample to Scientific Insight"
         titleId="tech-heading"
         lede="An integrated research workflow connecting laboratory processes, analytical systems and data interpretation."
+        focal="center"
+        media={
+          /* web_img/technology 的情境照。純裝飾——標題已經說完這張圖能說的事，
+             所以 alt=""，不描述畫面內容。width/height 是原圖尺寸，避免 CLS。
+             focal 用 center：這是室內走廊照，主體在中段，
+             沿用 ABOUT 的 right 25% 會讓天花板佔掉一半畫面。 */
+          <picture>
+            <source
+              srcSet={`${import.meta.env.BASE_URL}media/technology-hero.webp`}
+              type="image/webp"
+            />
+            <img
+              src={`${import.meta.env.BASE_URL}media/technology-hero.jpg`}
+              alt=""
+              width={1672}
+              height={941}
+              fetchPriority="high"
+            />
+          </picture>
+        }
       />
 
       <Section tone="tint" labelledBy="workflow-heading">

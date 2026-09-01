@@ -76,9 +76,10 @@
 
 @media (min-width: 768px) {
   .media img {
-    /* 桌機是寬扁的裁切框，只會裁掉上下。垂直取 25% 而非置中，
-       是為了保住建物屋頂與招牌——置中會把上緣切掉。 */
-    object-position: right 25%;
+    /* 桌機是寬扁的裁切框，只會裁掉上下。預設垂直取 25% 而非置中，
+       是為了保住 ABOUT 那張建物的屋頂與招牌——置中會把上緣切掉。
+       各頁可用 --hero-focal 覆寫，見 PageHero 的 focal 參數。 */
+    object-position: var(--hero-focal, right 25%);
   }
 }
 

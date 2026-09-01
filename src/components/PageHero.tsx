@@ -15,6 +15,7 @@ export default function PageHero({
   titleId,
   lede,
   media,
+  focal,
 }: {
   /** 可選。設計稿三個內頁都有，但不是每一頁都適合硬掰一個。 */
   eyebrow?: string
@@ -22,9 +23,22 @@ export default function PageHero({
   titleId: string
   lede: string
   media?: React.ReactNode
+  /**
+   * 桌機的取景點（object-position）。每張照片的主體位置不同，
+   * 共用一個值會切到不該切的地方——ABOUT 的建物要靠上取才保得住屋頂，
+   * 三張室內走廊照則要置中，用同一個值天花板會佔掉一半。
+   * 不給就用 CSS 裡的預設值。
+   */
+  focal?: string
 }) {
   return (
-    <section className={styles.hero} aria-labelledby={titleId}>
+    <section
+      className={styles.hero}
+      aria-labelledby={titleId}
+      style={
+        focal ? ({ '--hero-focal': focal } as React.CSSProperties) : undefined
+      }
+    >
       {media && <div className={styles.media}>{media}</div>}
 
       <div className={`container ${styles.content}`}>

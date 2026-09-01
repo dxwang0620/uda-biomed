@@ -41,6 +41,26 @@ export default function Research() {
         title="Researching Disease at Its Foundations"
         titleId="research-heading"
         lede="Connecting molecular investigation, analytical methods and collaborative research."
+        focal="center"
+        media={
+          /* web_img/research 的情境照。純裝飾——標題已經說完這張圖能說的事，
+             所以 alt=""，不描述畫面內容。width/height 是原圖尺寸，避免 CLS。
+             focal 用 center：這是室內走廊照，主體在中段，
+             沿用 ABOUT 的 right 25% 會讓天花板佔掉一半畫面。 */
+          <picture>
+            <source
+              srcSet={`${import.meta.env.BASE_URL}media/research-hero.webp`}
+              type="image/webp"
+            />
+            <img
+              src={`${import.meta.env.BASE_URL}media/research-hero.jpg`}
+              alt=""
+              width={1672}
+              height={941}
+              fetchPriority="high"
+            />
+          </picture>
+        }
       />
 
       <Section tone="tint" labelledBy="focus-heading">
