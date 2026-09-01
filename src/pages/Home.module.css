@@ -512,6 +512,9 @@
   gap: var(--space-3);
   width: 100%;
   margin-top: var(--space-3);
+  /* 內文與底下簽名區的分隔線之間留白。堆疊時這裡的底是肖像欄，
+     沒有它會直接貼著線。 */
+  padding-bottom: var(--space-2);
 }
 
 @media (min-width: 480px) {
