@@ -11,13 +11,16 @@ import styles from './Home.module.css'
    標 [抄錄] 的是從錄影讀出、待你校對；日期與數字一律不抄，走 <Placeholder>。 */
 
 /* 最新消息。
-   標題是草稿、日期一律不填——「某日發生某事」是事實主張，依 CLAUDE.md
-   工作方式第 3 條不編造。日期欄位保持 To add 的虛線標記，讓這一列不可能
-   被當成正式內容送上線。你給實際消息後，把 draft 拿掉、date 填上即可。 */
+   標題是草稿，日期一律寫成 YYYY.MM.DD 模板——「某日發生某事」是事實主張，
+   依 CLAUDE.md 工作方式第 3 條不編造。模板讓時間欄的版面完整呈現，
+   又不可能被誤認成真日期。你給實際消息後把 year / day 換掉即可。 */
 const NEWS = [
-  { date: null, title: 'Research direction update for cancer-detection technology', draft: true },
-  { date: null, title: 'UDA Biochip platform development progress', draft: true },
-  { date: null, title: 'Academic and industry collaboration announcement', draft: true },
+  { year: 'YYYY', day: 'MM.DD', title: 'Research direction update for cancer-detection technology' },
+  { year: 'YYYY', day: 'MM.DD', title: 'UDA Biochip platform development progress' },
+  { year: 'YYYY', day: 'MM.DD', title: 'Academic and industry collaboration announcement' },
+  { year: 'YYYY', day: 'MM.DD', title: 'Proto-Structural Biology research framework update' },
+  { year: 'YYYY', day: 'MM.DD', title: 'Intellectual property and translational development notice' },
+  { year: 'YYYY', day: 'MM.DD', title: 'Corporate responsibility and data governance statement' },
 ]
 
 /* 董事長談話草稿。
@@ -99,35 +102,43 @@ export default function Home() {
       {/* 兩個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。 */}
       <Section tone="translucent">
         <div className={styles.split}>
-          <div className={styles.newsBlock}>
-            <h2 id="news-heading" className={styles.blockTitle}>
-              Latest News
-            </h2>
+          <div className={`${styles.newsBlock} ${styles.reveal}`}>
+            <div className={styles.blockHead}>
+              <h2 id="news-heading" className={styles.blockTitle}>
+                Latest News
+              </h2>
+              <span className={styles.draftChip}>Draft</span>
+            </div>
 
-            <ol className={styles.newsList}>
-              {NEWS.map(({ date, title, draft }) => (
-                <li key={title} className={styles.newsItem}>
-                  <span className={styles.newsDate}>
-                    {date ?? <span className={styles.pendingInline}>To add</span>}
-                  </span>
-                  <span className={styles.newsTitle}>
-                    {title}
-                    {draft && (
-                      <span className={styles.draftChip}>Draft</span>
-                    )}
-                  </span>
-                </li>
-              ))}
-            </ol>
+            {/* 捲動區必須自己能拿到焦點，否則只用鍵盤的人捲不動它——
+                Firefox 會自動給焦點，Chrome 不會，所以明寫 tabIndex。 */}
+            <div
+              className={styles.newsScroll}
+              tabIndex={0}
+              role="group"
+              aria-labelledby="news-heading"
+            >
+              <ol className={styles.newsList}>
+                {NEWS.map(({ year, day, title }) => (
+                  <li key={title} className={styles.newsItem}>
+                    <time className={styles.newsDate}>
+                      <span className={styles.newsYear}>{year}</span>
+                      <span className={styles.newsDay}>{day}</span>
+                    </time>
+                    <span className={styles.newsTitle}>{title}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
 
             <p className={styles.draftNote}>
-              Headlines above are drafts written to show the layout. Dates are
-              deliberately unfilled — send the real items and both come off in
-              one edit. No news page exists yet, so there is no link out.
+              Headlines are drafts and the dates are YYYY.MM.DD templates, not
+              real ones. Send the actual items and both come off in one edit.
+              No news page exists yet, so there is no link out.
             </p>
           </div>
 
-          <blockquote className={`${styles.card} ${styles.chairman}`}>
+          <blockquote className={`${styles.card} ${styles.chairman} ${styles.reveal}`}>
             <h2 id="chairman-heading" className={styles.blockTitle}>
               Message from the Chairman
             </h2>

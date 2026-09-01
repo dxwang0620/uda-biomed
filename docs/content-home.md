@@ -159,18 +159,48 @@ CURRENT R&D FOCUS 之前，原本的區塊順序不變、整體往下移。
 
 | 欄位 | 狀態 | 說明 |
 | ---- | ---- | ---- |
-| 日期 | `[待補]` | **不編造**。「某月某日發生某事」是事實主張，寫錯即為不實資訊 |
-| 標題 | `[草稿]` | 只用來撐版面，畫面上帶 `DRAFT` 虛線標記 |
+| 日期 | `YYYY.MM.DD` 模板 | **不編造**。「某月某日發生某事」是事實主張，寫錯即為不實資訊。用模板讓時間欄的版面完整成立，又不可能被誤認成真日期 |
+| 標題 | `[草稿]` | 只用來撐版面，卡片標題旁有 `DRAFT` 虛線標記 |
 | 連結 | 無 | 目前沒有 news 頁，不做連往不存在路由的連結 |
 
-三則草稿標題：
+六則草稿標題（六則是為了讓清單超出高度、捲軸才有東西可捲）：
 
 1. Research direction update for cancer-detection technology
 2. UDA Biochip platform development progress
 3. Academic and industry collaboration announcement
+4. Proto-Structural Biology research framework update
+5. Intellectual property and translational development notice
+6. Corporate responsibility and data governance statement
 
-拿到實際消息後：把 `NEWS` 的 `date` 填上、`draft` 拿掉即可，
-`Home.tsx` 的 `<span className={styles.draftChip}>` 會自動不再渲染。
+拿到實際消息後：把 `NEWS` 每筆的 `year` / `day` 換掉、標題改寫，
+再刪掉 `blockHead` 裡那個 `draftChip` 即可。
+
+### 捲動清單與捲軸
+
+清單固定 `max-height: 19rem`，`overflow-y: auto`。消息會一直累積，
+讓它自己捲，區塊高度就不會跟著清單長。
+
+兩個實作上的坑：
+
+- **捲動區必須自己能拿到焦點**（`tabIndex={0}` + `role="group"` +
+  `aria-labelledby`），否則只用鍵盤的人捲不動它。Firefox 會自動給焦點，
+  Chrome 不會。既然可聚焦就必須有可見的焦點框。
+- **macOS 預設是 overlay 捲軸**，靜止時完全看不到，使用者不會知道能捲。
+  自訂 `::-webkit-scrollbar` 可讓 Chrome/Safari 改用常駐捲軸（實測佔 6px
+  版面寬度）。但**不能同時寫標準的 `scrollbar-width`**——Chrome 只要看到
+  它就會走標準路徑而整組忽略 `::-webkit-scrollbar`。所以標準屬性放進
+  `@supports not selector(::-webkit-scrollbar)`，只給 Firefox。
+
+### 捲動進場動畫
+
+用原生 `animation-timeline: view()`，**沒有引入動畫函式庫**。
+評估過 `motion`（framer-motion 後繼），但目前整包 gzip 只有 84 KB，
+而 GitHub Pages 有每月 100 GB 頻寬軟上限、影片已經是大戶，
+為兩個區塊的淡入付這個代價不划算。
+
+不支援 `animation-timeline` 的瀏覽器整條 `@supports` 失效，元素直接是
+最終狀態——不會出現「先隱藏、等 JS 才顯示」的空白閃動。
+外層再包一層 `@media (prefers-reduced-motion: no-preference)`。
 
 ### Message from the Chairman —— 全文 `[草稿]`、署名 `[待補]`
 

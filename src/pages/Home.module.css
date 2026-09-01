@@ -235,48 +235,110 @@
   composes: card;
 }
 
+.blockHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
 .blockTitle {
   font-size: 1.375rem;
   line-height: 1.25;
   color: var(--color-text-on-glass);
 }
 
-.newsList {
-  display: grid;
-  gap: var(--space-2);
+/* 捲動區。固定高度才會出現捲軸，這是刻意的：消息會一直累積，
+   讓它自己捲，區塊高度就不會跟著清單長。 */
+.newsScroll {
   width: 100%;
-  margin: var(--space-1) 0 0;
-  padding: 0;
-  list-style: none;
+  max-height: 19rem;
+  overflow-y: auto;
+  /* 捲到底不要把整頁一起帶著捲 */
+  overscroll-behavior: contain;
 }
 
-/* 日期與標題在桌機並排；手機寬度不夠，日期獨立成一行 */
-.newsItem {
-  display: grid;
-  gap: 2px;
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.15));
+/* 捲軸要「看得見」，不能用 macOS 預設的 overlay 捲軸——那種只有正在捲的
+   時候才浮現，靜止時使用者根本不知道這裡可以捲。
+   自訂 ::-webkit-scrollbar 會讓 Chrome/Safari 改用常駐捲軸（會佔版面寬度）。
+
+   關鍵：不能同時寫標準的 scrollbar-width，Chrome 只要看到它就會走標準
+   路徑而整組忽略 ::-webkit-scrollbar。所以標準屬性放進
+   @supports not selector(::-webkit-scrollbar)，只給 Firefox。 */
+.newsScroll::-webkit-scrollbar {
+  width: 6px;
 }
 
-.newsItem:last-child {
-  padding-bottom: 0;
-  border-bottom: 0;
+.newsScroll::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-@media (min-width: 480px) {
-  .newsItem {
-    grid-template-columns: auto 1fr;
-    gap: var(--space-2);
-    align-items: baseline;
+.newsScroll::-webkit-scrollbar-thumb {
+  background: var(--color-text-on-glass);
+  border-radius: 999px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .newsScroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-text-on-glass) transparent;
   }
 }
 
+/* 捲動區可以拿到焦點，焦點框就必須看得見 */
+.newsScroll:focus-visible {
+  outline: 2px solid var(--color-text-on-glass);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.newsList {
+  display: grid;
+  gap: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0 var(--space-2) 0 0;
+  list-style: none;
+}
+
+/* 時間欄固定寬度，標題才會對齊成一直行 */
+.newsItem {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: var(--space-2);
+  align-items: baseline;
+  padding-block: var(--space-2);
+  border-bottom: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.15));
+}
+
+.newsItem:first-child {
+  padding-top: var(--space-1);
+}
+
+.newsItem:last-child {
+  border-bottom: 0;
+}
+
+/* 年份小、月日大：純文字清單靠這個層級差建立節奏，不必再加裝飾 */
 .newsDate {
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-latin);
-  font-size: var(--text-small);
-  font-weight: 600;
+  line-height: 1.1;
   color: var(--color-text-on-glass);
   white-space: nowrap;
+}
+
+.newsYear {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+.newsDay {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .newsTitle {
@@ -339,4 +401,38 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--color-text-on-glass);
+}
+
+
+/* ---------- 捲動進場 ---------- */
+
+/* 用原生的 animation-timeline: view()，不裝動畫函式庫。
+   不支援的瀏覽器整條 @supports 失效，元素直接是最終狀態——
+   不會出現「先隱藏、等 JS 才顯示」的空白閃動。
+   prefers-reduced-motion 時整段不套用。 */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 30%;
+    }
+
+    /* 右邊那塊晚一點進場，兩塊才不會像同一個東西 */
+    .chairman.reveal {
+      animation-range: entry 5% cover 42%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
