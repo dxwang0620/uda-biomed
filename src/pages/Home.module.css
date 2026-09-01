@@ -462,6 +462,20 @@
   margin: 0;
 }
 
+/* 深色區塊，滿到卡片邊緣。負 margin 抵掉 .card 的 padding。
+   存在的理由是引言要用白字：卡片本身是 25% 白疊影片，影片亮時
+   合成成 #ffffff，白字對比 1.00:1 直接消失。實心底不透明，
+   白字 on --color-primary 是 12.21:1。數值見 docs/content-home.md。 */
+.chairmanHead {
+  width: calc(100% + var(--space-3) * 2);
+  margin: calc(var(--space-3) * -1) calc(var(--space-3) * -1) 0;
+  padding: var(--space-3);
+  /* 卡片外圓角 16px、邊框 1px，內側要 15px 才嵌得準（負 margin 只抵掉
+     padding，邊框仍在，所以這一塊是貼齊邊框內緣，寬度比卡片少 2px） */
+  border-radius: 15px 15px 0 0;
+  background: var(--color-primary);
+}
+
 /* 示意檔把標題當小眉標，大字引言才是視覺主體 */
 .chairmanEyebrow {
   font-family: var(--font-latin);
@@ -469,8 +483,8 @@
   font-weight: 700;
   letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
-  color: var(--color-text-on-glass);
-  opacity: 0.75;
+  color: var(--color-white);
+  opacity: 0.8;
 }
 
 .pullQuote {
@@ -479,16 +493,17 @@
   font-size: clamp(1.25rem, 2.2vw, 1.5rem);
   font-weight: 600;
   line-height: 1.45;
-  color: var(--color-text-on-glass);
+  color: var(--color-white);
 }
 
-/* 示意檔的 40x2 短橫線，引言與內文之間的分隔 */
+/* 示意檔的 40x2 短橫線。在深色底上要反白，不能再用主色。 */
 .quoteRule {
   display: block;
   width: 40px;
   height: 2px;
   margin-top: var(--space-2);
-  background: var(--color-primary);
+  background: var(--color-white);
+  opacity: 0.55;
 }
 
 /* 內文在左、肖像欄在右。卡片本身不寬，窄一點就把肖像收到下面。 */

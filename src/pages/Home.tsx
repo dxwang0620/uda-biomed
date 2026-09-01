@@ -183,13 +183,18 @@ export default function Home() {
 
           <blockquote className={`${styles.card} ${styles.chairman} ${styles.reveal}`}>
             {/* 示意檔把標題當成小眉標，大字引言才是視覺主體。
-                但語意上這仍是本區塊的標題，所以維持 h2，只是樣式收小。 */}
-            <h2 id="chairman-heading" className={styles.chairmanEyebrow}>
-              Message from the Chairman
-            </h2>
+                但語意上這仍是本區塊的標題，所以維持 h2，只是樣式收小。
 
-            <p className={styles.pullQuote}>{CHAIRMAN_QUOTE}</p>
-            <span className={styles.quoteRule} aria-hidden="true" />
+                眉標與引言整組放進深色區塊，是為了讓引言能用白字：
+                卡片是 25% 白疊在影片上，影片亮的時候會合成成純白，
+                白字直接消失（1.00:1）。深色底不透明才撐得住。 */}
+            <div className={styles.chairmanHead}>
+              <h2 id="chairman-heading" className={styles.chairmanEyebrow}>
+                Message from the Chairman
+              </h2>
+              <p className={styles.pullQuote}>{CHAIRMAN_QUOTE}</p>
+              <span className={styles.quoteRule} aria-hidden="true" />
+            </div>
 
             <div className={styles.chairmanBody}>
               <div className={styles.chairmanText}>
