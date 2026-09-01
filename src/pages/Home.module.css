@@ -38,7 +38,9 @@
 
 .pendingInline {
   padding-inline: var(--space-1);
-  border: 2px dashed var(--color-on-navy-border);
+  /* currentColor 而非固定色：這個標記同時出現在半透明區塊（白字）
+     與玻璃卡片（近黑字）上，寫死顏色就會有一邊看不見。 */
+  border: 2px dashed currentColor;
   border-radius: var(--radius-sm);
   font-size: var(--text-small);
   vertical-align: middle;
@@ -208,4 +210,133 @@
   .todos {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+
+/* ---------- 最新消息 / 董事長有話說 ---------- */
+
+/* 左消息、右董事長。手機一欄堆疊。
+   6fr/7fr 而非對半：董事長是整段文字，比清單需要更多行寬。 */
+.split {
+  display: grid;
+  gap: var(--space-3);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .split {
+    grid-template-columns: 6fr 7fr;
+    gap: var(--space-4);
+  }
+}
+
+/* 消息區塊沿用 .card 的玻璃語彙，兩塊才會是同一組東西 */
+.newsBlock {
+  composes: card;
+}
+
+.blockTitle {
+  font-size: 1.375rem;
+  line-height: 1.25;
+  color: var(--color-text-on-glass);
+}
+
+.newsList {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 日期與標題在桌機並排；手機寬度不夠，日期獨立成一行 */
+.newsItem {
+  display: grid;
+  gap: 2px;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.15));
+}
+
+.newsItem:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+@media (min-width: 480px) {
+  .newsItem {
+    grid-template-columns: auto 1fr;
+    gap: var(--space-2);
+    align-items: baseline;
+  }
+}
+
+.newsDate {
+  font-family: var(--font-latin);
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--color-text-on-glass);
+  white-space: nowrap;
+}
+
+.newsTitle {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--color-text-on-glass);
+}
+
+/* 草稿標記。刻意顯眼，理由同 Placeholder：不能讓草稿悄悄上線。 */
+.draftChip {
+  display: inline-block;
+  /* 不換行留在自己一列，跟著標題最後一個字走 */
+  white-space: nowrap;
+  margin-left: var(--space-1);
+  padding: 1px 8px;
+  font-family: var(--font-latin);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  color: var(--color-text-on-glass);
+  border: 2px dashed var(--color-text-on-glass);
+  border-radius: var(--radius-sm);
+}
+
+.draftNote {
+  margin-top: var(--space-2);
+  font-size: var(--text-small);
+  line-height: 1.6;
+  color: var(--color-text-on-glass);
+}
+
+/* ---------- 董事長 ---------- */
+
+.chairman {
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.quote {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-text-on-glass);
+}
+
+.signature {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+.role {
+  font-family: var(--font-latin);
+  font-size: var(--text-small);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-text-on-glass);
 }

@@ -10,6 +10,25 @@ import styles from './Home.module.css'
 /* 版面與文案依 index_video 參考影片重建，逐字內容見 docs/content-home.md。
    標 [抄錄] 的是從錄影讀出、待你校對；日期與數字一律不抄，走 <Placeholder>。 */
 
+/* 最新消息。
+   標題是草稿、日期一律不填——「某日發生某事」是事實主張，依 CLAUDE.md
+   工作方式第 3 條不編造。日期欄位保持 To add 的虛線標記，讓這一列不可能
+   被當成正式內容送上線。你給實際消息後，把 draft 拿掉、date 填上即可。 */
+const NEWS = [
+  { date: null, title: 'Research direction update for cancer-detection technology', draft: true },
+  { date: null, title: 'UDA Biochip platform development progress', draft: true },
+  { date: null, title: 'Academic and industry collaboration announcement', draft: true },
+]
+
+/* 董事長談話草稿。
+   這一段是理念陳述，不是事實主張，所以可以擬——但刻意不含任何成果、
+   數據、時程、獎項或合作對象。署名待你提供，不自行填人名。 */
+const CHAIRMAN_MESSAGE = [
+  'Our work begins with a simple conviction: that the earliest changes of disease are written in the molecules of the body, long before anything becomes visible. Reading them is difficult, and we do not pretend otherwise.',
+  'What we can commit to is discipline. Every question we pursue has to be answerable. Every method we build has to be reproducible by someone other than ourselves. Every result we report has to survive the scrutiny of clinicians who see patients rather than data.',
+  'Patience is not the opposite of urgency. Detection research rewards those willing to build carefully and verify repeatedly — and that is the company we intend to be, for our team and for anyone who shares the goal.',
+]
+
 const FOCUS = [
   {
     icon: Microscope,
@@ -76,6 +95,56 @@ export default function Home() {
       <HeroVideo>
         <HeroCarousel />
       </HeroVideo>
+
+      {/* 兩個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。 */}
+      <Section tone="translucent">
+        <div className={styles.split}>
+          <div className={styles.newsBlock}>
+            <h2 id="news-heading" className={styles.blockTitle}>
+              Latest News
+            </h2>
+
+            <ol className={styles.newsList}>
+              {NEWS.map(({ date, title, draft }) => (
+                <li key={title} className={styles.newsItem}>
+                  <span className={styles.newsDate}>
+                    {date ?? <span className={styles.pendingInline}>To add</span>}
+                  </span>
+                  <span className={styles.newsTitle}>
+                    {title}
+                    {draft && (
+                      <span className={styles.draftChip}>Draft</span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ol>
+
+            <p className={styles.draftNote}>
+              Headlines above are drafts written to show the layout. Dates are
+              deliberately unfilled — send the real items and both come off in
+              one edit. No news page exists yet, so there is no link out.
+            </p>
+          </div>
+
+          <blockquote className={`${styles.card} ${styles.chairman}`}>
+            <h2 id="chairman-heading" className={styles.blockTitle}>
+              Message from the Chairman
+            </h2>
+
+            {CHAIRMAN_MESSAGE.map((para) => (
+              <p key={para.slice(0, 24)} className={styles.quote}>
+                {para}
+              </p>
+            ))}
+
+            <footer className={styles.signature}>
+              <span className={styles.pendingInline}>To add: name</span>
+              <span className={styles.role}>Chairman, UDA BIOMED</span>
+            </footer>
+          </blockquote>
+        </div>
+      </Section>
 
       <Section tone="translucent" labelledBy="focus-heading">
         <div className={styles.intro}>
@@ -206,12 +275,6 @@ export default function Home() {
         </div>
 
         <div className={styles.todos}>
-          <Placeholder title="UDA Announcements / UDA Updates">
-            Two dated lists with previous and next paging. The dates in the
-            reference recording are small and behind moiré, and a misread digit
-            would be misinformation, so none were transcribed. Real dates and
-            headlines needed.
-          </Placeholder>
           <Placeholder title="R&D Portfolio Snapshot">
             Three headline figures with a disclaimer. The figures were not read
             off a handheld recording; supply them, or drop this block.

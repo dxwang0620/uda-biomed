@@ -149,3 +149,47 @@ investment, R&D, or licensing results.」
 
 **數字我不抄。** 從晃動的錄影讀數字放到生醫公司官網上，是最不該做的事。
 需要你提供，或直接不做這一區塊。
+
+## 新區塊：Latest News ／ Message from the Chairman `[草稿]`
+
+這兩塊不在 index_video 參考影片裡，是後來要求新增的，排在 hero 之後、
+CURRENT R&D FOCUS 之前，原本的區塊順序不變、整體往下移。
+
+### Latest News —— 標題 `[草稿]`、日期 `[待補]`
+
+| 欄位 | 狀態 | 說明 |
+| ---- | ---- | ---- |
+| 日期 | `[待補]` | **不編造**。「某月某日發生某事」是事實主張，寫錯即為不實資訊 |
+| 標題 | `[草稿]` | 只用來撐版面，畫面上帶 `DRAFT` 虛線標記 |
+| 連結 | 無 | 目前沒有 news 頁，不做連往不存在路由的連結 |
+
+三則草稿標題：
+
+1. Research direction update for cancer-detection technology
+2. UDA Biochip platform development progress
+3. Academic and industry collaboration announcement
+
+拿到實際消息後：把 `NEWS` 的 `date` 填上、`draft` 拿掉即可，
+`Home.tsx` 的 `<span className={styles.draftChip}>` 會自動不再渲染。
+
+### Message from the Chairman —— 全文 `[草稿]`、署名 `[待補]`
+
+這一段是**理念陳述而非事實主張**，所以可以擬草稿。刻意不含任何
+成果、數據、時程、獎項、專利或合作對象——這些依 CLAUDE.md 一律不編造。
+
+署名維持 `To add: name`，不自行填人名。職稱只寫 Chairman, UDA BIOMED。
+
+### 已知的對比度問題
+
+董事長談話是 17px／400 的長段落，屬一般字級，門檻 4.5:1。
+在目前的 `--glass: 0.25` 下最壞情況只有 **1.83:1**：
+
+| `--glass` | 左·影片亮 | 左·影片暗 | 右·影片亮 | 右·影片暗 | 最差 |
+| --------- | --------- | --------- | --------- | --------- | ---- |
+| 0.25（目前） | 7.53 | 2.61 | 19.08 | 1.83 | **1.83** |
+| 0.40 | 9.30 | 4.31 | 19.08 | 3.32 | 3.32 |
+| 0.50 | 10.63 | 5.85 | 19.08 | 4.80 | **4.80 通過** |
+
+0.25 是刻意指定的視覺方向（見 `Home.module.css` 的 `.card`），這裡沿用，
+沒有自行更動。若要讓這一段達 AA，在 `.chairman` 單獨覆寫 `--glass: 0.5`
+即可，不影響其他卡片。
