@@ -1,4 +1,4 @@
-import { Calendar, Dna, ImageIcon, Microscope, Share2 } from 'lucide-react'
+import { Calendar, Dna, ImageIcon, Microscope, Share2, User } from 'lucide-react'
 import HeroCarousel from '../components/HeroCarousel.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
 import Card from '../components/ui/Card.tsx'
@@ -56,13 +56,21 @@ const NEWS = [
   },
 ]
 
-/* 董事長談話草稿。
-   這一段是理念陳述，不是事實主張，所以可以擬——但刻意不含任何成果、
-   數據、時程、獎項或合作對象。署名待你提供，不自行填人名。 */
+/* 董事長談話草稿。版型參考 index_img/chairman_message_page_mockup_classic.html：
+   眉標 → 大字引言 + 短橫線 → 內文 + 直式肖像欄 → 簽名區。
+   示意檔是整頁版型，麵包屑、中/EN 切換、底部連結列不適用（那些頁面不存在）。
+
+   示意檔裡的營收、成長率、毛利率、員工數、人名都是通用模板的填充值，
+   一個都沒有沿用——那些正是 CLAUDE.md 禁止編造的東西。
+
+   這一段是理念陳述而非事實主張，所以可以擬，但刻意不含任何成果、數據、
+   時程、獎項或合作對象。署名待你提供，不自行填人名。 */
+const CHAIRMAN_QUOTE = 'Patience is not the opposite of urgency.'
+
 const CHAIRMAN_MESSAGE = [
   'Our work begins with a simple conviction: that the earliest changes of disease are written in the molecules of the body, long before anything becomes visible. Reading them is difficult, and we do not pretend otherwise.',
   'What we can commit to is discipline. Every question we pursue has to be answerable. Every method we build has to be reproducible by someone other than ourselves. Every result we report has to survive the scrutiny of clinicians who see patients rather than data.',
-  'Patience is not the opposite of urgency. Detection research rewards those willing to build carefully and verify repeatedly — and that is the company we intend to be, for our team and for anyone who shares the goal.',
+  'Detection research rewards those willing to build carefully and verify repeatedly — and that is the company we intend to be, for our team and for anyone who shares the goal.',
 ]
 
 const FOCUS = [
@@ -174,19 +182,37 @@ export default function Home() {
           </div>
 
           <blockquote className={`${styles.card} ${styles.chairman} ${styles.reveal}`}>
-            <h2 id="chairman-heading" className={styles.blockTitle}>
+            {/* 示意檔把標題當成小眉標，大字引言才是視覺主體。
+                但語意上這仍是本區塊的標題，所以維持 h2，只是樣式收小。 */}
+            <h2 id="chairman-heading" className={styles.chairmanEyebrow}>
               Message from the Chairman
             </h2>
 
-            {CHAIRMAN_MESSAGE.map((para) => (
-              <p key={para.slice(0, 24)} className={styles.quote}>
-                {para}
-              </p>
-            ))}
+            <p className={styles.pullQuote}>{CHAIRMAN_QUOTE}</p>
+            <span className={styles.quoteRule} aria-hidden="true" />
+
+            <div className={styles.chairmanBody}>
+              <div className={styles.chairmanText}>
+                {CHAIRMAN_MESSAGE.map((para) => (
+                  <p key={para.slice(0, 24)} className={styles.quote}>
+                    {para}
+                  </p>
+                ))}
+              </div>
+
+              {/* 肖像欄。3:4 直式，同示意檔。沒有照片，走佔位框。 */}
+              <div className={styles.portrait}>
+                <div className={styles.portraitFrame} aria-hidden="true">
+                  <User size={26} strokeWidth={1.5} />
+                </div>
+                <p className={styles.portraitRole}>Chairman</p>
+                <p className={styles.portraitOrg}>UDA BIOMED</p>
+              </div>
+            </div>
 
             <footer className={styles.signature}>
+              <span className={styles.signatureLabel}>Signed</span>
               <span className={styles.pendingInline}>To add: name</span>
-              <span className={styles.role}>Chairman, UDA BIOMED</span>
             </footer>
           </blockquote>
         </div>

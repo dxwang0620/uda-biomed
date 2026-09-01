@@ -451,11 +451,65 @@
 }
 
 
-/* ---------- 董事長 ---------- */
+/* ---------- 董事長 ----------
+   版型參考 index_img/chairman_message_page_mockup_classic.html：
+   眉標 → 大字引言 + 短橫線 → 內文 + 直式肖像欄 → 簽名區。
+   示意檔是整頁尺寸，這裡壓縮成卡片：肖像從 200px 收到 8rem，
+   麵包屑與底部連結列不做（那些頁面不存在）。 */
 
 .chairman {
-  gap: var(--space-2);
+  gap: 0;
   margin: 0;
+}
+
+/* 示意檔把標題當小眉標，大字引言才是視覺主體 */
+.chairmanEyebrow {
+  font-family: var(--font-latin);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-text-on-glass);
+  opacity: 0.75;
+}
+
+.pullQuote {
+  margin-top: var(--space-2);
+  max-width: 30ch;
+  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--color-text-on-glass);
+}
+
+/* 示意檔的 40x2 短橫線，引言與內文之間的分隔 */
+.quoteRule {
+  display: block;
+  width: 40px;
+  height: 2px;
+  margin-top: var(--space-2);
+  background: var(--color-primary);
+}
+
+/* 內文在左、肖像欄在右。卡片本身不寬，窄一點就把肖像收到下面。 */
+.chairmanBody {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+  margin-top: var(--space-3);
+}
+
+@media (min-width: 480px) {
+  .chairmanBody {
+    grid-template-columns: minmax(0, 1fr) 8rem;
+    align-items: start;
+  }
+}
+
+.chairmanText {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
 }
 
 .quote {
@@ -464,21 +518,58 @@
   color: var(--color-text-on-glass);
 }
 
-.signature {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-1);
-  margin-top: auto;
-  padding-top: var(--space-2);
+/* 堆疊時（480px 以下）肖像會吃滿整欄寬，3:4 一乘就變成 293x391 的大方塊，
+   把卡片拉到 1340px 高。示意檔裡它本來就只是側欄的小圖，所以限寬。 */
+.portrait {
+  max-width: 8rem;
 }
 
-.role {
+/* 肖像佔位。3:4 直式同示意檔；照片進來後換成 <img>，比例不用動。 */
+.portraitFrame {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius);
+  color: var(--color-text-on-glass);
+  background: rgba(255, 255, 255, calc(var(--glass) + 0.12));
+  border: 1px dashed rgba(5, 16, 31, 0.35);
+}
+
+.portraitRole {
+  margin-top: var(--space-1);
   font-family: var(--font-latin);
   font-size: var(--text-small);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--color-text-on-glass);
+}
+
+.portraitOrg {
+  font-family: var(--font-latin);
+  font-size: 0.75rem;
+  color: var(--color-text-on-glass);
+  opacity: 0.8;
+}
+
+/* 簽名區。示意檔用一條上緣分隔線把它與內文隔開。 */
+.signature {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.15));
+}
+
+.signatureLabel {
+  font-family: var(--font-latin);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-on-glass);
+  opacity: 0.75;
 }
 
 
