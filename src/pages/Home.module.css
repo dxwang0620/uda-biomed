@@ -245,11 +245,30 @@
    讓它自己捲，區塊高度就不會跟著清單長。 */
 .newsScroll {
   width: 100%;
-  /* 25rem 約放得下三則（參考稿的可視筆數），第四則露出上緣當作可捲的提示 */
+  /* 卡片有 height:100%，在 grid 裡會被撐到跟旁邊那張等高。清單若固定高度，
+     多出來的部分就變成卡片底部的空白。改成填滿剩餘高度，空白就沒了，
+     兩張卡片也還是等高。min-height:0 是讓 flex 子項能縮到內容以下，
+     否則 overflow 不會生效。 */
+  flex: 1 1 auto;
+  min-height: 0;
+  /* 手機是上下堆疊，沒有「旁邊那張」可以對齊，需要自己的高度上限 */
   max-height: 25rem;
   overflow-y: auto;
   /* 捲到底不要把整頁一起帶著捲 */
   overscroll-behavior: contain;
+}
+
+/* 桌機兩欄並排，高度交給旁邊那張卡片決定 */
+@media (min-width: 1024px) {
+  .newsScroll {
+    /* flex-basis 必須是 0 不能是 auto。auto 會把清單的內容高度算進卡片，
+       而卡片是這一列最高的那個，於是 max-height:none 反而讓整列撐到 970px
+       且完全不再有捲軸。basis 0 讓它只吃剩餘空間，高度改由旁邊那張決定。 */
+    flex-basis: 0;
+    max-height: none;
+    /* 萬一旁邊那張卡片變短，清單也不要塌掉 */
+    min-height: 18rem;
+  }
 }
 
 /* 捲軸要「看得見」，不能用 macOS 預設的 overlay 捲軸——那種只有正在捲的
@@ -268,14 +287,14 @@
 }
 
 .newsScroll::-webkit-scrollbar-thumb {
-  background: var(--color-text-on-glass);
+  background: var(--color-primary);
   border-radius: 999px;
 }
 
 @supports not selector(::-webkit-scrollbar) {
   .newsScroll {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-text-on-glass) transparent;
+    scrollbar-color: var(--color-primary) transparent;
   }
 }
 
