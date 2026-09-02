@@ -281,7 +281,18 @@ transparent。`prefers-reduced-motion: reduce` 時移除 transition。
 
 ### 展開／收合
 
-談話內容**預設收合**，藍色區塊右下角有一顆圓形箭頭鈕，點擊展開。
+**只有 1024 以下才收合。** 桌機兩欄並排時版面夠寬，藏起內容沒有意義，
+收合反而會讓右欄空掉一大塊；所以 1024 以上一律展開，箭頭鈕 `display: none`。
+1024 是 `.split` 換成兩欄的同一個斷點。
+
+這個判斷用 CSS 而不是 JS：`matchMedia` 的 `change` 事件在背景分頁不會派發，
+純 CSS 沒這個問題，也不必為了視窗寬度多一份 state。覆寫必須寫在
+`.collapseOpen` **之後**——兩者特異性相同，靠順序決勝。
+
+實測：1023 收合且箭頭顯示、1024 展開且箭頭隱藏。
+
+手機（1024 以下）談話內容**預設收合**，藍色區塊右下角有一顆圓形箭頭鈕，
+點擊展開。
 
 - 這是 disclosure 模式：`<button>` 加 `aria-expanded` 與 `aria-controls`，
   原生 button 本來就吃 Enter／Space，不需要自己接鍵盤事件

@@ -708,3 +708,26 @@
     transition: none;
   }
 }
+
+
+/* 桌機不收合：兩欄並排時版面夠寬，藏起內容沒有意義，
+   收合反而讓右欄空掉一大塊。1024 是 .split 換成兩欄的同一個斷點。
+
+   用 CSS 而不是 JS 判斷寬度：matchMedia 的 change 事件在背景分頁不會派發，
+   純 CSS 沒有這個問題，且不必為了視窗大小多一份 state。
+
+   這一段必須放在 .collapseOpen 之後——兩者特異性相同，靠順序決勝，
+   收合狀態下才會由這裡覆寫。 */
+@media (min-width: 1024px) {
+  .toggle {
+    display: none;
+  }
+
+  .collapse,
+  .collapseOpen {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    /* 桌機沒有展開這個動作，留著轉場只會在載入時閃一下 */
+    transition: none;
+  }
+}
