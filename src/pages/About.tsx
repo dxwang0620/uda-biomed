@@ -8,6 +8,34 @@ import styles from './About.module.css'
 /* 文案來源 docs/content-about.md。
    [稿] = 設計稿既有文字；[草稿] = 待你潤稿；[待補] 一律用 <Placeholder>。 */
 
+/* 創辦人理念。文案逐字取自 docs/founder_philosophy.txt 的英文版
+   （原檔同時有中文版，站上目前是全英文，之後要做雙語再接中文段落）。
+   原檔夾雜零寬空格，已清除。內容是你提供的，一字未改也未增補；
+   署名照原檔就是「Founder of UDA BIOMED」，沒有人名，所以不放 placeholder。 */
+const FOUNDER_LEDE =
+  'The creation of UDA BIOMED wasn\'t due to a lack of biomedical companies in the market, but rather because I firmly believe the healthcare industry needs a different approach.'
+
+const FOUNDER_BODY = [
+  'The essence of drugs, medical devices, and testing technologies is saving lives.',
+  'They can have R&D costs, reasonable profits, and should be protected by intellectual property rights; however, they shouldn\'t become resources affordable only to a few due to monopolies and profit-driven competition. Furthermore, a person\'s economic capacity shouldn\'t determine their opportunity for earlier disease detection, treatment, or even survival.',
+  'What UDA strives for is not merely developing a product, but rethinking the distance between medical technology and people. We aim to make complex technologies more accessible in daily life, shifting disease detection from passively waiting for symptoms to earlier, more proactive, and more easily accessible methods for the general public.',
+  'For me, prevention is never just a slogan. The earlier abnormalities are detected, the more time is gained for intervention; the earlier action is taken, the greater the chance of reducing the harm that disease causes to individuals and families.',
+  'Therefore, UDA BIOMED has chosen to start with early cancer detection, continuously investing in the independent research and development of non-invasive biomedical testing, biosensing, and digital analysis technologies. We respect science, medical expertise, and regulations, and insist that all results must be validated. Because technologies that concern life cannot rely on imagination, nor can they gain market attention through exaggerated promises.',
+  'UDA will not exploit people\'s fear of disease for business purposes, nor will it package incomplete research as miracles. What we aim to do is to build, step by step, truly reliable, sustainable technologies that ultimately have the potential to help more people.',
+  'I am not against corporate profits. Without reasonable profits, companies cannot continue research and development, nor can they bear the responsibility of long-term investment. However, I oppose using disease as a tool for monopoly, and even more so, I oppose allowing exorbitant prices to become a barrier to life.',
+  'A company\'s success should not only be measured by its revenue generation, but also by how many problems it solves, how much harm it reduces, and whether it brings previously unattainable technologies into people\'s lives.',
+  'I expect the future UDA BIOMED to be not just a company with technology and products, but a company willing to take responsibility for life, be honest with science, and dare to challenge existing industry frameworks.',
+  'If one day our technology allows someone to detect physical abnormalities earlier, and saves a family from the regret of not having enough time to heal, then everything UDA does will have true value.',
+]
+
+const FOUNDER_QUOTE =
+  'Technology shouldn\'t determine who deserves to be saved, but rather give more people the opportunity to be protected.'
+
+const FOUNDER_CLOSING =
+  'This is my original intention in founding UDA BIOMED, and it\'s the direction we will never change.'
+
+const FOUNDER_SIGNATURE = 'Founder of UDA BIOMED'
+
 const APPROACH = [
   {
     title: 'Start at the molecular level',
@@ -100,6 +128,31 @@ export default function About() {
             </li>
           ))}
         </ol>
+      </Section>
+
+      {/* 創辦人理念。這一段是全站最長的閱讀型文字，桌機分兩欄，
+          行長才不會拉到難讀。 */}
+      <Section labelledBy="founder-heading">
+        <div className={styles.founderHead}>
+          <p className={styles.eyebrow}>FOUNDER&rsquo;S PHILOSOPHY</p>
+          <h2 id="founder-heading">Founder&rsquo;s Philosophy</h2>
+          <p className={styles.lede}>{FOUNDER_LEDE}</p>
+        </div>
+
+        <div className={styles.founderBody}>
+          {FOUNDER_BODY.map((para) => (
+            <p key={para.slice(0, 24)} className={styles.body}>
+              {para}
+            </p>
+          ))}
+        </div>
+
+        <blockquote className={styles.founderQuote}>
+          <p>{FOUNDER_QUOTE}</p>
+        </blockquote>
+
+        <p className={styles.founderClosing}>{FOUNDER_CLOSING}</p>
+        <p className={styles.founderSignature}>{FOUNDER_SIGNATURE}</p>
       </Section>
 
       <Section>

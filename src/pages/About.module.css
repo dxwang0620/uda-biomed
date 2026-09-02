@@ -76,3 +76,86 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+
+/* ---------- 創辦人理念 ---------- */
+
+/* About.module.css 原本沒有 eyebrow，PageHero 那份不共用 */
+.eyebrow {
+  font-family: var(--font-latin);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.founderHead {
+  max-width: 62ch;
+}
+
+.founderHead h2 {
+  margin-top: var(--space-1);
+}
+
+/* 全站最長的一段閱讀型文字。單欄的話行長會拉到 100ch 以上，
+   桌機分兩欄把行長壓回 45–55ch。 */
+.founderBody {
+  margin-top: var(--space-4);
+  /* 單欄時要收寬度：768 不設限會拉到 73ch，一整面牆。
+     375 受視窗限制本來就只有 34ch，這個上限不影響。 */
+  max-width: 62ch;
+}
+
+@media (min-width: 1024px) {
+  .founderBody {
+    max-width: none;
+    columns: 2;
+    column-gap: var(--space-6);
+  }
+}
+
+.founderBody p {
+  margin-top: 0;
+  margin-bottom: var(--space-3);
+  max-width: none;
+  /* 段落不要被切成跨欄的兩半 */
+  break-inside: avoid;
+}
+
+.founderBody p:last-child {
+  margin-bottom: 0;
+}
+
+/* 收尾那句抽出來放大。實心深底、白字：
+   不受背景影響，白 on --color-primary 是 12.21:1。 */
+.founderQuote {
+  margin: var(--space-6) 0 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-primary);
+}
+
+.founderQuote p {
+  max-width: 34ch;
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-white);
+}
+
+.founderClosing {
+  margin-top: var(--space-4);
+  max-width: 60ch;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.founderSignature {
+  margin-top: var(--space-2);
+  font-family: var(--font-latin);
+  font-size: var(--text-small);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-primary);
+}
