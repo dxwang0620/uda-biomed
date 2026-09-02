@@ -1,4 +1,5 @@
 import OrgChart from "../components/OrgChart.tsx";
+import Responsibilities from "../components/Responsibilities.tsx";
 import PageHero from "../components/PageHero.tsx";
 import Card from "../components/ui/Card.tsx";
 import CtaBand from "../components/ui/CtaBand.tsx";
@@ -167,6 +168,19 @@ export default function About() {
           </p>
         </div>
         <OrgChart />
+      </Section>
+
+      {/* 職掌說明。收合式，預設全部收起——展開全部會是兩千多字。 */}
+      <Section labelledBy="duties-heading">
+        <div className={styles.founderHead}>
+          <p className={styles.eyebrow}>DUTIES</p>
+          <h2 id="duties-heading">Roles and Responsibilities</h2>
+          <p className={styles.lede}>
+            What each level of governance and each department is accountable
+            for. Select a heading to read the detail.
+          </p>
+        </div>
+        <Responsibilities />
       </Section>
 
       <Section>

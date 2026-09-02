@@ -47,14 +47,14 @@ const GOVERNANCE: {
     aside: { kind: 'office', items: [{ en: "Chairman's Office", zh: '董事長室' }] },
   },
   {
-    en: 'President',
+    en: 'General Manager',
     zh: '總經理',
-    aside: { kind: 'office', items: [{ en: "President's Office", zh: '總經理室' }] },
+    aside: { kind: 'office', items: [{ en: "General Manager's Office", zh: '總經理室' }] },
   },
   {
-    en: 'Vice President',
+    en: 'Vice General Manager',
     zh: '副總經理',
-    aside: { kind: 'office', items: [{ en: "Vice President's Office", zh: '副總室' }] },
+    aside: { kind: 'office', items: [{ en: "Vice General Manager's Office", zh: '副總室' }] },
   },
 ]
 
@@ -196,7 +196,7 @@ export default function OrgChart() {
 
       <div className={styles.officesBlock}>
         <p className={styles.branchLabel}>
-          <Label en="Reporting to the President" zh="總經理直轄" />
+          <Label en="Reporting to the General Manager" zh="總經理直轄" />
         </p>
         <ul className={styles.offices}>
           {OFFICES.map((o) => (
@@ -220,8 +220,8 @@ export default function OrgChart() {
               </h3>
               <p className={styles.deptReports}>
                 {reportsTo === 'president'
-                  ? 'Reports to the President'
-                  : 'Reports to the Vice President'}
+                  ? 'Reports to the General Manager'
+                  : 'Reports to the Vice General Manager'}
               </p>
               <ul className={styles.units}>
                 {units.map((u) => (
