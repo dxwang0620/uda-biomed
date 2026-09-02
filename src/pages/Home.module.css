@@ -467,6 +467,8 @@
    合成成 #ffffff，白字對比 1.00:1 直接消失。實心底不透明，
    白字 on --color-primary 是 12.21:1。數值見 docs/content-home.md。 */
 .chairmanHead {
+  /* 展開鈕要跨在下緣上，所以這一層當定位基準 */
+  position: relative;
   width: calc(100% + var(--space-3) * 2);
   margin: calc(var(--space-3) * -1) calc(var(--space-3) * -1) 0;
   padding: var(--space-3);
@@ -621,5 +623,88 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+
+/* ---------- 董事長談話：展開鈕與收合 ---------- */
+
+/* 圓鈕跨在藍色區塊的下緣上，一半在藍底、一半在卡片上。
+   白底深藍箭頭在兩種底色上都清楚（白 on --color-primary 是 12.21:1）。 */
+.toggle {
+  position: absolute;
+  right: var(--space-3);
+  /* -22px＝高度的一半，圓心正好落在藍色區塊的下緣線上 */
+  bottom: -22px;
+  display: grid;
+  place-items: center;
+  /* 44×44 是 CLAUDE.md 的觸控目標下限 */
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--color-primary);
+  background: var(--color-white);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0, 24, 56, 0.28);
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 24, 56, 0.34);
+}
+
+.toggle:focus-visible {
+  outline: 3px solid var(--color-white);
+  outline-offset: 3px;
+}
+
+/* 箭頭本身轉 180 度表示已展開 */
+.chevron {
+  transition: transform 260ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.toggle[aria-expanded='true'] .chevron {
+  transform: rotate(180deg);
+}
+
+/* 0fr → 1fr 是目前唯一能對「高度 auto」做轉場的穩定做法。
+   用 max-height 猜一個值，內容一長就會被截斷、或在收合時卡頓。 */
+.collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  opacity: 0;
+  transition:
+    grid-template-rows 340ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 220ms ease;
+}
+
+/* 這兩個屬性缺一不可：沒有 overflow 內容不會被裁，
+   沒有 min-height:0 格線列收不到 0。 */
+.collapseInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.collapseOpen {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  /* 展開時內容比較晚出現，收合時先淡出，兩邊的節奏才對 */
+  transition:
+    grid-template-rows 340ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 260ms ease 120ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle,
+  .chevron,
+  .collapse,
+  .collapseOpen {
+    transition: none;
   }
 }

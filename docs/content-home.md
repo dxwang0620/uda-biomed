@@ -279,6 +279,30 @@ transparent。`prefers-reduced-motion: reduce` 時移除 transition。
 > 人名「陳裕昌」，都是通用模板的填充值，**一個都沒有沿用**。
 > 那些正好是 CLAUDE.md 明令不得編造的類別。
 
+### 展開／收合
+
+談話內容**預設收合**，藍色區塊右下角有一顆圓形箭頭鈕，點擊展開。
+
+- 這是 disclosure 模式：`<button>` 加 `aria-expanded` 與 `aria-controls`，
+  原生 button 本來就吃 Enter／Space，不需要自己接鍵盤事件
+- 只有箭頭沒有可見文字，所以另外放一段 `visually-hidden` 當名稱，
+  並隨狀態在 Read／Hide the full message 之間切換
+- 按鈕 **44×44**（CLAUDE.md 的觸控目標下限），`bottom: -22px`＝高度一半，
+  圓心正好落在藍色區塊的下緣線上
+- 白底深藍箭頭：這顆鈕一半在藍底、一半在玻璃卡片上，白色在兩種底上都清楚
+
+動畫用 `grid-template-rows: 0fr → 1fr`。這是目前唯一能對「高度 auto」
+做轉場的穩定做法——用 `max-height` 猜一個值，內容一長就會被截斷，
+收合時也會有一段空等。內層必須同時有 `overflow: hidden` 與
+`min-height: 0`，格線列才收得回 0。
+
+實測展開曲線（1920 寬）：0ms 高 0 → 92ms 高 365 → 185ms 高 529 →
+368ms 高 559 收斂；opacity 依設計延遲 120ms 才起跑（185ms 時 0.20、
+321ms 時 0.95），收合時則先淡出，兩個方向的節奏才對稱。
+
+箭頭展開時轉 180 度。`prefers-reduced-motion: reduce` 時三者的
+transition 全部移除。
+
 ### 談話內容 —— 全文 `[草稿]`、署名 `[待補]`
 
 這一段是**理念陳述而非事實主張**，所以可以擬草稿。刻意不含任何

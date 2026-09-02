@@ -1,4 +1,5 @@
-import { Calendar, Dna, ImageIcon, Microscope, Share2, User } from 'lucide-react'
+import { useState } from 'react'
+import { Calendar, ChevronDown, Dna, ImageIcon, Microscope, Share2, User } from 'lucide-react'
 import HeroCarousel from '../components/HeroCarousel.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
 import Card from '../components/ui/Card.tsx'
@@ -134,6 +135,9 @@ const POSITIONING_TAGS = [
 ]
 
 export default function Home() {
+  /* 董事長談話預設收合，點藍色區塊下緣的箭頭展開。 */
+  const [messageOpen, setMessageOpen] = useState(false)
+
   return (
     <>
       <HeroVideo>
@@ -194,7 +198,37 @@ export default function Home() {
               </h2>
               <p className={styles.pullQuote}>{CHAIRMAN_QUOTE}</p>
               <span className={styles.quoteRule} aria-hidden="true" />
+
+              {/* 展開鈕跨在藍色區塊的下緣上。這是 disclosure 模式：
+                  aria-expanded 說明狀態、aria-controls 指向被控制的區塊，
+                  只有箭頭沒有文字，所以另外給一個唯讀的名稱。 */}
+              <button
+                type="button"
+                className={styles.toggle}
+                aria-expanded={messageOpen}
+                aria-controls="chairman-message"
+                onClick={() => setMessageOpen((v) => !v)}
+              >
+                <span className="visually-hidden">
+                  {messageOpen ? 'Hide the full message' : 'Read the full message'}
+                </span>
+                <ChevronDown
+                  size={20}
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                  className={styles.chevron}
+                />
+              </button>
             </div>
+
+            {/* grid-template-rows 由 0fr 轉 1fr，是能對「高度 auto」做轉場的
+                做法；用 max-height 猜一個值會在內容長度改變時卡頓或截斷。
+                內層必須 overflow:hidden 且 min-height:0，格線列才收得起來。 */}
+            <div
+              id="chairman-message"
+              className={`${styles.collapse} ${messageOpen ? styles.collapseOpen : ''}`}
+            >
+              <div className={styles.collapseInner}>
 
             <div className={styles.chairmanBody}>
               <div className={styles.chairmanText}>
@@ -219,6 +253,8 @@ export default function Home() {
               <span className={styles.signatureLabel}>Signed</span>
               <span className={styles.pendingInline}>To add: name</span>
             </footer>
+              </div>
+            </div>
           </blockquote>
         </div>
       </Section>
