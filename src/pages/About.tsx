@@ -1,9 +1,10 @@
-import PageHero from '../components/PageHero.tsx'
-import Card from '../components/ui/Card.tsx'
-import CtaBand from '../components/ui/CtaBand.tsx'
-import Placeholder from '../components/ui/Placeholder.tsx'
-import Section from '../components/ui/Section.tsx'
-import styles from './About.module.css'
+import OrgChart from "../components/OrgChart.tsx";
+import PageHero from "../components/PageHero.tsx";
+import Card from "../components/ui/Card.tsx";
+import CtaBand from "../components/ui/CtaBand.tsx";
+import Placeholder from "../components/ui/Placeholder.tsx";
+import Section from "../components/ui/Section.tsx";
+import styles from "./About.module.css";
 
 /* 文案來源 docs/content-about.md。
    [稿] = 設計稿既有文字；[草稿] = 待你潤稿；[待補] 一律用 <Placeholder>。 */
@@ -13,43 +14,43 @@ import styles from './About.module.css'
    原檔夾雜零寬空格，已清除。內容是你提供的，一字未改也未增補；
    署名照原檔就是「Founder of UDA BIOMED」，沒有人名，所以不放 placeholder。 */
 const FOUNDER_LEDE =
-  'The creation of UDA BIOMED wasn\'t due to a lack of biomedical companies in the market, but rather because I firmly believe the healthcare industry needs a different approach.'
+  "The creation of UDA BIOMED wasn't due to a lack of biomedical companies in the market, but rather because I firmly believe the healthcare industry needs a different approach.";
 
 const FOUNDER_BODY = [
-  'The essence of drugs, medical devices, and testing technologies is saving lives.',
-  'They can have R&D costs, reasonable profits, and should be protected by intellectual property rights; however, they shouldn\'t become resources affordable only to a few due to monopolies and profit-driven competition. Furthermore, a person\'s economic capacity shouldn\'t determine their opportunity for earlier disease detection, treatment, or even survival.',
-  'What UDA strives for is not merely developing a product, but rethinking the distance between medical technology and people. We aim to make complex technologies more accessible in daily life, shifting disease detection from passively waiting for symptoms to earlier, more proactive, and more easily accessible methods for the general public.',
-  'For me, prevention is never just a slogan. The earlier abnormalities are detected, the more time is gained for intervention; the earlier action is taken, the greater the chance of reducing the harm that disease causes to individuals and families.',
-  'Therefore, UDA BIOMED has chosen to start with early cancer detection, continuously investing in the independent research and development of non-invasive biomedical testing, biosensing, and digital analysis technologies. We respect science, medical expertise, and regulations, and insist that all results must be validated. Because technologies that concern life cannot rely on imagination, nor can they gain market attention through exaggerated promises.',
-  'UDA will not exploit people\'s fear of disease for business purposes, nor will it package incomplete research as miracles. What we aim to do is to build, step by step, truly reliable, sustainable technologies that ultimately have the potential to help more people.',
-  'I am not against corporate profits. Without reasonable profits, companies cannot continue research and development, nor can they bear the responsibility of long-term investment. However, I oppose using disease as a tool for monopoly, and even more so, I oppose allowing exorbitant prices to become a barrier to life.',
-  'A company\'s success should not only be measured by its revenue generation, but also by how many problems it solves, how much harm it reduces, and whether it brings previously unattainable technologies into people\'s lives.',
-  'I expect the future UDA BIOMED to be not just a company with technology and products, but a company willing to take responsibility for life, be honest with science, and dare to challenge existing industry frameworks.',
-  'If one day our technology allows someone to detect physical abnormalities earlier, and saves a family from the regret of not having enough time to heal, then everything UDA does will have true value.',
-]
+  "The essence of drugs, medical devices, and testing technologies is saving lives.",
+  "They can have R&D costs, reasonable profits, and should be protected by intellectual property rights; however, they shouldn't become resources affordable only to a few due to monopolies and profit-driven competition. Furthermore, a person's economic capacity shouldn't determine their opportunity for earlier disease detection, treatment, or even survival.",
+  "What UDA strives for is not merely developing a product, but rethinking the distance between medical technology and people. We aim to make complex technologies more accessible in daily life, shifting disease detection from passively waiting for symptoms to earlier, more proactive, and more easily accessible methods for the general public.",
+  "For me, prevention is never just a slogan. The earlier abnormalities are detected, the more time is gained for intervention; the earlier action is taken, the greater the chance of reducing the harm that disease causes to individuals and families.",
+  "Therefore, UDA BIOMED has chosen to start with early cancer detection, continuously investing in the independent research and development of non-invasive biomedical testing, biosensing, and digital analysis technologies. We respect science, medical expertise, and regulations, and insist that all results must be validated. Because technologies that concern life cannot rely on imagination, nor can they gain market attention through exaggerated promises.",
+  "UDA will not exploit people's fear of disease for business purposes, nor will it package incomplete research as miracles. What we aim to do is to build, step by step, truly reliable, sustainable technologies that ultimately have the potential to help more people.",
+  "I am not against corporate profits. Without reasonable profits, companies cannot continue research and development, nor can they bear the responsibility of long-term investment. However, I oppose using disease as a tool for monopoly, and even more so, I oppose allowing exorbitant prices to become a barrier to life.",
+  "A company's success should not only be measured by its revenue generation, but also by how many problems it solves, how much harm it reduces, and whether it brings previously unattainable technologies into people's lives.",
+  "I expect the future UDA BIOMED to be not just a company with technology and products, but a company willing to take responsibility for life, be honest with science, and dare to challenge existing industry frameworks.",
+  "If one day our technology allows someone to detect physical abnormalities earlier, and saves a family from the regret of not having enough time to heal, then everything UDA does will have true value.",
+];
 
 const FOUNDER_QUOTE =
-  'Technology shouldn\'t determine who deserves to be saved, but rather give more people the opportunity to be protected.'
+  "Technology shouldn't determine who deserves to be saved, but rather give more people the opportunity to be protected.";
 
 const FOUNDER_CLOSING =
-  'This is my original intention in founding UDA BIOMED, and it\'s the direction we will never change.'
+  "This is my original intention in founding UDA BIOMED, and it's the direction we will never change.";
 
-const FOUNDER_SIGNATURE = 'Founder of UDA BIOMED'
+const FOUNDER_SIGNATURE = "Founder of UDA BIOMED";
 
 const APPROACH = [
   {
-    title: 'Start at the molecular level',
-    body: 'We look at the changes that precede visible disease, rather than the signatures it leaves behind once established.',
+    title: "Start at the molecular level",
+    body: "We look at the changes that precede visible disease, rather than the signatures it leaves behind once established.",
   },
   {
-    title: 'Build methods that hold up',
-    body: 'A finding is only useful if it can be reproduced. Standardised handling and traceable analysis are part of the research, not overhead attached to it.',
+    title: "Build methods that hold up",
+    body: "A finding is only useful if it can be reproduced. Standardised handling and traceable analysis are part of the research, not overhead attached to it.",
   },
   {
-    title: 'Work with clinicians, not adjacent to them',
-    body: 'Research questions worth pursuing come from clinical practice. We develop ours in conversation with the people who see the problem first-hand.',
+    title: "Work with clinicians, not adjacent to them",
+    body: "Research questions worth pursuing come from clinical practice. We develop ours in conversation with the people who see the problem first-hand.",
   },
-]
+];
 
 export default function About() {
   return (
@@ -121,7 +122,7 @@ export default function About() {
           {APPROACH.map(({ title, body }, i) => (
             <li key={title}>
               <span className={styles.approachNumber} aria-hidden="true">
-                {String(i + 1).padStart(2, '0')}
+                {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className={styles.approachTitle}>{title}</h3>
               <p className={styles.body}>{body}</p>
@@ -155,15 +156,25 @@ export default function About() {
         <p className={styles.founderSignature}>{FOUNDER_SIGNATURE}</p>
       </Section>
 
+      {/* 組織架構。資料在 OrgChart 元件裡，之後改組織只動那一份常數。 */}
+      <Section tone="tint" labelledBy="org-heading">
+        <div className={styles.founderHead}>
+          <p className={styles.eyebrow}>ORGANISATION</p>
+          <h2 id="org-heading">Organisational Structure</h2>
+          <p className={styles.lede}>
+            How responsibility is divided across governance, oversight and the
+            seven operating departments.
+          </p>
+        </div>
+        <OrgChart />
+      </Section>
+
       <Section>
         <div className={styles.todos}>
           <Placeholder title="Our Story">
-            需要公司成立年份、地點、成立緣由。這些是可查證的事實，不編造。
+            需要公司成立年份、地點、成立緣由。
           </Placeholder>
-          <Placeholder title="Team">
-            需要姓名、職稱、經歷、照片。在你給名單之前，這裡不會出現任何人名。
-            若暫時不公開個別成員，可改放團隊組成概述，但需要你先說明實際組成。
-          </Placeholder>
+          <Placeholder title="Team">需要姓名、職稱、經歷、照片。</Placeholder>
         </div>
       </Section>
 
@@ -173,5 +184,5 @@ export default function About() {
         body="Our work depends on the questions other people bring us."
       />
     </>
-  )
+  );
 }

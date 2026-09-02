@@ -1,0 +1,217 @@
+/* 組織架構圖。
+
+   連接線一律用 border/pseudo-element 畫，不用 SVG：這張圖從 375 到 1920
+   都要重排，SVG 的座標得跟著算，CSS 的線會自己跟著版面走。 */
+
+.chart {
+  margin-top: var(--space-4);
+}
+
+/* ---------- 治理主軸 ---------- */
+
+.spine {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 每一層之間的縱向連接線。最後一層不畫，否則會有一段懸空的線。 */
+.spineItem {
+  position: relative;
+  padding-bottom: var(--space-4);
+}
+
+.spineItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.25rem;
+  width: 2px;
+  background: var(--color-border);
+}
+
+.spineItem:first-child::before {
+  top: 1.5rem;
+}
+
+.spineItem:last-child {
+  padding-bottom: 0;
+}
+
+.spineItem:last-child::before {
+  display: none;
+}
+
+.node {
+  position: relative;
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  color: var(--color-white);
+  background: var(--color-primary);
+  border-radius: var(--radius);
+}
+
+/* ---------- 側邊分支 ---------- */
+
+.aside {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: var(--space-1) 0 0 var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+.asideItem {
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+/* 委員會：灰底，同原件 */
+.committee .asideItem {
+  color: var(--color-white);
+  background: var(--color-text-muted);
+}
+
+/* 幕僚室：白底外框，同原件 */
+.office .asideItem {
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+}
+
+/* 創辦人在原件是指向股東會，不是被管轄，用外框區隔 */
+.origin .asideItem {
+  color: var(--color-primary);
+  background: var(--color-tint);
+  border: 1px dashed var(--color-primary);
+}
+
+/* ---------- 總經理直轄五室 ----------
+   類名不能叫 .office：那個已經給側邊幕僚室的 <ul> 用了
+   （aside.kind === 'office'），撞名會讓 <ul> 吃到本來要給 <li> 的外框，
+   變成一個橫跨整列的白框。 */
+
+.officesBlock {
+  margin-top: var(--space-4);
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--color-border);
+}
+
+.branchLabel {
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
+}
+
+.offices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.officeItem {
+  padding: 6px var(--space-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- 部門 ---------- */
+
+.departments {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .departments {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .departments {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1440px) {
+  .departments {
+    /* 七個部，四欄會落單一個；1440 以上放得下 7 欄一列，與原件相同 */
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+/* --dept 只當識別色條。原件是白字壓在色塊上，但橘 #e87722 只有 2.96:1、
+   金 #d6a000 只有 2.36:1，照搬會有兩個部讀不到，所以文字一律深色。 */
+.dept {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 100%;
+  padding: var(--space-2);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-top: 4px solid var(--dept, var(--color-primary));
+  border-radius: var(--radius);
+}
+
+.deptName {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.deptReports {
+  margin-bottom: var(--space-1);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  color: var(--color-text-muted);
+}
+
+.units {
+  display: grid;
+  gap: 4px;
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.unit {
+  padding: 5px var(--space-1);
+  font-size: var(--text-small);
+  background: var(--color-surface);
+  border-left: 2px solid var(--dept, var(--color-primary));
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ---------- 標籤 ---------- */
+
+.en {
+  display: block;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* 中文比英文小一階、降一階顏色：它是同一個名稱的原文，不是補充說明 */
+.zh {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  opacity: 0.75;
+}
+
+.note {
+  margin-top: var(--space-3);
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
+}
