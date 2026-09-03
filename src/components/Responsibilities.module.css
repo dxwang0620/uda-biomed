@@ -161,3 +161,95 @@
     transition: none;
   }
 }
+
+
+/* ---------- 桌機：hover／focus 浮出 ---------- */
+
+/* 1024 以上不用手風琴，改成滑到標題就浮出內容。
+   手機沒有 hover，維持點擊展開的 grid-template-rows 動畫。
+
+   .item 要 position: relative 當定位基準，並在 hover 時抬高 z-index，
+   否則浮出的區塊會被後面的項目蓋住（它們是後來的堆疊順序）。 */
+@media (min-width: 1024px) {
+  .item {
+    position: relative;
+  }
+
+  .item:hover,
+  .item:focus-within,
+  .itemPinned {
+    z-index: 2;
+  }
+
+  .panel {
+    position: absolute;
+    top: calc(100% - 1px);
+    left: -1px;
+    right: -1px;
+    /* 浮出層不需要格線動畫，改成淡入上移 */
+    display: block;
+    grid-template-rows: none;
+    /* 內容可能很長。限高並自己捲，才不會被 Section 的 overflow 裁掉
+       —— .section 有 overflow-x: clip，而 clip 會讓另一軸的 visible
+       也變成 clip，超出區塊範圍的部分會直接消失。 */
+    max-height: 22rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: 0 12px 28px rgba(0, 24, 56, 0.18);
+    opacity: 0;
+    transform: translateY(-6px);
+    /* visibility 一起切換：只有 opacity 的話，看不見的層仍會擋住滑鼠 */
+    visibility: hidden;
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease,
+      visibility 0s linear 160ms;
+  }
+
+  .item:hover .panel,
+  .item:focus-within .panel,
+  .itemPinned .panel {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease,
+      visibility 0s;
+  }
+
+  /* Esc 之後暫時停用 hover 浮出，游標離開清單就恢復。
+     已釘住的（點過的）不受影響。 */
+  .wrapDismissed .item:hover .panel,
+  .wrapDismissed .item:focus-within .panel {
+    opacity: 0;
+    transform: translateY(-6px);
+    visibility: hidden;
+  }
+
+  .wrapDismissed .itemPinned .panel {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+  }
+
+  .panelInner {
+    overflow: visible;
+  }
+
+  /* 浮出時把觸發列的下緣圓角拉平，兩者才像同一塊 */
+  .item:hover .trigger,
+  .item:focus-within .trigger,
+  .itemPinned .trigger {
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
+  }
+}

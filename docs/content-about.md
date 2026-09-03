@@ -221,9 +221,34 @@ PDF 的中文是**向量外框而非文字**——字型只有 Helvetica、沒�
 職稱調整為執行副總經理）與一張手寫簽名。註記屬未來規劃、簽名是具名個人，
 兩者都沒有放上網站——要放請先確認。
 
+### 兩種呈現：桌機浮出、手機手風琴
+
+**1024 以上**：滑到（或鍵盤聚焦到）標題就浮出一個絕對定位的區塊，
+覆蓋在後面的項目上；點擊會「釘住」，游標移開也不收。
+**1023 以下**：沒有 hover 可用，維持點擊展開的手風琴。
+
+三個實作上的必要細節：
+
+- **`.item` 要 `position: relative` 並在 hover 時抬高 `z-index`**，
+  否則浮出層會被後面的項目蓋住（它們的堆疊順序在後）。
+- **`visibility` 要跟著 `opacity` 一起切換**。只降 `opacity` 的話，
+  看不見的那一層仍然會擋住滑鼠事件。
+- **浮出層要限高並自己捲**（`max-height: 22rem` ＋ `overflow-y: auto`）。
+  `Section` 有 `overflow-x: clip`，而一軸是 `clip` 時另一軸的 `visible`
+  也會被計算成 `clip`，超出區塊範圍的部分會直接消失。
+
+WCAG 1.4.13（Content on Hover or Focus）：浮出層會遮住其他內容，
+所以必須能在不移動游標的情況下關掉。**Esc 關閉**並移除焦點，
+游標離開清單後恢復；已釘住的不受影響。浮出層本身可以把游標移進去
+（hoverable），也不會自己消失（persistent）。
+
+> 驗證陷阱：React 的 `onMouseLeave` 是用 `mouseout` 委派實作的，
+> 直接 `dispatchEvent(new MouseEvent('mouseleave'))` **不會**觸發它，
+> 要派發 `mouseout` 並把 `relatedTarget` 設在容器外。
+
 ### 實作
 
-動畫與董事長談話同一套：`grid-template-rows: 0fr → 1fr`，內層需
+手機的展開動畫與董事長談話同一套：`grid-template-rows: 0fr → 1fr`，內層需
 `overflow: hidden` ＋ `min-height: 0`。按鈕包在 `<h4>` 裡是 disclosure 的
 標準寫法，讀屏可以靠標題列表跳著找。右側顯示項目數，展開前就知道有幾條。
 

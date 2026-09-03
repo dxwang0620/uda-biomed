@@ -485,11 +485,13 @@ const SCOPE_LABEL: Record<Group['scope'], { en: string; zh: string }> = {
 }
 
 function Panel({ group }: { group: Group }) {
+  /* 桌機靠 hover／focus 浮出，這個 state 是「釘住」——點過就留著，
+     滑鼠移開也不收。手機沒有 hover，它就是單純的展開狀態。 */
   const [open, setOpen] = useState(false)
   const panelId = `resp-${group.id}`
 
   return (
-    <div className={styles.item}>
+    <div className={`${styles.item} ${open ? styles.itemPinned : ''}`}>
       <h4 className={styles.itemHeading}>
         <button
           type="button"
@@ -548,8 +550,23 @@ function Panel({ group }: { group: Group }) {
 export default function Responsibilities() {
   const scopes: Group['scope'][] = ['governance', 'operations']
 
+  /* WCAG 1.4.13：靠 hover 浮出的內容會遮住後面的項目，所以必須能在
+     不移動游標的情況下關掉。Esc 關閉，游標離開清單後再恢復。 */
+  const [dismissed, setDismissed] = useState(false)
+
   return (
-    <div className={styles.wrap}>
+    <div
+      className={`${styles.wrap} ${dismissed ? styles.wrapDismissed : ''}`}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') {
+          setDismissed(true)
+          if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur()
+          }
+        }
+      }}
+      onMouseLeave={() => setDismissed(false)}
+    >
       {scopes.map((scope) => (
         <section key={scope} className={styles.scope}>
           <h3 className={styles.scopeTitle}>
