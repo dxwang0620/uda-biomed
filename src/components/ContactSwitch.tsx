@@ -161,7 +161,7 @@ export default function ContactSwitch() {
                 <textarea
                   id="visitor-message"
                   name="message"
-                  rows={4}
+                  rows={3}
                   required
                   className={styles.input}
                 />
