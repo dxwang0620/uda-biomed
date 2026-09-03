@@ -290,8 +290,10 @@ export default function OrgChart() {
               className={styles.dept}
               style={{ '--dept': color } as React.CSSProperties}
             >
+              {/* 部門名稱不掛 hover：職掌在下面每個轄下單位上，
+                  兩層都做會把同一份內容講兩次。 */}
               <h3 className={styles.deptName}>
-                <DutyNode en={en} zh={zh} className={styles.deptNameBtn} />
+                <Label en={en} zh={zh} />
               </h3>
               <p className={styles.deptReports}>
                 {reportsTo === 'president'

@@ -7,6 +7,25 @@
   margin-top: var(--space-4);
 }
 
+/* 有職掌說明的節點是 <button>。這段重設必須放在各節點樣式「之前」——
+   CSS Modules 依原始順序輸出，放後面的話 font / color / border 會反過來
+   蓋掉 .node、.unit 各自的設定：先前就因此讓深藍節點變成深藍字、
+   讓轄下單位吃到瀏覽器預設邊框而變成一個個粗框大塊。
+
+   這裡只清掉瀏覽器的按鈕外觀，字級與配色一律交給各節點的 class。 */
+.hasDuty {
+  position: relative;
+  /* 浮層要能超出節點，不能被自己裁掉 */
+  overflow: visible;
+  padding: 0;
+  font-family: inherit;
+  font-weight: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
 /* ---------- 治理主軸 ---------- */
 
 .spine {
@@ -188,10 +207,14 @@
 }
 
 .unit {
-  /* 同 .officeItem：改成 button 後不再繼承 */
+  /* button 預設是 inline-block、寬度貼合內容，會讓每個單位長短不一。
+     撐滿才跟原本的 li 一樣是整齊的一列。 */
+  display: block;
+  width: 100%;
   color: var(--color-text);
-  padding: 5px var(--space-1);
-  font-size: var(--text-small);
+  padding: 4px var(--space-1);
+  font-size: 0.8125rem;
+  line-height: 1.35;
   background: var(--color-surface);
   border-left: 2px solid var(--dept, var(--color-primary));
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
@@ -208,7 +231,7 @@
 /* 中文比英文小一階、降一階顏色：它是同一個名稱的原文，不是補充說明 */
 .zh {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 400;
   line-height: 1.4;
   opacity: 0.75;
@@ -221,15 +244,6 @@
 }
 
 
-/* 部門名稱本身就是標題樣式，按鈕只要撐滿並清掉內距 */
-.deptNameBtn {
-  display: block;
-  width: 100%;
-  padding: 0;
-  background: none;
-  border: 0;
-}
-
 /* ---------- 節點的職掌說明浮層 ---------- */
 
 /* 有職掌的節點是 <button>，要把瀏覽器預設的按鈕外觀清掉，
@@ -241,18 +255,6 @@
 .hasDuty:focus-visible,
 .dutyOpen {
   z-index: 21;
-}
-
-.hasDuty {
-  position: relative;
-  /* 浮層要能超出節點，不能被自己裁掉 */
-  overflow: visible;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  /* 不要寫 color: inherit。這條規則在 .node / .asideItem 之後，
-     會蓋掉它們各自的文字色——深藍節點上的白字會變成深藍字，
-     幾乎讀不到。顏色一律交給各節點自己的 class。 */
 }
 
 .hasDuty:focus-visible {
