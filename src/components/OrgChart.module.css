@@ -215,3 +215,142 @@
   font-size: var(--text-small);
   color: var(--color-text-muted);
 }
+
+
+/* 部門名稱本身就是標題樣式，按鈕只要撐滿並清掉內距 */
+.deptNameBtn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+}
+
+/* ---------- 節點的職掌說明浮層 ---------- */
+
+/* 有職掌的節點是 <button>，要把瀏覽器預設的按鈕外觀清掉，
+   但保留原本節點的配色（.node / .asideItem / .officeItem / .unit
+   各自的背景與文字色仍然生效，因為它們是同一個元素的 class）。 */
+/* 有職掌的節點浮出時要抬到最上層，否則自己的文字會被浮層的陰影壓暗，
+   相鄰節點也可能蓋住浮層。 */
+.hasDuty:hover,
+.hasDuty:focus-visible,
+.dutyOpen {
+  z-index: 21;
+}
+
+.hasDuty {
+  position: relative;
+  /* 浮層要能超出節點，不能被自己裁掉 */
+  overflow: visible;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: help;
+}
+
+/* 有說明可看的提示：底部一條虛線，沿用「可展開」的既有語彙 */
+.hasDuty::after {
+  content: '';
+  position: absolute;
+  right: 6px;
+  bottom: 3px;
+  left: 6px;
+  height: 0;
+  border-bottom: 1px dashed currentColor;
+  opacity: 0.4;
+}
+
+.hasDuty:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* 浮層本身。--pop-w 與 DutyNode 裡的 POP 常數同值，改一邊要改兩邊。 */
+.pop {
+  --pop-w: 320px;
+
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  display: block;
+  width: var(--pop-w);
+  max-width: calc(100vw - var(--space-4) * 2);
+  /* 治理層的職掌有四條，全展開會很長。限高自己捲，
+     也避開 Section 的 overflow-x: clip 連帶把另一軸也裁掉的問題。 */
+  max-height: 18rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-2);
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 28px rgba(0, 24, 56, 0.22);
+  opacity: 0;
+  transform: translateY(-4px);
+  /* visibility 一起切：只降 opacity 的話，看不見的浮層仍會擋住滑鼠 */
+  visibility: hidden;
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease,
+    visibility 0s linear 150ms;
+}
+
+/* 靠近容器右緣的節點改向左展開，否則會被 Section 的 overflow 裁掉 */
+.popFlip {
+  left: auto;
+  right: 0;
+}
+
+.hasDuty:hover .pop,
+.hasDuty:focus-visible .pop,
+.dutyOpen .pop {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease,
+    visibility 0s;
+}
+
+.popEntry {
+  display: block;
+  padding-left: var(--space-1);
+  border-left: 2px solid var(--color-border);
+}
+
+.popEntry + .popEntry {
+  margin-top: var(--space-2);
+}
+
+.popTerm {
+  display: block;
+  font-size: var(--text-small);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-primary);
+}
+
+.popDetail {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.popDetailZh {
+  margin-top: 2px;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop {
+    transition: none;
+  }
+}

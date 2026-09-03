@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react'
+import { dutiesFor } from '../data/duties.ts'
 import styles from './OrgChart.module.css'
 
 /**
@@ -171,21 +173,94 @@ function Label({ en, zh }: Unit) {
   )
 }
 
+/**
+ * 有職掌說明的節點。滑到（或鍵盤聚焦到）就浮出該節點的職掌。
+ *
+ * 用 <button> 而不是 div：這是可操作的元素，鍵盤要能 Tab 到，
+ * 觸控裝置也要能點開——沒有 hover 的裝置只剩點擊這條路。
+ *
+ * 說明浮層預設向右展開；若會超出架構圖容器就翻向左邊。這個判斷必須
+ * 量測後才知道，所以放在 state 裡，不能只靠 CSS。
+ */
+function DutyNode({
+  en,
+  zh,
+  className,
+}: Unit & { className?: string }) {
+  const entries = dutiesFor(zh)
+  const [open, setOpen] = useState(false)
+  const [flip, setFlip] = useState(false)
+  const ref = useRef<HTMLButtonElement>(null)
+
+  if (entries.length === 0) {
+    return (
+      <div className={className}>
+        <Label en={en} zh={zh} />
+      </div>
+    )
+  }
+
+  const measure = () => {
+    const btn = ref.current
+    const chart = btn?.closest(`.${styles.chart}`)
+    if (!btn || !chart) return
+    // 浮層寬度與 CSS 的 --pop-w 一致
+    const POP = 320
+    const right = chart.getBoundingClientRect().right
+    setFlip(btn.getBoundingClientRect().left + POP > right)
+  }
+
+  return (
+    <button
+      type="button"
+      ref={ref}
+      className={`${className ?? ''} ${styles.hasDuty} ${open ? styles.dutyOpen : ''}`}
+      aria-expanded={open}
+      onMouseEnter={measure}
+      onFocus={measure}
+      onClick={() => {
+        measure()
+        setOpen((v) => !v)
+      }}
+    >
+      <Label en={en} zh={zh} />
+
+      <span
+        className={`${styles.pop} ${flip ? styles.popFlip : ''}`}
+        role="note"
+      >
+        {entries.map(({ term, detail }) => (
+          <span key={term.en} className={styles.popEntry}>
+            <span className={styles.popTerm}>
+              {term.en}
+              <span className={styles.zh} lang="zh-Hant">
+                {term.zh}
+              </span>
+            </span>
+            <span className={styles.popDetail}>{detail.en}</span>
+            <span className={`${styles.zh} ${styles.popDetailZh}`} lang="zh-Hant">
+              {detail.zh}
+            </span>
+          </span>
+        ))}
+      </span>
+    </button>
+  )
+}
+
 export default function OrgChart() {
   return (
     <div className={styles.chart}>
       <ol className={styles.spine}>
         {GOVERNANCE.map(({ en, zh, aside }) => (
           <li key={en} className={styles.spineItem}>
-            <div className={styles.node}>
-              <Label en={en} zh={zh} />
-            </div>
+            <DutyNode en={en} zh={zh} className={styles.node} />
 
             {aside && (
               <ul className={`${styles.aside} ${styles[aside.kind]}`}>
                 {aside.items.map((item) => (
-                  <li key={item.en} className={styles.asideItem}>
-                    <Label {...item} />
+                  <li key={item.en}>
+                    <DutyNode {...item} className={styles.asideItem} />
                   </li>
                 ))}
               </ul>
@@ -200,8 +275,8 @@ export default function OrgChart() {
         </p>
         <ul className={styles.offices}>
           {OFFICES.map((o) => (
-            <li key={o.en} className={styles.officeItem}>
-              <Label {...o} />
+            <li key={o.en}>
+              <DutyNode {...o} className={styles.officeItem} />
             </li>
           ))}
         </ul>
@@ -216,7 +291,7 @@ export default function OrgChart() {
               style={{ '--dept': color } as React.CSSProperties}
             >
               <h3 className={styles.deptName}>
-                <Label en={en} zh={zh} />
+                <DutyNode en={en} zh={zh} className={styles.deptNameBtn} />
               </h3>
               <p className={styles.deptReports}>
                 {reportsTo === 'president'
@@ -225,8 +300,8 @@ export default function OrgChart() {
               </p>
               <ul className={styles.units}>
                 {units.map((u) => (
-                  <li key={u.en} className={styles.unit}>
-                    <Label {...u} />
+                  <li key={u.en}>
+                    <DutyNode {...u} className={styles.unit} />
                   </li>
                 ))}
               </ul>
