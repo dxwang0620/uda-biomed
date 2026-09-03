@@ -205,7 +205,7 @@ function DutyNode({
     const chart = btn?.closest(`.${styles.chart}`)
     if (!btn || !chart) return
     // 浮層寬度與 CSS 的 --pop-w 一致
-    const POP = 320
+    const POP = 440
     const right = chart.getBoundingClientRect().right
     setFlip(btn.getBoundingClientRect().left + POP > right)
   }
