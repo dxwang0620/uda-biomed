@@ -1,70 +1,51 @@
-# CONTACT — 文案
+# CONTACT 頁文案與實作
 
-> 標記：`[草稿]` Claude 寫的暫用文字，需你潤稿 ·
-> `[待補]` 涉及可查證的事實，不編造，等你提供
->
-> **已確認：這一版不做表單，只放聯絡資訊。**
-> 之後若要加表單再走 Formspree，屆時需要你提供 endpoint。
+## 兩區塊切換（`ContactSwitch`）
 
----
+一般訪客（藍 `--color-primary`）與 KYC（橘 `--color-orange`）並排，
+點一邊就滑過去蓋住另一邊，收合側留一條可點的直式標籤。白色欄位反白其上。
 
-## Hero
+- **桌機（900 以上）**：左右並排各半，點擊後選中側撐到 `100% - 5.5rem`、
+  另一側收成 `5.5rem` 的窄帶，標籤轉直式。動畫用 `flex-grow` / `flex-basis`。
+- **手機（900 以下）**：上下堆疊，「蓋住另一邊」不成立，改成兩塊預設都收起、
+  點開才展開（`grid-template-rows: 0fr → 1fr`）。不這樣做的話整頁會是兩份
+  完整表單。
 
-- **Eyebrow** `[草稿]`
-  GET IN TOUCH
+收合側的內容用 **`visibility: hidden`** 隱藏，不是只降 opacity——
+隱藏的元素本來就不可聚焦，比用 JS 逐一改 `tabindex` 可靠，也不必在 JS 裡
+再判斷一次斷點。切換延遲到動畫結束，才不會一點下去內容就消失。
 
-  設計稿沒有 CONTACT 頁，這個 eyebrow 是為了與其他內頁的 hero 結構一致而補的。
-  不想要的話 `PageHero` 的 eyebrow 是可選的，拿掉即可。
+## 欄位
 
-- **H1** `[草稿]`
-  Contact
+| 區塊 | 欄位 |
+| ---- | ---- |
+| 一般訪客 | 姓名、信箱、訊息 |
+| KYC | 公司行號、統一編號、姓名、職稱、信箱、電話、公司電話（選填） |
 
-- **Subhead** `[草稿]`
-  We welcome enquiries from research groups, clinical partners and
-  organisations working on related questions.
+KYC 七個欄位在桌機展開時排成兩欄，單欄會拉得太長。
 
----
+### 統一編號有做檢查碼驗證
 
-## Contact Details `[待補]`
+逐位乘上權重 `[1,2,1,2,1,2,4,1]`，把每個乘積的十位與個位相加，
+總和能被 5 整除即為有效；第 7 位是 7 時 `+1` 也算通過。
 
-**全部不編造。** 一個寫錯的 email 或電話，比整頁空白還糟。
+做這個不是為了嚴謹好看——統編打錯一碼表單照樣送得出去，
+但收到的資料是廢的，而且**沒有後端可以事後補救**。
+已用真實統編驗證（04595257、23638777 通過；12345678 擋下）。
 
-| 欄位 | 內容 |
-| --- | --- |
-| Email | `[待補]` |
-| Phone | `[待補]` |
-| Address | `[待補]` |
-| 營業時間 | `[待補]`，若不想公開可整列拿掉 |
+## ⚠️ 送出目的地尚未接
 
-沒有的欄位直接刪掉，不要放 `info@example.com` 這種佔位值上線。
+GitHub Pages 沒有後端，表單資料沒有地方可以送。CLAUDE.md 要求實作前先確認
+要走哪一種，所以目前 `handleSubmit` 只擋下事件、**不送任何資料出去**。
 
----
+兩個選項各有代價：
 
-## Enquiry Types `[草稿]`
+- **`mailto:`** — 無第三方、無相依套件，資料只經過訪客自己的郵件軟體。
+  但體驗差（會跳出郵件軟體）、無法驗證送出成功，且收件信箱會暴露給爬蟲。
+- **Formspree 之類的第三方** — 體驗好、有送出確認。但**資料會經過並儲存在
+  第三方**。KYC 收的是統編、姓名、職稱、電話這類身分資料，
+  這需要隱私權政策配合，是商業決定不是技術決定。
 
-選用區塊。分流不同來訪者，內容不涉及任何事實宣稱。
-若最後只公開一個 email，這一區塊可以整段拿掉。
+## 聯絡資訊 `[待補]`
 
-- **Research collaboration**
-  Proposals for joint investigation, or questions about our research focus.
-
-- **Clinical partnership**
-  Enquiries from clinical groups and medical institutions.
-
-- **General enquiries**
-  Everything else.
-
-若各類別要用不同收件信箱，請一併告訴我。`[待補]`
-
----
-
-## Media Enquiries `[待補]`
-
-需要你決定：是否設獨立的媒體聯絡窗口，或併入一般聯絡。
-
----
-
-## 社群連結 `[待補]`
-
-LinkedIn、X 等。**只放實際存在且由你們經營的帳號**，
-沒有就不放，不要留空連結或指向首頁的假連結。
+Email、電話、地址全部未定。一個寫錯的 email 比整頁空白還糟，絕不放假值。

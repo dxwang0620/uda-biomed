@@ -1,11 +1,14 @@
+import ContactSwitch from "../components/ContactSwitch.tsx";
 import PageHero from "../components/PageHero.tsx";
 import Placeholder from "../components/ui/Placeholder.tsx";
 import Section from "../components/ui/Section.tsx";
 import styles from "./Contact.module.css";
 
 /* 文案來源 docs/content-contact.md。
-   已確認：這一版不做表單，只放聯絡資訊。
-   聯絡方式全部 [待補] —— 一個寫錯的 email 比整頁空白還糟，絕不放假值。 */
+   聯絡方式仍全部 [待補] —— 一個寫錯的 email 比整頁空白還糟，絕不放假值。
+
+   表單改為兩個並排區塊（一般訪客／KYC），元件在 ContactSwitch。
+   ⚠️ 送出目的地尚未接，見該元件開頭的說明。 */
 
 const ENQUIRIES = [
   {
@@ -32,7 +35,15 @@ export default function Contact() {
         lede="We welcome enquiries from research groups, clinical partners and organisations working on related questions."
       />
 
-      <Section labelledBy="details-heading">
+      <Section labelledBy="choose-heading">
+        <h2 id="choose-heading">How would you like to reach us?</h2>
+        <p className={styles.lede}>
+          Two routes in. Pick the one that fits and the panel will open.
+        </p>
+        <ContactSwitch />
+      </Section>
+
+      <Section tone="tint" labelledBy="details-heading">
         <h2 id="details-heading">Contact Details</h2>
         <div className={styles.details}>
           <Placeholder title="Email、電話、地址">提供聯絡資訊。</Placeholder>

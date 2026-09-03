@@ -1,0 +1,309 @@
+/* 兩個並排的聯絡區塊，點一邊就滑過去蓋住另一邊。
+   藍（一般訪客）／橘（KYC）／白，配色沿用 tokens，不寫死 hex。 */
+
+.wrap {
+  margin-top: var(--space-4);
+}
+
+.panels {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  /* 圓角要裁掉子層的方角，滑動時邊緣才乾淨 */
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 900px) {
+  .panels {
+    flex-direction: row;
+    gap: 0;
+    /* 兩邊各半時的高度基準；展開後由內容決定，所以只設下限 */
+    min-height: 34rem;
+  }
+}
+
+/* flex-grow 是動畫的主角：兩邊各 1 → 被選中的變 1，另一邊收成細條。
+   用 grow 而不是 width，收合側才能靠 flex-basis 精準停在一個固定寬度。 */
+.panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition:
+    flex-grow 520ms cubic-bezier(0.32, 0.72, 0, 1),
+    flex-basis 520ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@media (min-width: 900px) {
+  .panel {
+    flex: 1 1 50%;
+  }
+
+  .open {
+    flex: 1 1 calc(100% - 5.5rem);
+  }
+
+  .shut {
+    flex: 0 0 5.5rem;
+  }
+}
+
+.visitor {
+  color: var(--color-white);
+  background: var(--color-primary);
+}
+
+.kyc {
+  color: var(--color-white);
+  background: var(--color-orange);
+}
+
+/* ---------- 可點的標籤 ---------- */
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3);
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.tab:focus-visible {
+  outline: 3px solid var(--color-white);
+  outline-offset: -6px;
+}
+
+.tabEn {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.tabZh {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  opacity: 0.85;
+}
+
+/* 收合時標籤轉直式，只留一條窄帶 */
+@media (min-width: 900px) {
+  .shut .tab {
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    padding-block: var(--space-4);
+  }
+
+  .shut .tabText {
+    writing-mode: vertical-rl;
+    margin-top: var(--space-3);
+  }
+
+  .shut .tabZh {
+    margin: var(--space-2) 0 0;
+  }
+}
+
+/* ---------- 內容 ---------- */
+
+/* 手機（900 以下）是上下堆疊，沒有「蓋住另一邊」可言：
+   預設兩塊都只留標籤，點開才展開內容，否則整頁會是兩份完整表單。
+   高度轉場用 grid-template-rows 0fr→1fr，內層需 overflow:hidden。 */
+.body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 420ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.open .body {
+  grid-template-rows: 1fr;
+}
+
+.bodyInner {
+  overflow: hidden;
+  min-height: 0;
+  padding: 0 var(--space-3) var(--space-3);
+  /* 收合時真的隱藏，否則看不見的欄位仍可被 Tab 進去。
+     延遲到動畫結束才切，才不會一點下去內容就消失。 */
+  visibility: hidden;
+  transition: visibility 0s linear 420ms;
+}
+
+.open .bodyInner {
+  visibility: visible;
+  transition: visibility 0s;
+}
+
+@media (min-width: 900px) {
+  /* 桌機一律展開，收合交給 flex 的寬度動畫 */
+  .body {
+    grid-template-rows: 1fr;
+    overflow-y: auto;
+  }
+
+  .bodyInner {
+    visibility: visible;
+    transition: none;
+  }
+
+  .shut .bodyInner {
+    visibility: hidden;
+    transition: visibility 0s linear 520ms;
+  }
+
+  /* 收合側的內容淡出並停止接收滑鼠；動畫結束前不能直接 display:none，
+     否則會沒有過場、直接消失。 */
+  .shut .body {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+
+  .open .body,
+  .panel:not(.shut) .body {
+    opacity: 1;
+    transition: opacity 320ms ease 160ms;
+  }
+}
+
+.blurb {
+  max-width: 46ch;
+  font-size: var(--text-small);
+  line-height: 1.65;
+  opacity: 0.92;
+}
+
+/* ---------- 表單 ---------- */
+
+.form {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+@media (min-width: 900px) {
+  /* KYC 有七個欄位，單欄會拉得很長 */
+  .open .formTwoCol {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .open .formTwoCol > button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+.row {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+}
+
+.labelEn {
+  font-size: var(--text-small);
+  font-weight: 700;
+}
+
+.labelZh {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.optional {
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+/* 白底深字：欄位疊在藍／橘上面，靠反白取得對比，
+   不靠半透明——半透明會讓兩個底色下的可讀性不一致。 */
+.input {
+  width: 100%;
+  padding: 10px var(--space-2);
+  font: inherit;
+  font-size: var(--text-small);
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+}
+
+.input:focus-visible {
+  outline: 3px solid var(--color-white);
+  outline-offset: 2px;
+}
+
+.inputError {
+  border-color: #b3261e;
+}
+
+.hint,
+.error {
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.hint {
+  opacity: 0.8;
+}
+
+/* 白底上的錯誤字，不是疊在彩色上，所以用深紅 */
+.error {
+  padding: 2px var(--space-1);
+  font-weight: 700;
+  color: #7f1d17;
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+}
+
+.submit {
+  justify-self: start;
+  margin-top: var(--space-1);
+  padding: 12px var(--space-4);
+  font-family: var(--font-latin);
+  font-size: var(--text-small);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: var(--color-white);
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform 160ms ease;
+}
+
+.submit:hover {
+  transform: translateY(-2px);
+}
+
+.submit:focus-visible {
+  outline: 3px solid var(--color-white);
+  outline-offset: 3px;
+}
+
+.submitKyc {
+  color: #8a3d00;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .body,
+  .submit {
+    transition: none;
+  }
+}
