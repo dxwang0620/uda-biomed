@@ -30,9 +30,11 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  /* 拉長到 720ms 並換成兩端都平緩的曲線；原本 520ms 的收尾太急，
+     滑到一半就「卡住」的感覺就是從那裡來的。 */
   transition:
-    flex-grow 520ms cubic-bezier(0.32, 0.72, 0, 1),
-    flex-basis 520ms cubic-bezier(0.32, 0.72, 0, 1);
+    flex-grow 720ms cubic-bezier(0.65, 0, 0.35, 1),
+    flex-basis 720ms cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @media (min-width: 900px) {
@@ -49,14 +51,26 @@
   }
 }
 
+/* 帶透明度的漸層，讓兩塊不是死板的色塊。底下是白色區塊，
+   所以透明度等於「往白色淡」——透得越多字越難讀，數值是算過的。 */
 .visitor {
   color: var(--color-white);
-  background: var(--color-primary);
+  background: linear-gradient(
+    140deg,
+    rgba(var(--color-primary-rgb), 0.97) 0%,
+    rgba(var(--color-primary-rgb), 0.78) 100%
+  );
 }
 
+/* 橘底一律深色字。白字在 #fd7c06 上只有 2.60:1，連大字的 3:1 都不到；
+   近黑 #05101f 是 7.33:1，透明度拉到 0.8 還有 8.75:1。 */
 .kyc {
-  color: var(--color-white);
-  background: var(--color-orange);
+  color: var(--color-text-on-glass);
+  background: linear-gradient(
+    140deg,
+    rgba(var(--color-orange-rgb), 0.97) 0%,
+    rgba(var(--color-orange-rgb), 0.80) 100%
+  );
 }
 
 /* ---------- 可點的標籤 ---------- */
@@ -76,7 +90,7 @@
 }
 
 .tab:focus-visible {
-  outline: 3px solid var(--color-white);
+  outline: 3px solid currentColor;
   outline-offset: -6px;
 }
 
@@ -121,7 +135,7 @@
 .body {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 420ms cubic-bezier(0.32, 0.72, 0, 1);
+  transition: grid-template-rows 560ms cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .open .body {
@@ -135,7 +149,7 @@
   /* 收合時真的隱藏，否則看不見的欄位仍可被 Tab 進去。
      延遲到動畫結束才切，才不會一點下去內容就消失。 */
   visibility: hidden;
-  transition: visibility 0s linear 420ms;
+  transition: visibility 0s linear 560ms;
 }
 
 .open .bodyInner {
@@ -157,7 +171,7 @@
 
   .shut .bodyInner {
     visibility: hidden;
-    transition: visibility 0s linear 520ms;
+    transition: visibility 0s linear 720ms;
   }
 
   /* 收合側的內容淡出並停止接收滑鼠；動畫結束前不能直接 display:none，
@@ -165,13 +179,13 @@
   .shut .body {
     opacity: 0;
     pointer-events: none;
-    transition: opacity 200ms ease;
+    transition: opacity 240ms ease;
   }
 
   .open .body,
   .panel:not(.shut) .body {
     opacity: 1;
-    transition: opacity 320ms ease 160ms;
+    transition: opacity 400ms ease 260ms;
   }
 }
 
@@ -243,7 +257,7 @@
 }
 
 .input:focus-visible {
-  outline: 3px solid var(--color-white);
+  outline: 3px solid currentColor;
   outline-offset: 2px;
 }
 
@@ -284,7 +298,7 @@
   border: 0;
   border-radius: var(--radius);
   cursor: pointer;
-  transition: transform 160ms ease;
+  transition: transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .submit:hover {
@@ -292,7 +306,7 @@
 }
 
 .submit:focus-visible {
-  outline: 3px solid var(--color-white);
+  outline: 3px solid currentColor;
   outline-offset: 3px;
 }
 

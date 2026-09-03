@@ -26,6 +26,7 @@ type Field = {
 
 const VISITOR_FIELDS: Field[] = [
   { name: 'name', en: 'Name', zh: '姓名', type: 'text', required: true, autoComplete: 'name' },
+  { name: 'phone', en: 'Phone', zh: '電話', type: 'tel', required: true, autoComplete: 'tel' },
   { name: 'email', en: 'Email', zh: '信箱', type: 'email', required: true, autoComplete: 'email' },
 ]
 
@@ -152,9 +153,9 @@ export default function ContactSwitch() {
 
               <div className={styles.row}>
                 <label className={styles.label} htmlFor="visitor-message">
-                  <span className={styles.labelEn}>Message</span>
+                  <span className={styles.labelEn}>Enquiry</span>
                   <span className={styles.labelZh} lang="zh-Hant">
-                    訊息
+                    諮詢內容
                   </span>
                 </label>
                 <textarea
