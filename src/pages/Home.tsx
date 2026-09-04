@@ -146,15 +146,10 @@ export default function Home() {
         <HeroCarousel />
       </HeroVideo>
 
-      {/* 四格數字統計。前兩項是公開統計並附出處，後兩項是 UDA 自己的
-          數字、尚未提供，見 StatCounters 內的說明。 */}
-      <Section tone="translucent" labelledBy="stats-heading">
-        <div className={styles.intro}>
-          <p className={styles.eyebrow}>WHY THIS MATTERS</p>
-          <h2 id="stats-heading" className={styles.sectionTitle}>
-            The scale we are working against
-          </h2>
-        </div>
+      {/* 數字統計。刻意不放標題與出處說明（指定），所以區塊沒有可用的
+          標題可指向，改用 aria-label 說明它是什麼。
+          ⚠️ 後兩個數字是佔位值，見 StatCounters 內的說明。 */}
+      <Section tone="translucent">
         <StatCounters />
       </Section>
 

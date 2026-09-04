@@ -4,14 +4,16 @@ import styles from './StatCounters.module.css'
 /**
  * 四格數字統計，捲進畫面才開始跑數。
  *
- * 前兩項是**公開統計**，有出處，可以放：
- *   - 全球人口：UN World Population Prospects
- *   - 全球癌症：WHO / IARC GLOBOCAN 2022
+ * ⚠️ **四個數字裡有兩個是假的，畫面上沒有任何標示。**
  *
- * 後兩項是 **UDA 自己的內部數字**，我沒有來源，依 CLAUDE.md 工作方式
- * 第 3 條不編造研發成果與專利數據——填錯一個專利件數，對外就是不實陳述。
- * 所以 value 留 null，畫面上顯示待補標記而不是假數字。
- * 拿到實際數字後把 null 換成數字即可，動畫會自動接上。
+ * 前兩項是公開統計，有出處：
+ *   - 全球人口：UN World Population Prospects（2026-09 約 83.1 億）
+ *   - 全球癌症：WHO / IARC GLOBOCAN 2022（每年約 2,000 萬新增病例）
+ *
+ * 後兩項（研發中項目數、專利申請）是 **UDA 自己的內部數字，我沒有來源**，
+ * 目前填的是佔位值，指定要先隨便加的。出處說明列也一併移除了，
+ * 所以畫面上看不出哪些是真的。**上線前必須換成實際數字。**
+ * 完整說明見 docs/content-home.md。
  */
 
 type Stat = {
@@ -40,12 +42,14 @@ const STATS: Stat[] = [
     zh: '全球每年新增癌症病例',
   },
   {
-    value: null,
+    /* ⚠️ 佔位值，非實際數據 */
+    value: 12,
     en: 'Programmes in development',
     zh: '研發中項目數',
   },
   {
-    value: null,
+    /* ⚠️ 佔位值，非實際數據 */
+    value: 8,
     en: 'Patent applications',
     zh: '專利申請',
   },
@@ -131,18 +135,12 @@ function StatCell({ stat }: { stat: Stat }) {
 export default function StatCounters() {
   return (
     <div className={styles.wrap}>
-      <ul className={styles.grid}>
+      {/* 這一排沒有可見標題（指定移除），讀屏使用者需要知道它是什麼 */}
+      <ul className={styles.grid} aria-label="Key figures">
         {STATS.map((s) => (
           <StatCell key={s.en} stat={s} />
         ))}
       </ul>
-
-      {/* 出處要寫出來。生醫網站放數字卻不說來源，等於要人憑信任接受。 */}
-      <p className={styles.sources}>
-        Population: UN World Population Prospects. Cancer incidence: WHO/IARC
-        GLOBOCAN 2022. The final two figures are UDA&rsquo;s own and are not
-        published yet.
-      </p>
     </div>
   )
 }
