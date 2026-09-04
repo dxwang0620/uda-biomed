@@ -46,6 +46,73 @@
 
 ## 區塊一：研發重點三張卡 `[抄錄]`
 
+版型改為**橫向推進的三張卡** `FocusStack`，取代原本的三欄圖示卡。
+版型與底色依 `index_img/card1.jpg`～`card3.jpg`，照片是 `card1-1`～`card3-1`。
+
+### 底色（取樣自設計稿，非自行配色）
+
+| 卡 | 底色 | 對應 |
+| - | ---- | ---- |
+| 01 | `#1b42a3` | Cancer Research & Detection Technology |
+| 02 | `#313b87` | UDA Biochip Technology |
+| 03 | `#0c132f` | Proto-Structural Biology |
+
+02 的 `#313b87` 偏靛紫，嚴格說在專案的藍白色系之外，但稿上就是這個值，照抄。
+
+白字疊在三張底色上的對比度（最差的是 01）：
+
+| 元素 | 01 `#1b42a3` | 02 `#313b87` | 03 `#0c132f` |
+| ---- | ----------- | ----------- | ----------- |
+| 標題 白 100% | 8.92 | 9.97 | 18.26 |
+| 內文 白 82% | 6.56 | 7.31 | 12.44 |
+| 眉標 白 72% | 5.43 | 6.02 | 9.74 |
+
+全部通過 AA。
+
+### 橫向移動怎麼做的
+
+參考 UDA 現有站的 `.uda-scroll-stack`。那一段實測是 **JS 依捲動進度寫 inline
+transform** 的垂直疊牌：捲到定位時三張卡分別是 `scale(0.9) translateY(1606px)`、
+`scale(0.95) translateY(803px)`、`scale(1) translateY(0)`，z-index 1/2/3。
+
+這裡改成橫向，而且**不用 JS**——用 CSS 捲動時間軸：
+
+```
+.stack   高度 = 100svh + travel，宣告 view-timeline: --focusStack
+.viewport  position: sticky，釘在 header 底下，overflow: hidden
+.rail    animation-timeline: --focusStack，range 為 contain 0% ～ contain 100%
+```
+
+`contain 0% ～ contain 100%` 是「這個元素完整蓋住可視區」的那一段，長度剛好等於
+stack 高度減一個可視區高度。把 stack 高度設成 `100svh + travel`，捲 1px 卡片就
+移動 1px，沒有加速感。
+
+終點位移 `translateX(calc(var(--view-w) - 100%))`：`100%` 是 rail 自己的寬度，
+相減之後最後一張卡的右緣剛好貼齊可視區右緣。1200 寬實測 vpW=1136、railW=1968、
+終點 -832，與計算一致。
+
+**沒有支援捲動時間軸的瀏覽器**（目前主要是 Firefox）看到的是可橫向滑動的卡片列
+（`overflow-x: auto` ＋ scroll-snap）。那是基礎樣式，釘住捲動包在
+`@supports (animation-timeline: view())` 裡才加上去。`prefers-reduced-motion: reduce`
+走同一條退路。
+
+### 兩個踩到的坑
+
+**一、scroll-snap 會讓整個分頁卡死。**
+增強模式下 `.viewport` 是 `overflow: hidden` 的捲動容器，內容又被動畫持續位移。
+基礎樣式的 `scroll-snap-type: x mandatory` 若留著，瀏覽器會為了對齊反覆修正捲動
+位置，而位移來自動畫，兩者互相觸發，分頁直接沒有反應。增強模式必須
+`scroll-snap-type: none`。
+
+**二、`animation` 簡寫會把 duration 設成 0s。**
+配上 `fill: both` 的結果是進度永遠是 1——卡片一開始就停在終點，完全不會動。
+捲動時間軸要 `animation-duration: auto`，所以這裡用長寫法，不用簡寫。
+
+（順帶一提，`container-type: inline-size` ＋ 在 keyframe 裡用 `100cqw` 也會讓
+Chrome 卡死，已改用 `--view-w`。代價是 Windows 上寬度小於 1232px 時，
+`100vw` 會把傳統捲軸算進去，終點會差十幾 px。）
+
+
 > **眉標、標題、導言已依指示刪除**（2026-09-05）。刪掉的是：
 > Eyebrow `CURRENT R&D FOCUS`、標題 `From cancer research to detection
 > technology, building a continuously validated R&D pathway`、

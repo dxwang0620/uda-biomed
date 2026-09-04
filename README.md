@@ -135,6 +135,39 @@ ffprobe -v error -show_entries stream=codec_type -of csv=p=0 public/media/hero.m
 
 ---
 
+## 內頁與卡片照片
+
+原始檔在 `web_img/`（內頁 hero）與 `index_img/`（研發重點三張卡）。
+**兩個資料夾都不要動**，轉檔輸出到 `public/media/`。
+
+研發重點卡片照片（`card1-1.jpg`～`card3-1.jpg` → `focus-1`～`focus-3`）：
+
+```bash
+# scale='min(1400,iw)':-2
+#   min(1400,iw)  最寬 1400，比這窄的原圖不放大——放大只會變糊又變大
+#   -2            高度依比例，並取偶數（部分編碼器要求偶數尺寸）
+#   flags=lanczos 縮圖用的重取樣演算法，比預設的 bicubic 銳利
+for n in 1 2 3; do
+  ffmpeg -y -i "index_img/card$n-1.jpg" -vf "scale='min(1400,iw)':-2:flags=lanczos" \
+    -q:v 4 "public/media/focus-$n.jpg"
+  ffmpeg -y -i "index_img/card$n-1.jpg" -vf "scale='min(1400,iw)':-2:flags=lanczos" \
+    -q:v 78 "public/media/focus-$n.webp"
+done
+```
+
+產出：
+
+| 檔案 | jpg | webp |
+| --- | --- | --- |
+| `focus-1` | 91 KB | 58 KB |
+| `focus-2` | 98 KB | 61 KB |
+| `focus-3` | 99 KB | 64 KB |
+
+`<picture>` 先給 webp、再退回 jpg，兩份都要留——webp 的支援度雖然夠，
+但 jpg 是那個「一定不會出事」的退路。
+
+---
+
 ## 已知的 audit 警告
 
 `npm audit` 會回報 react-router 的兩則 moderate advisory：

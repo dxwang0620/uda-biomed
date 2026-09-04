@@ -1,0 +1,205 @@
+/* 研發重點三張卡，橫向推進。
+   版型與底色取樣自 index_img/card1.jpg～card3.jpg。
+
+   兩層樣式：
+   1. 基礎 —— 可橫向滑動的卡片列，配 scroll-snap。所有瀏覽器都能用，
+      鍵盤與觸控都能操作。
+   2. 增強 —— 支援 CSS 捲動時間軸時，區塊釘在畫面上，往下捲讓卡片由右往左推進。
+      包在 @supports 裡，不支援就留在基礎樣式，畫面不會壞掉。 */
+
+.stack {
+  /* 卡片寬度與間距。--rail-w 是三張卡加間距的總寬，
+     stack 的高度、以及要推進多少距離都從它算出來 */
+  --card-w: min(84vw, 40rem);
+  --gap: var(--space-3);
+  --rail-w: calc(3 * var(--card-w) + 2 * var(--gap));
+  /* .container 的左右內距，1024 以上變成 --space-4 */
+  --pad: var(--space-2);
+  --view-w: calc(min(100vw, var(--container)) - 2 * var(--pad));
+  --travel: calc(var(--rail-w) - var(--view-w));
+  --sticky-top: var(--header-h-mobile);
+}
+
+@media (min-width: 1024px) {
+  .stack {
+    --pad: var(--space-4);
+    --sticky-top: var(--header-h);
+  }
+}
+
+/* 基礎：橫向捲動容器 */
+.viewport {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* 卡片有陰影與圓角，捲動時上下不要被裁掉 */
+  padding-block: var(--space-1);
+}
+
+.rail {
+  display: flex;
+  gap: var(--gap);
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--card-w);
+  height: clamp(28rem, 74svh, 40rem);
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  scroll-snap-align: start;
+  box-shadow: 0 12px 32px rgba(0, 48, 104, 0.24);
+}
+
+/* 三張卡的底色。取樣自設計稿的實際像素，不是自行配色。
+   02 的 #313b87 偏靛紫，嚴格說在專案的藍白色系之外，但稿上就是這個值。 */
+.tone1 {
+  background: #1b42a3;
+}
+
+.tone2 {
+  background: #313b87;
+}
+
+.tone3 {
+  background: #0c132f;
+}
+
+.text {
+  padding: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .text {
+    padding: var(--space-4);
+  }
+}
+
+.eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  /* 白 72%。三張底色裡最差的是 01 的 #1b42a3，5.43:1 */
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.num {
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  color: var(--color-white);
+}
+
+.slash {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.title {
+  margin: var(--space-2) 0 0;
+  font-size: clamp(1.375rem, 2.4vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  color: var(--color-white);
+}
+
+.body {
+  margin: var(--space-2) 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  /* 白 82%。最差是 01 的 #1b42a3，6.56:1 */
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.14);
+  /* 邊框是純裝飾，資訊由文字本身承載，不受 1.4.11 的 3:1 約束 */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+}
+
+/* 照片吃掉卡片剩下的高度。min-height: 0 不能省——
+   flex 項目的預設 min-height 是 auto，圖片會把卡片撐破。 */
+.media {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: var(--space-3);
+}
+
+.media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 增強：釘住捲動。
+   捲動時間軸把捲動位置直接映射成 transform，不需要 scroll 事件，
+   也就沒有節流問題（CLAUDE.md 對 header 的要求也是同一個理由）。
+
+   contain 0% ～ contain 100% 是「這個元素完整蓋住可視區」的那一段，
+   長度剛好是 stack 高度減掉一個可視區高度。把 stack 的高度設成
+   100svh + travel，捲 1px 卡片就移動 1px，不會有加速感。 */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .stack {
+      height: calc(100svh + var(--travel));
+      view-timeline: --focusStack block;
+    }
+
+    .viewport {
+      position: sticky;
+      top: var(--sticky-top);
+      display: flex;
+      align-items: center;
+      height: calc(100svh - var(--sticky-top));
+      overflow: hidden;
+      /* 一定要關掉基礎樣式的 scroll-snap。這一層是 overflow: hidden 的捲動容器，
+         內容又被動畫持續位移；留著 snap 的話瀏覽器會為了對齊反覆修正捲動位置，
+         而位移又來自動畫，兩者互相觸發，整個分頁會卡死。 */
+      scroll-snap-type: none;
+    }
+
+    /* 用長寫法，不要用 animation 簡寫。簡寫會把 animation-duration 設成 0s，
+       配上 fill: both 的結果是進度永遠停在 1——卡片一開始就在終點，不會動。
+       捲動時間軸要的是 duration: auto，讓整段動畫對應到 range 的長度。 */
+    .rail {
+      animation-name: railSlide;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --focusStack;
+      animation-range: contain 0% contain 100%;
+    }
+  }
+}
+
+@keyframes railSlide {
+  to {
+    /* 100% 是 rail 自己的寬度，--view-w 是可視區寬度，
+       兩者相減就是「最後一張卡的右緣貼齊可視區右緣」的位移 */
+    transform: translateX(calc(var(--view-w) - 100%));
+  }
+}

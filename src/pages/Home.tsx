@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { Calendar, ChevronDown, Dna, ImageIcon, Microscope, Share2, User } from 'lucide-react'
+import { Calendar, ChevronDown, ImageIcon, User } from 'lucide-react'
 import ContactSwitch from '../components/ContactSwitch.tsx'
+import FocusStack from '../components/FocusStack.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
 import StatCounters from '../components/StatCounters.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
 import Card from '../components/ui/Card.tsx'
-import IconCircle from '../components/ui/IconCircle.tsx'
 import Placeholder from '../components/ui/Placeholder.tsx'
 import Section from '../components/ui/Section.tsx'
 import styles from './Home.module.css'
@@ -76,26 +76,6 @@ const CHAIRMAN_MESSAGE = [
   'Detection research rewards those willing to build carefully and verify repeatedly — and that is the company we intend to be, for our team and for anyone who shares the goal.',
 ]
 
-const FOCUS = [
-  {
-    icon: Microscope,
-    title: 'Cancer Research & Detection Technology',
-    body: 'Studies cancer-related biological signals, background interference, recognition and detection applications in the context of cancer biology and disease heterogeneity.',
-    tags: ['Cancer Biology', 'Detection Research', 'Molecular Recognition'],
-  },
-  {
-    icon: Dna,
-    title: 'UDA Biochip Technology',
-    body: 'Integrates molecular recognition, material interfaces, biosensing, microscale engineering and data analysis into a miniaturized platform for life-signal research and cancer-detection applications.',
-    tags: ['Molecular Recognition', 'Sensing Integration', 'Platform Translation'],
-  },
-  {
-    icon: Share2,
-    title: 'Proto-Structural Biology',
-    body: "UDA's original R&D framework for integrating structural biology, molecular biophysics and life-signal research from atomic and molecular structure to cellular state.",
-    tags: ['Structural Research', 'Molecular Dynamics', 'UDA R&D Framework'],
-  },
-]
 
 const PLATFORM = [
   {
@@ -202,28 +182,7 @@ export default function Home() {
               併進這一塊是為了讓董事長談話在窄螢幕能排到卡片下面——
               兩個 Section 之間沒辦法互換順序。 */}
           <div className={styles.focusGroup}>
-            <ul role="list" className={styles.cards}>
-              {FOCUS.map(({ icon: Icon, title, body, tags }) => (
-                <li key={title}>
-                  <Card className={styles.card}>
-                    <IconCircle tone="tint">
-                      <Icon size={28} strokeWidth={1.5} />
-                    </IconCircle>
-                    {/* 原本是 h3，掛在已刪除的那個 h2 底下。h2 沒了就要升上來，
-                        否則從 h1 直接跳到 h3。 */}
-                    <h2 className={styles.cardTitle}>{title}</h2>
-                    <p className={styles.cardBody}>{body}</p>
-                    <ul role="list" className={styles.tags}>
-                      {tags.map((tag) => (
-                        <li key={tag} className={styles.tag}>
-                          {tag}
-                        </li>
-                      ))}
-                    </ul>
-                  </Card>
-                </li>
-              ))}
-            </ul>
+            <FocusStack />
 
             <p className={`${styles.note} ${styles.intro}`}>
               R&amp;D can be broad, while market strategy must remain focused. UDA
