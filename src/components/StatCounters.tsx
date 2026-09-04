@@ -88,7 +88,10 @@ function useCountUp(target: number | null, decimals: number) {
 
         const start = performance.now()
         const tick = (now: number) => {
-          const t = Math.min((now - start) / DURATION, 1)
+          // 下界一定要夾。rAF 傳進來的時間戳是「該幀開始的時間」，
+          // 可能早於上面用 performance.now() 記下的 start，t 會是負數，
+          // easeOutCubic 就吐出負值，畫面上第一幀會出現「-0.0」
+          const t = Math.min(Math.max((now - start) / DURATION, 0), 1)
           // easeOutCubic：起步快、收尾緩，數字停下來時不會突兀
           const eased = 1 - Math.pow(1 - t, 3)
           setShown(target * eased)

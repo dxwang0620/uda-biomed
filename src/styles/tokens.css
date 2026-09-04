@@ -21,6 +21,7 @@
   --color-orange: #fd7c06;
   /* CSS 無法對 hex 加透明度，需要拆成分量 */
   --color-orange-rgb: 253, 124, 6;
+  --color-accent-rgb: 0, 114, 234; /* accent 的分量，供 rgba() 調透明度用 */
   --color-accent-bright: #00bef8; /* [取樣] 網格節點亮點 */
 
   /* ---- 白與灰 ---- */

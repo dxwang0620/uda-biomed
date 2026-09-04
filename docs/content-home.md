@@ -374,8 +374,8 @@ transition 全部移除。
 
 | | 靜止 | hover |
 | - | ---- | ----- |
-| 底色 | `#fff → --color-tint` 直向微漸層 | `--color-primary → --color-navy` 斜向漸層 |
-| 邊框 | 1px `--color-border` | 透明（改由陰影界定邊緣） |
+| 底色 | `--color-accent` 5% → 18% 疊在白上，158° 斜向 | `--color-primary → --color-navy` 斜向漸層 |
+| 外框 | `inset` 1px，accent 22% | 無（改由陰影界定邊緣） |
 | 陰影 | `--shadow-card` | `0 18px 38px rgba(0,48,104,.28)` |
 | 位置 | — | `translateY(-6px) scale(1.02)` |
 | 數字 | primary | 白，並 `rotateX(-88deg) → 0` 翻轉進場 |
@@ -402,6 +402,23 @@ transition 全部移除。
 改用 `scale(0.975)` 加收平陰影，效果一樣是「退後」，但不動任何顏色。
 
 `prefers-reduced-motion: reduce` 時位移、縮放、翻轉全部關掉，只留顏色變化。
+
+### 靜止底色為什麼用 accent 調、上限為什麼是 18%
+
+指定「一開始不要全白」。先用 `--color-primary`（#0f3661）調淡色，
+但 primary 本身偏灰，疊出來看起來是灰的不是藍的；換成
+`--color-accent`（#0072ea）才讀得出藍。為此在 `tokens.css` 補了
+`--color-accent-rgb`。
+
+深的那一端卡在 **18%**，是 13px 中文小標決定的：
+
+| accent 透明度 | 合成底色 | 中文小標 13px |
+| ------------ | ------- | ------------ |
+| 0.14 | `#dbebfc` | 4.94:1 |
+| **0.18（目前）** | `#d1e6fb` | **4.69:1** |
+| 0.22 | `#c7e0fa` | 4.42:1 ✗ 低於 AA |
+
+要再深就得同時把中文小標的顏色壓深，否則過不了 4.5:1。
 
 ### 對比度（hover 態）
 
