@@ -148,7 +148,7 @@ export default function ContactSwitch() {
 
             <form className={styles.form} onSubmit={handleSubmit}>
               {VISITOR_FIELDS.map((f) => (
-                <FieldRow key={f.name} field={f} />
+                <FieldRow key={f.name} field={f} scope="visitor" />
               ))}
 
               <div className={styles.row}>
@@ -220,6 +220,7 @@ export default function ContactSwitch() {
                 <FieldRow
                   key={f.name}
                   field={f}
+                  scope="kyc"
                   error={f.name === 'taxId' ? taxIdError : null}
                   onInput={f.name === 'taxId' ? () => setTaxIdError(null) : undefined}
                 />
@@ -239,14 +240,18 @@ export default function ContactSwitch() {
 
 function FieldRow({
   field,
+  scope,
   error,
   onInput,
 }: {
   field: Field
+  /** 兩個表單都有 name／email／phone，不加前綴會產生重複的 id，
+      點 KYC 的標籤會跳去聚焦另一個表單的欄位。 */
+  scope: PanelId
   error?: string | null
   onInput?: () => void
 }) {
-  const id = `f-${field.name}`
+  const id = `${scope}-${field.name}`
   const hintId = field.hint ? `${id}-hint` : undefined
   const errId = error ? `${id}-err` : undefined
 

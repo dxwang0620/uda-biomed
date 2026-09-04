@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Calendar, ChevronDown, Dna, ImageIcon, Microscope, Share2, User } from 'lucide-react'
+import ContactSwitch from '../components/ContactSwitch.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
 import Card from '../components/ui/Card.tsx'
@@ -397,6 +398,24 @@ export default function Home() {
             in the reference but could not be read in full.
           </Placeholder>
         </div>
+      </Section>
+
+      {/* 首頁結尾的聯絡入口，與 /contact 共用同一個元件。
+          兩個對等的 h2（一般訪客／KYC）在元件內部，用其中之一當
+          section 名稱會誤導，所以這裡自己給一個標題。 */}
+      <Section tone="translucent" labelledBy="home-contact-heading">
+        <div className={styles.intro}>
+          <p className={styles.eyebrow}>GET IN TOUCH</p>
+          <h2 id="home-contact-heading" className={styles.sectionTitle}>
+            Two ways to reach us
+          </h2>
+          <p className={styles.lede}>
+            A general enquiry, or a formal KYC registration if your
+            organisation is entering a working relationship with us.
+          </p>
+        </div>
+
+        <ContactSwitch />
       </Section>
     </>
   )
