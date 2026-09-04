@@ -257,6 +257,11 @@
   z-index: 21;
 }
 
+/* 背景層只在窄螢幕出現，桌機的浮層是貼著節點的，不需要遮罩 */
+.popBackdrop {
+  display: none;
+}
+
 .hasDuty:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
@@ -300,7 +305,7 @@
   right: 0;
 }
 
-.hasDuty:hover .pop,
+/* 點擊釘住與鍵盤聚焦：所有裝置都適用 */
 .hasDuty:focus-visible .pop,
 .dutyOpen .pop {
   opacity: 1;
@@ -310,6 +315,21 @@
     opacity 150ms ease,
     transform 150ms ease,
     visibility 0s;
+}
+
+/* hover 只給真的有游標的裝置。觸控會把一次點擊同時模擬成 hover 與
+   click，兩者打架就出現「點一下開了又關」或「移開還留著」。
+   問「有沒有游標」比問「螢幕多寬」準確——平板接鍵鼠也能正確判斷。 */
+@media (hover: hover) and (pointer: fine) {
+  .hasDuty:hover .pop {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease,
+      visibility 0s;
+  }
 }
 
 .popEntry {
@@ -348,5 +368,44 @@
 @media (prefers-reduced-motion: reduce) {
   .pop {
     transition: none;
+  }
+}
+
+
+/* ---------- 窄螢幕：改成置中彈窗 ---------- */
+
+/* 1024 以下節點很小，貼著節點的浮層會擠在角落又容易被裁。
+   改成畫面置中的彈窗，加半透明背景把注意力集中過來。 */
+@media (max-width: 1023px) {
+  .dutyOpen .popBackdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0, 24, 56, 0.55);
+  }
+
+  .pop {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    z-index: 41;
+    width: min(30rem, calc(100vw - var(--space-4)));
+    max-height: min(70vh, 34rem);
+    /* translate 要含在 transform 裡，否則會蓋掉置中位移 */
+    transform: translate(-50%, calc(-50% + 8px));
+    box-shadow: 0 24px 60px rgba(0, 24, 56, 0.4);
+  }
+
+  /* 翻邊是給貼著節點的浮層用的，置中之後沒有意義 */
+  .popFlip {
+    left: 50%;
+    right: auto;
+  }
+
+  .hasDuty:focus-visible .pop,
+  .dutyOpen .pop {
+    transform: translate(-50%, -50%);
   }
 }

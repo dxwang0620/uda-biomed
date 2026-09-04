@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { dutiesFor } from '../data/duties.ts'
 import styles from './OrgChart.module.css'
 
@@ -174,12 +174,19 @@ function Label({ en, zh }: Unit) {
 }
 
 /**
- * 有職掌說明的節點。滑到（或鍵盤聚焦到）就浮出該節點的職掌。
+ * 有職掌說明的節點。
  *
- * 用 <button> 而不是 div：這是可操作的元素，鍵盤要能 Tab 到，
- * 觸控裝置也要能點開——沒有 hover 的裝置只剩點擊這條路。
+ * **桌機**（真的有 hover 能力的裝置）：滑到或鍵盤聚焦就浮出，點擊釘住。
+ * **觸控 / 窄螢幕**：只有點擊，且浮層改成置中彈窗加半透明背景。
  *
- * 說明浮層預設向右展開；若會超出架構圖容器就翻向左邊。這個判斷必須
+ * 觸控裝置會把一次點擊同時模擬成 hover 與 click，兩者打架會出現
+ * 「點一下開了又立刻關」或「移開後還留著」。所以 hover 那條規則用
+ * `@media (hover: hover) and (pointer: fine)` 擋掉——那是問「這個裝置
+ * 真的有游標嗎」，比用螢幕寬度判斷準確。
+ *
+ * 用 <button> 而不是 div：鍵盤要能 Tab 到，觸控也只剩點擊這條路。
+ *
+ * 浮層預設向右展開；若會超出架構圖容器就翻向左邊。這個判斷必須
  * 量測後才知道，所以放在 state 裡，不能只靠 CSS。
  */
 function DutyNode({
@@ -191,6 +198,20 @@ function DutyNode({
   const [open, setOpen] = useState(false)
   const [flip, setFlip] = useState(false)
   const ref = useRef<HTMLButtonElement>(null)
+
+  /* 彈窗開著時 Esc 關閉。窄螢幕上它會蓋住整個畫面，
+     沒有鍵盤退路的話只能靠點背景。 */
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false)
+        ref.current?.focus()
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open])
 
   if (entries.length === 0) {
     return (
@@ -225,9 +246,16 @@ function DutyNode({
     >
       <Label en={en} zh={zh} />
 
+      {/* 窄螢幕上的半透明背景。它在 button 之內，所以點它會冒泡回按鈕、
+          等同再按一次＝關閉，不必為了關窗多做一顆按鈕
+          （button 裡不能再放 button）。 */}
+      <span className={styles.popBackdrop} aria-hidden="true" />
+
       <span
         className={`${styles.pop} ${flip ? styles.popFlip : ''}`}
         role="note"
+        /* 在彈窗內容上點擊不該關窗，否則捲動時容易誤觸 */
+        onClick={(e) => e.stopPropagation()}
       >
         {entries.map(({ term, detail }) => (
           <span key={term.en} className={styles.popEntry}>
