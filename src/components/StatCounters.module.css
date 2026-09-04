@@ -67,6 +67,24 @@
     border-color 0.38s ease;
 }
 
+/* 手機與觸控裝置不做 backdrop-filter，理由同 Home.module.css 的 .card：
+   背景是固定播放的影片，模糊背景要每幀重新取樣，四格加上其他五個元素
+   會把行動裝置的 GPU 吃光，捲動就會頓。
+   改成幾乎不透明的白底，視覺接近，對比度也從 5.97:1 升到 8.62:1。 */
+@media (max-width: 1023px), (hover: none) {
+  .cell {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background:
+      linear-gradient(
+        158deg,
+        rgba(var(--color-accent-rgb), 0.05),
+        rgba(var(--color-accent-rgb), 0.18)
+      ),
+      rgba(255, 255, 255, 0.95);
+  }
+}
+
 /* hover 時蓋上去的深藍。用獨立圖層而不是直接換 background：
    background 是漸層，漸層之間沒辦法做 transition，只有 opacity 能補間 */
 .cell::before {

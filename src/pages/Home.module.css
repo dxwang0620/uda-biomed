@@ -102,6 +102,25 @@
   }
 }
 
+/* 手機與觸控裝置不做 backdrop-filter。
+
+   背景影片是 position: fixed 且一直在播，每一個帶 backdrop-filter 的元素都會讓
+   合成器在每一幀重新讀取並模糊影片畫面。首頁上這樣的元素有 9 個，行動裝置的
+   GPU 撐不住，捲動就會頓。這是實際回報的「手機版滑起來很卡」的主因。
+
+   模糊拿掉之後影片會清晰地透出來，25% 白膜擋不住，所以同時把 --glass 拉到 0.55。
+   對比度是往上走的：文字 #05101f 疊在影片最暗的畫面，
+   0.25 只有 1.83:1（原本就不合格，是當初指定的視覺方向），0.55 是 5.69:1，過 AA。
+
+   這一段必須排在上面的 @supports 之後——兩者特異性相同，靠順序決勝。 */
+@media (max-width: 1023px), (hover: none) {
+  .card {
+    --glass: 0.55;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
 .card h3 {
   color: var(--color-text-on-glass);
 }

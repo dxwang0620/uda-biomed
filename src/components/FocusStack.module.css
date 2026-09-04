@@ -222,6 +222,9 @@
       animation-fill-mode: both;
       animation-timeline: --focusStack;
       animation-range: contain 0% contain 100%;
+      /* 明講這一層只有 transform 會變，讓它一開始就上獨立圖層。
+         捲動驅動的 transform 本來就跑在合成器上，這個提示是保險。 */
+      will-change: transform;
     }
   }
 }
