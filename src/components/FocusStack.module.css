@@ -48,7 +48,9 @@
   display: flex;
   flex-direction: column;
   flex: 0 0 var(--card-w);
-  height: clamp(28rem, 74svh, 40rem);
+  /* 卡片拉長，讓照片分到的高度變多。上限受釘住時的可視區
+     （100svh - header）限制，86svh 在任何視窗高度都塞得下 */
+  height: clamp(32rem, 88svh, 46rem);
   overflow: hidden;
   border-radius: var(--radius-lg);
   scroll-snap-align: start;
@@ -145,7 +147,35 @@
   display: block;
   flex: 1 1 auto;
   min-height: 0;
-  margin-top: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+/* 窄螢幕上卡片只有 320～400px 寬，同樣的文案換行多一倍，文字塊會吃掉卡片
+   三分之二的高度，照片只剩一條。這裡把內距、字級與間距整組收緊，
+   把高度讓給照片。768 以上不套用——那邊照片本來就有一半。 */
+@media (max-width: 767px) {
+  .text {
+    padding: var(--space-2);
+  }
+
+  .title {
+    margin-top: var(--space-1);
+  }
+
+  .body {
+    margin-top: var(--space-1);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .tags {
+    margin-top: var(--space-2);
+  }
+
+  .tag {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.75rem;
+  }
 }
 
 .media img {
