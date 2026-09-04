@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Calendar, ChevronDown, Dna, ImageIcon, Microscope, Share2, User } from 'lucide-react'
 import ContactSwitch from '../components/ContactSwitch.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
+import StatCounters from '../components/StatCounters.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
 import Card from '../components/ui/Card.tsx'
 import IconCircle from '../components/ui/IconCircle.tsx'
@@ -144,6 +145,18 @@ export default function Home() {
       <HeroVideo>
         <HeroCarousel />
       </HeroVideo>
+
+      {/* 四格數字統計。前兩項是公開統計並附出處，後兩項是 UDA 自己的
+          數字、尚未提供，見 StatCounters 內的說明。 */}
+      <Section tone="translucent" labelledBy="stats-heading">
+        <div className={styles.intro}>
+          <p className={styles.eyebrow}>WHY THIS MATTERS</p>
+          <h2 id="stats-heading" className={styles.sectionTitle}>
+            The scale we are working against
+          </h2>
+        </div>
+        <StatCounters />
+      </Section>
 
       {/* 兩個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。 */}
       <Section tone="translucent">

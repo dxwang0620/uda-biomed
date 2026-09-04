@@ -1,0 +1,85 @@
+/* 四格數字統計。手機也維持四格（指定），所以字級全部用 clamp，
+   375 寬時每格只有約 78px，數字必須跟著縮才塞得下。 */
+
+.wrap {
+  margin-top: var(--space-4);
+}
+
+.grid {
+  display: grid;
+  /* 四格到底，不因寬度改變欄數 */
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(6px, 1.2vw, var(--space-2));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: clamp(var(--space-2), 2.4vw, var(--space-4)) clamp(4px, 1vw, var(--space-2));
+  text-align: center;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.value {
+  display: block;
+  font-family: var(--font-latin);
+  font-size: clamp(1.375rem, 4.2vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-primary);
+  /* 數字跑動時寬度會變，等寬數字才不會讓整格左右抖 */
+  font-variant-numeric: tabular-nums;
+}
+
+.suffix {
+  font-size: 0.6em;
+  font-weight: 700;
+  margin-left: 1px;
+}
+
+/* 尚無數據：顯示破折號而不是 0，0 會被當成「真的是零」 */
+.pending {
+  color: var(--color-text-muted);
+}
+
+.label {
+  display: block;
+}
+
+.labelEn {
+  display: block;
+  font-size: clamp(0.625rem, 1.05vw, 0.8125rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+.labelZh {
+  display: block;
+  margin-top: 2px;
+  font-size: clamp(0.5625rem, 0.9vw, 0.75rem);
+  line-height: 1.35;
+  color: var(--color-text-muted);
+}
+
+/* 出處疊在影片上讀不到：深灰字最差只有 1.46:1，白字在影片最亮時是 1.00。
+   影片的亮度不可控，唯一可靠的做法是自己帶不透明底色——
+   跟上面四張卡片同一套白底，深灰字在白底上是 5.46:1。 */
+.sources {
+  margin-top: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-small);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
