@@ -10,3 +10,6 @@ dist/
 
 # 影片原始檔不進版控，只收壓縮後的 public/media/
 background_video/
+
+# 報價文件不進版控——這是公開 repo，提交後客戶與任何人都看得到
+報價項目.md
