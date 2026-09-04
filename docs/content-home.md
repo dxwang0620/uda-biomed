@@ -368,6 +368,42 @@ transition 全部移除。
 > 拿到實際數字後改 `STATS` 裡標了 `⚠️ 佔位值` 的兩筆即可。
 > **這份文件是唯一的紀錄。**
 
+### 靜止與 hover 樣式
+
+原本四格是純白，指定「太平」後改成：
+
+| | 靜止 | hover |
+| - | ---- | ----- |
+| 底色 | `#fff → --color-tint` 直向微漸層 | `--color-primary → --color-navy` 斜向漸層 |
+| 邊框 | 1px `--color-border` | 透明（改由陰影界定邊緣） |
+| 陰影 | `--shadow-card` | `0 18px 38px rgba(0,48,104,.28)` |
+| 位置 | — | `translateY(-6px) scale(1.02)` |
+| 頂部色條 | `scaleX(0)` | `scaleX(1)`，由左往右展開，`--color-accent` |
+| 數字 | primary | 白，並 `rotateX(-88deg) → 0` 翻轉進場 |
+
+三個實作細節：
+
+1. **蓋色用獨立的 `::before` 圖層，不是換 `background`。**
+   兩個 `background` 之間沒辦法做 transition，漸層更不行；只有 `opacity` 能補間。
+2. **`perspective` 掛在 `.grid` 上，不是各別的格子。**
+   掛在格子上的話每格各有自己的消失點，四格翻轉的角度會不一致。
+3. **hover 效果包在 `@media (hover: hover) and (pointer: fine)` 裡。**
+   觸控裝置上 `:hover` 點過就黏著不放，那一格會一直維持深藍。
+
+`prefers-reduced-motion: reduce` 時位移、縮放、翻轉全部關掉，只留顏色變化。
+
+### 對比度（hover 態）
+
+白字疊在深藍漸層上，兩端都量過：
+
+| 元素 | 靜止（最差在 tint 端） | hover（primary–navy） |
+| ---- | -------------------- | -------------------- |
+| 數字 | 11.29:1 | 12.21 – 12.94:1 |
+| 英文標 | 11.55:1 | 12.21 – 12.94:1 |
+| 中文小標 13px | 5.55:1 | 7.58 – 7.86:1（白 75%） |
+
+全部通過 AA。最低是靜止時的中文小標 5.55:1。
+
 ### 動畫
 
 `IntersectionObserver`（threshold 0.4）觸發，`requestAnimationFrame` 逐幀更新，
