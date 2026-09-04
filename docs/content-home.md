@@ -378,23 +378,37 @@ transition 全部移除。
 | 邊框 | 1px `--color-border` | 透明（改由陰影界定邊緣） |
 | 陰影 | `--shadow-card` | `0 18px 38px rgba(0,48,104,.28)` |
 | 位置 | — | `translateY(-6px) scale(1.02)` |
-| 頂部色條 | `scaleX(0)` | `scaleX(1)`，由左往右展開，`--color-accent` |
 | 數字 | primary | 白，並 `rotateX(-88deg) → 0` 翻轉進場 |
+| 掃光 | — | 斜向白色亮帶掃過一次 |
+| 其餘三格 | — | `scale(0.975)`，陰影收平 |
 
-三個實作細節：
+四個實作細節：
 
 1. **蓋色用獨立的 `::before` 圖層，不是換 `background`。**
    兩個 `background` 之間沒辦法做 transition，漸層更不行；只有 `opacity` 能補間。
-2. **`perspective` 掛在 `.grid` 上，不是各別的格子。**
+2. **外框用 `inset` box-shadow，不用 `border`。**
+   絕對定位的 `::before`（`inset: 0`）只蓋到 padding box，border 那一圈蓋不到，
+   hover 填深藍時會在外面露出一道白邊。inset 陰影畫在背景層，會被整片蓋掉。
+3. **`perspective` 掛在 `.grid` 上，不是各別的格子。**
    掛在格子上的話每格各有自己的消失點，四格翻轉的角度會不一致。
-3. **hover 效果包在 `@media (hover: hover) and (pointer: fine)` 裡。**
+4. **hover 效果包在 `@media (hover: hover) and (pointer: fine)` 裡。**
    觸控裝置上 `:hover` 點過就黏著不放，那一格會一直維持深藍。
+
+### 其餘三格為什麼是縮小、不是降透明度
+
+`.grid:has(.cell:hover) .cell:not(:hover)` 讓沒被滑到的三格退後一點。
+直覺作法是降 `opacity`，但**這裡不能用**：卡片是不透明白底疊在首頁的背景影片上，
+一降透明度影片就透出來，影片亮度不可控，文字對比度會掉到 AA 以下。
+改用 `scale(0.975)` 加收平陰影，效果一樣是「退後」，但不動任何顏色。
 
 `prefers-reduced-motion: reduce` 時位移、縮放、翻轉全部關掉，只留顏色變化。
 
 ### 對比度（hover 態）
 
 白字疊在深藍漸層上，兩端都量過：
+
+掃光是 `rgba(255,255,255,.16)` 的亮帶，最亮處把深藍底提亮不到一階，
+白字在掃光經過時仍有 11:1 以上。
 
 | 元素 | 靜止（最差在 tint 端） | hover（primary–navy） |
 | ---- | -------------------- | -------------------- |

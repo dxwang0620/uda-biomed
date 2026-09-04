@@ -39,9 +39,13 @@
   text-align: center;
   /* 純白太平，改成極淡的漸層，靜止時就有立體感 */
   background: linear-gradient(180deg, var(--color-white), var(--color-tint));
-  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
+  /* 外框用 inset 陰影而不是 border。border 是絕對定位 ::before 蓋不到的區域
+     （inset:0 只到 padding box），hover 填深藍時那一圈會露出底下的白，
+     變成一道白邊。inset 陰影畫在背景層，會被 ::before 整片蓋掉 */
+  box-shadow:
+    inset 0 0 0 1px var(--color-border),
+    var(--shadow-card);
   transition:
     transform 0.38s cubic-bezier(0.2, 0.7, 0.3, 1),
     box-shadow 0.38s ease,
@@ -59,16 +63,18 @@
   transition: opacity 0.38s ease;
 }
 
-/* 頂部色條，由左往右展開 */
+/* 斜向掃光。填色完成後從左掃到右，一次性，不循環 */
 .cell::after {
   content: '';
   position: absolute;
-  inset: 0 0 auto;
-  height: 3px;
-  background: var(--color-accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+  inset: -20% -60%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.16) 50%,
+    transparent 60%
+  );
+  opacity: 0;
 }
 
 /* 內容要浮在蓋色圖層之上 */
@@ -83,7 +89,6 @@
 @media (hover: hover) and (pointer: fine) {
   .cell:hover {
     transform: translateY(-6px) scale(1.02);
-    border-color: transparent;
     box-shadow: 0 18px 38px rgba(0, 48, 104, 0.28);
   }
 
@@ -92,7 +97,17 @@
   }
 
   .cell:hover::after {
-    transform: scaleX(1);
+    animation: shine 0.85s ease-out 0.12s;
+  }
+
+  /* 滑到其中一格時，另外三格稍微退後。
+     這裡刻意不用 opacity —— 卡片是不透明白底疊在影片上，
+     一降透明度影片就會透出來，文字對比度會掉到 AA 以下 */
+  .grid:has(.cell:hover) .cell:not(:hover) {
+    transform: scale(0.975);
+    box-shadow:
+      inset 0 0 0 1px var(--color-border),
+      none;
   }
 
   .cell:hover .value {
@@ -108,6 +123,17 @@
   .cell:hover .labelZh {
     /* 白 75%，在深藍上 7.58:1 */
     color: rgba(255, 255, 255, 0.75);
+  }
+}
+
+@keyframes shine {
+  from {
+    opacity: 1;
+    transform: translateX(-70%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(70%);
   }
 }
 
@@ -183,11 +209,12 @@
     transform: none;
   }
 
-  .cell:hover .value {
+  .cell:hover .value,
+  .cell:hover::after {
     animation: none;
   }
 
-  .cell::after {
-    transition: none;
+  .grid:has(.cell:hover) .cell:not(:hover) {
+    transform: none;
   }
 }
