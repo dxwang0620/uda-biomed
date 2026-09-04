@@ -44,17 +44,19 @@
 
 ---
 
-## 區塊一：CURRENT R&D FOCUS `[抄錄]`
+## 區塊一：研發重點三張卡 `[抄錄]`
 
-- **Eyebrow**：CURRENT R&D FOCUS
-- **標題**：From cancer research to detection technology, building a continuously
-  validated R&D pathway
-- **內文**：UDA maintains broad cross-disciplinary exploration, while its current
-  public R&D and industry focus is cancer detection technology. We connect cancer
-  biology, life-signal research and structural science with recognition, validation,
-  intellectual property and translational development.
+> **眉標、標題、導言已依指示刪除**（2026-09-05）。刪掉的是：
+> Eyebrow `CURRENT R&D FOCUS`、標題 `From cancer research to detection
+> technology, building a continuously validated R&D pathway`、
+> 以及開頭那段 `UDA maintains broad cross-disciplinary exploration…`。
+> 三張卡與結尾那段 `R&D can be broad…` 保留。
+>
+> 連帶處理：卡片標題原本是 `h3`，掛在被刪掉的那個 `h2` 底下；`h2` 沒了會變成
+> 從 `h1` 直接跳到 `h3`，所以卡片標題升為 `h2`。區塊的 `labelledBy` 也一併移除
+> （已沒有標題可指向）。
 
-三張卡，每張有圖示、標題、內文與標籤：
+現在只剩三張卡，每張有圖示、標題、內文與標籤：，每張有圖示、標題、內文與標籤：
 
 | 卡片 | 內文 | 標籤 |
 | --- | --- | --- |
@@ -153,7 +155,28 @@ investment, R&D, or licensing results.」
 ## 新區塊：Latest News ／ Message from the Chairman `[草稿]`
 
 這兩塊不在 index_video 參考影片裡，是後來要求新增的，排在 hero 之後、
-CURRENT R&D FOCUS 之前，原本的區塊順序不變、整體往下移。
+研發重點三張卡之前，原本的區塊順序不變、整體往下移。
+
+### 為什麼跟研發重點卡片同屬一個 Section
+
+指定「窄螢幕時董事長談話要排到三張卡下面」。消息與董事長談話原本自成一個
+Section、卡片在下一個 Section——**兩個 Section 之間沒有任何 CSS 手段可以互換
+順序**（`order` 只在同一個 flex／grid 容器內有效，`display: contents` 也跨不過
+Section 邊界）。所以把兩個 Section 併成一個 `.newsFocus`。
+
+DOM 順序是**消息 → 三張卡 → 董事長談話**，也就是窄螢幕看到的順序，
+讀屏與 Tab 的順序跟視覺一致。1024 以上才改用 grid 把董事長談話拉回第一列右欄：
+
+| | DOM | 視覺 |
+| - | --- | --- |
+| < 1024 | 消息 → 卡片 → 董事長 | 相同 |
+| ≥ 1024 | 消息 → 卡片 → 董事長 | 消息 ｜ 董事長（第一列）／ 卡片（第二列） |
+
+寬螢幕下視覺順序與 DOM 順序不同（WCAG 1.3.2 的疑慮），這裡可以接受：
+三塊各有自己的 `h2`、內容彼此獨立，先讀到哪一塊都不影響理解。
+反過來讓窄螢幕錯位比較糟——手機是主要流量。
+
+合併後少了一份 Section 內距，用 2 倍內距的 margin／`row-gap` 補回原本的間距。
 
 ### Latest News —— 版面依 `index_img/part1.jpeg`
 

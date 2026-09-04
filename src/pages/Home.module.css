@@ -217,16 +217,57 @@
 
 /* 左消息、右董事長。手機一欄堆疊。
    6fr/7fr 而非對半：董事長是整段文字，比清單需要更多行寬。 */
-.split {
-  display: grid;
-  gap: var(--space-3);
-  align-items: start;
+/* 消息 / 研發重點卡片 / 董事長談話。
+   這三塊原本是兩個 Section，合併成一個是因為指定「窄螢幕時董事長談話要排到
+   卡片下面」——兩個 Section 之間沒有任何 CSS 手段可以互換順序。
+
+   DOM 順序是消息 → 卡片 → 董事長談話，也就是窄螢幕的視覺順序，
+   讀屏與 Tab 的順序跟看到的一致。1024 以上才用 grid 把董事長談話
+   拉回第一列右欄，那個寬度下視覺順序與 DOM 順序不同，但三塊各有自己的
+   h2、內容彼此獨立，不影響理解。
+
+   間距用 2 倍的 Section 內距補回來——原本兩個 Section 相鄰時
+   上下內距會相加，合併後少了一份。 */
+.newsFocus {
+  display: flex;
+  flex-direction: column;
+}
+
+/* .cards 自帶 margin-top，而 .focusGroup 是 flex 項目、會建立 BFC，
+   margin 不會跟子元素合併，兩者會相加 */
+.focusGroup > .cards {
+  margin-top: 0;
+}
+
+.focusGroup,
+.newsFocus > .chairman {
+  margin-top: calc(var(--space-8) * 2);
 }
 
 @media (min-width: 1024px) {
-  .split {
+  .newsFocus {
+    display: grid;
     grid-template-columns: 6fr 7fr;
-    gap: var(--space-4);
+    column-gap: var(--space-4);
+    row-gap: calc(var(--space-12) * 2);
+    align-items: start;
+  }
+
+  .newsFocus > .newsBlock {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .newsFocus > .chairman {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
+  }
+
+  .focusGroup {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: 0;
   }
 }
 

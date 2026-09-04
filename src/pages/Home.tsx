@@ -153,9 +153,13 @@ export default function Home() {
         <StatCounters />
       </Section>
 
-      {/* 兩個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。 */}
+      {/* 消息、研發重點卡片、董事長談話三塊。
+          多個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。
+
+          DOM 順序＝窄螢幕的視覺順序：消息 → 卡片 → 董事長談話。
+          1024 以上才用 grid 把董事長談話拉回第一列右欄。 */}
       <Section tone="translucent">
-        <div className={styles.split}>
+        <div className={styles.newsFocus}>
           <div className={`${styles.newsBlock} ${styles.reveal}`}>
             <h2 id="news-heading" className={styles.blockTitle}>
               Latest News
@@ -192,6 +196,44 @@ export default function Home() {
                 ))}
               </ol>
             </div>
+          </div>
+
+          {/* 原本自成一個 Section，眉標／標題／導言已依指示刪除。
+              併進這一塊是為了讓董事長談話在窄螢幕能排到卡片下面——
+              兩個 Section 之間沒辦法互換順序。 */}
+          <div className={styles.focusGroup}>
+            <ul role="list" className={styles.cards}>
+              {FOCUS.map(({ icon: Icon, title, body, tags }) => (
+                <li key={title}>
+                  <Card className={styles.card}>
+                    <IconCircle tone="tint">
+                      <Icon size={28} strokeWidth={1.5} />
+                    </IconCircle>
+                    {/* 原本是 h3，掛在已刪除的那個 h2 底下。h2 沒了就要升上來，
+                        否則從 h1 直接跳到 h3。 */}
+                    <h2 className={styles.cardTitle}>{title}</h2>
+                    <p className={styles.cardBody}>{body}</p>
+                    <ul role="list" className={styles.tags}>
+                      {tags.map((tag) => (
+                        <li key={tag} className={styles.tag}>
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                  </Card>
+                </li>
+              ))}
+            </ul>
+
+            <p className={`${styles.note} ${styles.intro}`}>
+              R&amp;D can be broad, while market strategy must remain focused. UDA
+              currently starts with cancer detection; animal oncology, advanced
+              molecules, signal analysis, animal health and other cross-disciplinary
+              topics remain in R&amp;D. Focus does not mean expanding every market
+              direction at once; today we concentrate resources on cancer-detection
+              technology while converting broader research into technical reserves
+              and future innovation capacity.
+            </p>
           </div>
 
           <blockquote className={`${styles.card} ${styles.chairman} ${styles.reveal}`}>
@@ -266,54 +308,6 @@ export default function Home() {
             </div>
           </blockquote>
         </div>
-      </Section>
-
-      <Section tone="translucent" labelledBy="focus-heading">
-        <div className={styles.intro}>
-          <p className={styles.eyebrow}>CURRENT R&amp;D FOCUS</p>
-          <h2 id="focus-heading" className={styles.sectionTitle}>
-            From cancer research to detection technology, building a continuously
-            validated R&amp;D pathway
-          </h2>
-          <p className={styles.lede}>
-            UDA maintains broad cross-disciplinary exploration, while its current
-            public R&amp;D and industry focus is cancer detection technology. We
-            connect cancer biology, life-signal research and structural science
-            with recognition, validation, intellectual property and translational
-            development.
-          </p>
-        </div>
-
-        <ul role="list" className={styles.cards}>
-          {FOCUS.map(({ icon: Icon, title, body, tags }) => (
-            <li key={title}>
-              <Card className={styles.card}>
-                <IconCircle tone="tint">
-                  <Icon size={28} strokeWidth={1.5} />
-                </IconCircle>
-                <h3 className={styles.cardTitle}>{title}</h3>
-                <p className={styles.cardBody}>{body}</p>
-                <ul role="list" className={styles.tags}>
-                  {tags.map((tag) => (
-                    <li key={tag} className={styles.tag}>
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
-              </Card>
-            </li>
-          ))}
-        </ul>
-
-        <p className={`${styles.note} ${styles.intro}`}>
-          R&amp;D can be broad, while market strategy must remain focused. UDA
-          currently starts with cancer detection; animal oncology, advanced
-          molecules, signal analysis, animal health and other cross-disciplinary
-          topics remain in R&amp;D. Focus does not mean expanding every market
-          direction at once; today we concentrate resources on cancer-detection
-          technology while converting broader research into technical reserves and
-          future innovation capacity.
-        </p>
       </Section>
 
       <Section tone="translucent" labelledBy="platform-heading">
