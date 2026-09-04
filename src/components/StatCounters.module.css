@@ -7,7 +7,7 @@
 
 .grid {
   display: grid;
-  /* 手機兩格 */
+  /* 所有寬度都橫排兩格 */
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-2);
   margin: 0;
@@ -17,9 +17,10 @@
   perspective: 1200px;
 }
 
+/* 900 以上維持兩格（指定），只把間距放大。
+   格子高度的覆寫要放在 .cell 之後，見檔案下方 */
 @media (min-width: 900px) {
   .grid {
-    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-3);
   }
 }
@@ -47,7 +48,12 @@
       rgba(var(--color-accent-rgb), 0.05),
       rgba(var(--color-accent-rgb), 0.18)
     ),
-    var(--color-white);
+    /* 白底只有 78%，背景影片會透出來。上限是文字對比度決定的，
+       算法與數字見 docs/content-home.md */
+    rgba(255, 255, 255, 0.78);
+  /* 模糊背後的影片。純粹是質感，對比度不靠它——模糊不會改變平均亮度 */
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+  backdrop-filter: blur(10px) saturate(1.15);
   border-radius: var(--radius-lg);
   /* 外框用 inset 陰影而不是 border。border 是絕對定位 ::before 蓋不到的區域
      （inset:0 只到 padding box），hover 填深藍時那一圈會露出底下的白，
@@ -155,6 +161,15 @@
   }
 }
 
+/* 兩格之後每格很寬，高度要跟著長一點才不會變成扁條。
+   這段必須排在 .cell 之後——CSS Modules 依原始順序輸出，
+   同權重下後面的贏，寫在前面的話會被 .cell 的 min-height 蓋掉 */
+@media (min-width: 900px) {
+  .cell {
+    min-height: 14rem;
+  }
+}
+
 .value {
   display: block;
   font-family: var(--font-latin);
@@ -192,12 +207,15 @@
   transition: color 0.38s ease;
 }
 
+/* 顏色跟英文標同一階，不是灰的。卡片半透明之後，
+   --color-text-muted 在影片深色畫面上只有 4.24:1，過不了 AA；
+   層級差改由字級與字重維持（英文標 700、這裡 400） */
 .labelZh {
   display: block;
   margin-top: 2px;
   font-size: clamp(0.6875rem, 1.2vw, 0.8125rem);
   line-height: 1.35;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   transition: color 0.38s ease;
 }
 
