@@ -126,11 +126,11 @@ export default function Home() {
         <HeroCarousel />
       </HeroVideo>
 
-      {/* 消息、研發重點卡片、董事長談話三塊。
+      {/* 消息、研發重點卡片、四格數字、董事長談話四塊。
           多個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。
 
-          DOM 順序＝窄螢幕的視覺順序：消息 → 卡片 → 董事長談話。
-          1024 以上才用 grid 把董事長談話拉回第一列右欄。 */}
+          DOM 順序＝窄螢幕的視覺順序：消息 → 卡片 → 四格數字 → 董事長談話。
+          1024 以上用 order 改成 消息 → 四格數字 → 董事長談話 → 卡片。 */}
       <Section tone="translucent">
         <div className={styles.newsFocus}>
           <div className={`${styles.newsBlock} ${styles.reveal}`}>
@@ -186,6 +186,17 @@ export default function Home() {
               technology while converting broader research into technical reserves
               and future innovation capacity.
             </p>
+          </div>
+
+
+          {/* 數字統計。刻意不放標題與出處說明（指定），所以沒有可指向的標題，
+              改用 aria-label 說明它是什麼。
+              ⚠️ 後兩個數字是佔位值，見 StatCounters 內的說明。
+
+              放在這個容器裡而不是自成一個 Section，是為了在寬螢幕上排到
+              消息／董事長那一列的正下方（指定）——跨 Section 沒辦法指定列。 */}
+          <div className={styles.statsBlock}>
+            <StatCounters />
           </div>
 
           <blockquote className={`${styles.card} ${styles.chairman} ${styles.reveal}`}>
@@ -259,16 +270,6 @@ export default function Home() {
               </div>
             </div>
           </blockquote>
-
-          {/* 數字統計。刻意不放標題與出處說明（指定），所以沒有可指向的標題，
-              改用 aria-label 說明它是什麼。
-              ⚠️ 後兩個數字是佔位值，見 StatCounters 內的說明。
-
-              放在這個容器裡而不是自成一個 Section，是為了在寬螢幕上排到
-              消息／董事長那一列的正下方（指定）——跨 Section 沒辦法指定列。 */}
-          <div className={styles.statsBlock}>
-            <StatCounters />
-          </div>
         </div>
       </Section>
 

@@ -236,17 +236,23 @@
 
 /* 左消息、右董事長。手機一欄堆疊。
    6fr/7fr 而非對半：董事長是整段文字，比清單需要更多行寬。 */
-/* 消息 / 研發重點卡片 / 董事長談話。
-   這三塊原本是兩個 Section，合併成一個是因為指定「窄螢幕時董事長談話要排到
-   卡片下面」——兩個 Section 之間沒有任何 CSS 手段可以互換順序。
+/* 消息 / 研發重點卡片 / 四格數字 / 董事長談話。
 
-   DOM 順序是消息 → 卡片 → 董事長談話，也就是窄螢幕的視覺順序，
-   讀屏與 Tab 的順序跟看到的一致。1024 以上才用 grid 把董事長談話
-   拉回第一列右欄，那個寬度下視覺順序與 DOM 順序不同，但三塊各有自己的
-   h2、內容彼此獨立，不影響理解。
+   這四塊原本分屬兩個 Section，合併成一個容器是因為指定過幾次跨區塊的順序調整——
+   兩個 Section 之間沒有任何 CSS 手段可以互換順序，也沒辦法指定誰排在哪一列。
 
-   間距用 2 倍的 Section 內距補回來——原本兩個 Section 相鄰時
-   上下內距會相加，合併後少了一份。 */
+   四塊都是滿版堆疊，兩個斷點的差別只有順序：
+
+   | | 順序 |
+   | 窄螢幕 | 消息 → 卡片 → 四格數字 → 董事長談話（＝DOM 順序） |
+   | ≥1024 | 消息 → 四格數字 → 董事長談話 → 卡片（用 order 指定） |
+
+   寬螢幕下視覺順序與 DOM 順序不同（WCAG 1.3.2 的疑慮），這裡可以接受：
+   四塊各有自己的 h2、內容彼此獨立，先讀到哪一塊都不影響理解。
+   反過來讓窄螢幕錯位比較糟——手機是主要流量。
+
+   間距用 2 倍的 Section 內距補回來——原本兩個 Section 相鄰時上下內距會相加，
+   合併後少了一份。 */
 .newsFocus {
   display: flex;
   flex-direction: column;
@@ -258,6 +264,9 @@
   margin-top: 0;
 }
 
+/* 除了第一塊，每一塊都自己帶上緣間距。用 margin 而不是 flex gap：
+   order 改變視覺順序之後，gap 仍然正確，margin 也一樣正確，
+   但 margin 讓「第一塊不留白」這件事跟著 DOM 走，不會因為換序而多出一段空白。 */
 .focusGroup,
 .statsBlock,
 .newsFocus > .chairman {
@@ -265,37 +274,26 @@
 }
 
 @media (min-width: 1024px) {
-  .newsFocus {
-    display: grid;
-    grid-template-columns: 6fr 7fr;
-    column-gap: var(--space-4);
-    row-gap: calc(var(--space-12) * 2);
-    align-items: start;
+  .focusGroup,
+  .statsBlock,
+  .newsFocus > .chairman {
+    margin-top: calc(var(--space-12) * 2);
   }
 
   .newsFocus > .newsBlock {
-    grid-column: 1;
-    grid-row: 1;
+    order: 1;
+  }
+
+  .statsBlock {
+    order: 2;
   }
 
   .newsFocus > .chairman {
-    grid-column: 2;
-    grid-row: 1;
-    margin-top: 0;
-  }
-
-  /* 寬螢幕的列序：第一列消息｜董事長、第二列四格數字、第三列研發重點卡片。
-     窄螢幕不套用，那邊照 DOM 順序：消息 → 卡片 → 董事長 → 四格數字。 */
-  .statsBlock {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    margin-top: 0;
+    order: 3;
   }
 
   .focusGroup {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    margin-top: 0;
+    order: 4;
   }
 }
 
