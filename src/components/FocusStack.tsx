@@ -85,22 +85,38 @@ export default function FocusStack() {
     if (!vp || !el) return
 
     const max = vp.scrollWidth - vp.clientWidth
-    const p = max > 0 ? vp.scrollLeft / max : 0
+    const raw = max > 0 ? vp.scrollLeft / max : 0
+    /* 捲到底時直接視為 1。scrollLeft 幾乎不會剛好等於 max——
+       裝置像素比與慣性收尾都會差零點幾 px，藍線會永遠停在 99.x%。 */
+    const p = vp.scrollLeft >= max - 1 ? 1 : raw
     el.style.setProperty('--p', String(p))
 
-    /* 圓點預設是白的，藍線走到才變主色（指定）。
-       reached = 藍線已經走過幾顆。還沒開始滑時是 0 顆，三顆都維持白色。
+    /* 圓點看的是「哪一張卡目前佔畫面最多」，不是捲動比例。
 
-       EDGE 是 2% 的容差，不是浮點誤差的緩衝。捲到最後一張時 scrollLeft
-       常常停在 656.5 / 657 這種位置（snap 對齊、裝置像素比、慣性收尾都會差
-       一點），p 因此永遠差一點到 1，第三顆就不會亮——實際回報就是
-       「已經滑到第三張，圓點還沒到」。 */
-    const EDGE = 0.02
-    const reached =
-      p <= 0
-        ? 0
-        : Math.min(CARDS.length, Math.floor(p * (CARDS.length - 1) + EDGE) + 1)
-    el.dataset.reached = String(reached)
+       兩者不一樣，因為卡片列右側留了下一張的邊角：第三張卡佔滿畫面時，
+       捲動比例其實只有七、八成，用比例判斷的話圓點要等捲到最底才會亮——
+       回報的「已經滑到第三頁，底下滑軌還沒到指定位置」就是這個落差。
+
+       還沒開始滑（p 為 0）時維持 0 顆，三顆都是白的（指定）。 */
+    const track = vp.firstElementChild as HTMLElement | null
+    const left = vp.scrollLeft
+    const right = left + vp.clientWidth
+    let dominant = 0
+    let widest = -1
+    Array.from(track?.children ?? []).forEach((node, i) => {
+      const card = node as HTMLElement
+      /* offsetLeft 是相對於定位祖先（這裡一路到 body），不是相對於捲動容器。
+         扣掉卡片列自己的偏移才會跟 scrollLeft 同一個基準——
+         不扣的話三張卡的座標都比可視區大好幾百，永遠算成第一張。 */
+      const cardLeft = card.offsetLeft - (track?.offsetLeft ?? 0)
+      const visible =
+        Math.min(cardLeft + card.offsetWidth, right) - Math.max(cardLeft, left)
+      if (visible > widest) {
+        widest = visible
+        dominant = i
+      }
+    })
+    el.dataset.reached = String(p <= 0 ? 0 : dominant + 1)
   }, [])
 
   /* 直接在 scroll 事件裡更新，不做 rAF 節流。
