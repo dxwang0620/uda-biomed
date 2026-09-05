@@ -107,17 +107,12 @@ ol[role='list'] {
   }
 }
 
+/* 左右留白與 header／footer 共用同一個值，三者的內容邊界才會對齊 */
 .container {
   width: 100%;
   max-width: var(--container);
   margin-inline: auto;
-  padding-inline: var(--space-2);
-}
-
-@media (min-width: 1024px) {
-  .container {
-    padding-inline: var(--space-4);
-  }
+  padding-inline: var(--edge-inline);
 }
 
 /* 跳過導覽，鍵盤使用者的第一個 tab 目標 */
