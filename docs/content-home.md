@@ -639,6 +639,20 @@ hover 那一整組包在 `@media (hover: hover) and (pointer: fine)` 裡（觸�
 
 ### 動畫
 
+捲進畫面時跑一次，之後**每次滑過或點下再從 0 跑一次**（指定）。
+
+用 `onPointerEnter`：觸控裝置按下時也會派發，一個事件同時涵蓋滑鼠與觸控，
+不必分開處理。重播前先 `cancelAnimationFrame` 取消上一輪——不取消的話兩個
+rAF 迴圈會同時寫同一個數字，畫面會跳。四格各自獨立，滑過其中一格不影響其他三格。
+
+`prefers-reduced-motion: reduce` 時重播也不跑動畫，直接顯示終值。
+
+> 測試上的坑：React 的 `onPointerEnter` **不是**直接監聽 `pointerenter`，
+> 而是由 root 上的 `pointerover` / `pointerout` 合成出來的。
+> 用 `dispatchEvent(new PointerEvent('pointerenter'))` 驗證會完全沒有反應，
+> 要派發 `pointerover`（`bubbles: true`）才會觸發。
+
+
 `IntersectionObserver`（threshold 0.4）觸發，`requestAnimationFrame` 逐幀更新，
 easeOutCubic，1.6 秒。用 rAF 而不是 `setInterval`：後者的間隔不保證，
 掉幀時數字會跳動；以實際經過時間換算進度，掉幀只會少畫幾格。

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styles from './StatCounters.module.css'
 
 /**
@@ -58,55 +58,75 @@ const STATS: Stat[] = [
 const DURATION = 1600
 
 /**
- * 捲進畫面時把數字從 0 跑到目標值。
+ * 把數字從 0 跑到目標值。捲進畫面時跑一次，之後每次滑過／點下再跑一次。
  *
  * 用 requestAnimationFrame 而不是 setInterval：setInterval 的間隔不保證，
  * 掉幀時數字會跳動。這裡以實際經過時間換算進度，掉幀只會少畫幾格。
  *
- * `prefers-reduced-motion` 時直接顯示終值，不跑動畫。
+ * `prefers-reduced-motion` 時直接顯示終值，不跑動畫——重播也一樣不跑。
  */
 function useCountUp(target: number | null, decimals: number) {
   const [shown, setShown] = useState(0)
   const ref = useRef<HTMLSpanElement>(null)
-  const done = useRef(false)
+  const raf = useRef<number | undefined>(undefined)
+  const started = useRef(false)
 
-  useEffect(() => {
+  /** 從 0 重跑一次。重播前先取消上一輪，否則兩個 rAF 迴圈會同時寫同一個數字 */
+  const run = useCallback(() => {
     if (target === null) return
-    const el = ref.current
-    if (!el) return
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setShown(target)
       return
     }
 
+    if (raf.current !== undefined) cancelAnimationFrame(raf.current)
+    setShown(0)
+
+    const start = performance.now()
+    const tick = (now: number) => {
+      // 下界一定要夾。rAF 傳進來的時間戳是「該幀開始的時間」，
+      // 可能早於上面用 performance.now() 記下的 start，t 會是負數，
+      // easeOutCubic 就吐出負值，畫面上第一幀會出現「-0.0」
+      const t = Math.min(Math.max((now - start) / DURATION, 0), 1)
+      // easeOutCubic：起步快、收尾緩，數字停下來時不會突兀
+      const eased = 1 - Math.pow(1 - t, 3)
+      setShown(target * eased)
+      if (t < 1) raf.current = requestAnimationFrame(tick)
+      else {
+        raf.current = undefined
+        setShown(target)
+      }
+    }
+    raf.current = requestAnimationFrame(tick)
+  }, [target])
+
+  // 第一次進畫面時自己跑一次
+  useEffect(() => {
+    const el = ref.current
+    if (target === null || !el) return
+
     const io = new IntersectionObserver(
       (entries) => {
-        if (!entries[0].isIntersecting || done.current) return
-        done.current = true
+        if (!entries[0].isIntersecting || started.current) return
+        started.current = true
         io.disconnect()
-
-        const start = performance.now()
-        const tick = (now: number) => {
-          // 下界一定要夾。rAF 傳進來的時間戳是「該幀開始的時間」，
-          // 可能早於上面用 performance.now() 記下的 start，t 會是負數，
-          // easeOutCubic 就吐出負值，畫面上第一幀會出現「-0.0」
-          const t = Math.min(Math.max((now - start) / DURATION, 0), 1)
-          // easeOutCubic：起步快、收尾緩，數字停下來時不會突兀
-          const eased = 1 - Math.pow(1 - t, 3)
-          setShown(target * eased)
-          if (t < 1) requestAnimationFrame(tick)
-          else setShown(target)
-        }
-        requestAnimationFrame(tick)
+        run()
       },
       { threshold: 0.4 },
     )
     io.observe(el)
     return () => io.disconnect()
-  }, [target])
+  }, [target, run])
 
-  return { ref, text: shown.toFixed(decimals) }
+  useEffect(
+    () => () => {
+      if (raf.current !== undefined) cancelAnimationFrame(raf.current)
+    },
+    [],
+  )
+
+  return { ref, text: shown.toFixed(decimals), run }
 }
 
 /**
@@ -146,12 +166,15 @@ function usePress() {
 }
 
 function StatCell({ stat }: { stat: Stat }) {
-  const { ref, text } = useCountUp(stat.value, stat.decimals ?? 0)
+  const { ref, text, run } = useCountUp(stat.value, stat.decimals ?? 0)
   const { pressed, handlers } = usePress()
 
   return (
     <li
       className={`${styles.cell} ${pressed ? styles.pressed : ''}`}
+      /* 滑過（或觸控裝置上點下）就讓數字重跑一次。用 pointerenter 而不是
+         mouseenter：觸控裝置按下時也會派發，一個事件同時涵蓋兩種輸入。 */
+      onPointerEnter={run}
       {...handlers}
     >
       <span className={styles.value} ref={ref}>
