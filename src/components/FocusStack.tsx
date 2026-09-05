@@ -1,20 +1,16 @@
 import styles from './FocusStack.module.css'
 
 /**
- * 研發重點三張卡，橫向推進。
+ * 研發重點三張卡，橫向滑動。
  *
  * 版型依 `index_img/card1.jpg`～`card3.jpg`：編號＋眉標、大標、內文、膠囊標籤，
- * 每張卡自己的底色（色值從稿上取樣，見下方 TONE）。照片是 `card1-1`～`card3-1`。
+ * 每張卡自己的底色（色值從稿上取樣，見下方 TONE）。
  *
- * 行為參考 UDA 現有站的 `.uda-scroll-stack`：那一段是 JS 依捲動進度寫 inline
- * transform 做垂直疊牌（實測三張卡分別是 scale(0.9)/translateY(1606px)、
- * scale(0.95)/translateY(803px)、scale(1)/0）。這裡改成橫向，並且**不用 JS**——
- * 用 CSS 捲動時間軸（`view-timeline` + `animation-timeline`），
- * 捲動位置直接驅動 transform，不需要 scroll 監聽，也不會有節流的問題。
+ * 照片（`card1-1`～`card3-1`）鋪滿整張卡，上面壓一層該卡色票的漸層遮罩，
+ * 文字再壓在遮罩上——與內頁 hero 同一套語彙（指定）。
  *
- * 不支援捲動時間軸的瀏覽器（目前主要是 Firefox）看到的是可橫向滑動的卡片列，
- * 那是基礎樣式，釘住捲動是 `@supports` 之後才加上去的增強。
- * `prefers-reduced-motion: reduce` 也走同一條退路。
+ * 原本是釘住捲動的橫向推進，搬到消息右邊之後那個做法不能用：釘住會把整個區塊
+ * 固定住，左邊的消息也會跟著卡住。改成使用者自己滑的橫向卡片列，配 scroll-snap。
  */
 
 type Card = {
@@ -85,6 +81,22 @@ export default function FocusStack() {
         <ol className={styles.rail}>
           {CARDS.map((card, i) => (
             <li key={card.index} className={`${styles.card} ${styles[TONE[i]]}`}>
+              {/* 照片是底層，遮罩由 .card::after 疊在它上面，文字再壓在最上層 */}
+              <picture className={styles.media}>
+                <source
+                  srcSet={`${base}media/${card.image}.webp`}
+                  type="image/webp"
+                />
+                <img
+                  src={`${base}media/${card.image}.jpg`}
+                  alt={card.alt}
+                  width={card.width}
+                  height={card.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+
               <div className={styles.text}>
                 <p className={styles.eyebrow}>
                   <span className={styles.num}>{card.index}</span>
@@ -106,20 +118,6 @@ export default function FocusStack() {
                 </ul>
               </div>
 
-              <picture className={styles.media}>
-                <source
-                  srcSet={`${base}media/${card.image}.webp`}
-                  type="image/webp"
-                />
-                <img
-                  src={`${base}media/${card.image}.jpg`}
-                  alt={card.alt}
-                  width={card.width}
-                  height={card.height}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
             </li>
           ))}
         </ol>

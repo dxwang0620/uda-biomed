@@ -1,33 +1,18 @@
-/* 研發重點三張卡，橫向推進。
+/* 研發重點三張卡，橫向滑動。
    版型與底色取樣自 index_img/card1.jpg～card3.jpg。
 
-   兩層樣式：
-   1. 基礎 —— 可橫向滑動的卡片列，配 scroll-snap。所有瀏覽器都能用，
-      鍵盤與觸控都能操作。
-   2. 增強 —— 支援 CSS 捲動時間軸時，區塊釘在畫面上，往下捲讓卡片由右往左推進。
-      包在 @supports 裡，不支援就留在基礎樣式，畫面不會壞掉。 */
+   照片鋪滿整張卡，上面壓一層該卡色票的漸層遮罩，文字再壓在遮罩上，
+   與內頁 hero 同一套語彙（指定）。
+
+   原本是釘住捲動的橫向推進。搬到消息右邊之後那個做法不能用——釘住會把整個
+   區塊固定住，左邊的消息也會跟著卡住。現在是使用者自己滑的卡片列，
+   配 scroll-snap 對齊，鍵盤與觸控都能操作。 */
 
 .stack {
-  /* 卡片寬度與間距。--rail-w 是三張卡加間距的總寬，
-     stack 的高度、以及要推進多少距離都從它算出來 */
-  --card-w: min(84vw, 40rem);
-  --gap: var(--space-3);
-  --rail-w: calc(3 * var(--card-w) + 2 * var(--gap));
-  /* .container 的左右內距，1024 以上變成 --space-4 */
-  --pad: var(--space-2);
-  --view-w: calc(min(100vw, var(--container)) - 2 * var(--pad));
-  --travel: calc(var(--rail-w) - var(--view-w));
-  --sticky-top: var(--header-h-mobile);
+  --card-w: min(84vw, 24rem);
+  --gap: var(--space-2);
 }
 
-@media (min-width: 1024px) {
-  .stack {
-    --pad: var(--space-4);
-    --sticky-top: var(--header-h);
-  }
-}
-
-/* 基礎：橫向捲動容器 */
 .viewport {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -45,40 +30,78 @@
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 var(--card-w);
-  /* 卡片拉長，讓照片分到的高度變多。上限受釘住時的可視區
-     （100svh - header）限制，86svh 在任何視窗高度都塞得下 */
-  height: clamp(32rem, 88svh, 46rem);
+  position: relative;
+  /* 遮罩與文字都要疊在照片上，各自建立層級 */
+  isolation: isolate;
   overflow: hidden;
+  flex: 0 0 var(--card-w);
+  /* 卡片要夠高，文字才不會把照片壓光。窄螢幕實測：384 高時文字就佔了 346，
+     照片只露 38px，等於沒有 */
+  height: clamp(28rem, 68vh, 36rem);
   border-radius: var(--radius-lg);
   scroll-snap-align: start;
   box-shadow: 0 12px 32px rgba(0, 48, 104, 0.24);
+  /* 照片載入完成前先用色票撐著，不要露出白框 */
+  background: rgb(var(--tone));
 }
 
-/* 三張卡的底色。取樣自設計稿的實際像素，不是自行配色。
-   02 的 #313b87 偏靛紫，嚴格說在專案的藍白色系之外，但稿上就是這個值。 */
+/* 三張卡的色票。取樣自設計稿的實際像素，不是自行配色。
+   02 的 #313b87 偏靛紫，嚴格說在專案的藍白色系之外，但稿上就是這個值。
+   寫成 rgb 分量是因為遮罩要用 rgba() 調不透明度。 */
 .tone1 {
-  background: #1b42a3;
+  --tone: 27, 66, 163;
 }
 
 .tone2 {
-  background: #313b87;
+  --tone: 49, 59, 135;
 }
 
 .tone3 {
-  background: #0c132f;
+  --tone: 12, 19, 47;
+}
+
+/* 照片鋪滿整張卡 */
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+}
+
+.media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 色票漸層遮罩。文字集中在上半部，所以上面壓得重、下緣幾乎放掉，
+   讓照片在底部看得清楚。
+
+   0.82 是下限，由對比度決定：白字疊在「色票遮罩 ＋ 純白照片」上
+   （card1-1 與 card3-1 都有大片近白的區域，這是最不利的情況），
+   0.82 時三張卡分別是 5.6 / 5.9 / 10.4，最差 5.6:1，過 AA；
+   0.70 只有 4.15，不合格。算法與數值見 docs/content-home.md。 */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(var(--tone), 0.96) 0%,
+    rgba(var(--tone), 0.93) 42%,
+    rgba(var(--tone), 0.82) 58%,
+    rgba(var(--tone), 0.45) 78%,
+    rgba(var(--tone), 0.12) 100%
+  );
 }
 
 .text {
+  position: relative;
+  /* 壓在遮罩之上 */
+  z-index: 2;
   padding: var(--space-3);
-}
-
-@media (min-width: 768px) {
-  .text {
-    padding: var(--space-4);
-  }
 }
 
 .eyebrow {
@@ -90,8 +113,7 @@
   font-size: var(--text-eyebrow);
   font-weight: 700;
   letter-spacing: var(--tracking-eyebrow);
-  /* 白 72%。三張底色裡最差的是 01 的 #1b42a3，5.43:1 */
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .num {
@@ -101,12 +123,12 @@
 }
 
 .slash {
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .title {
-  margin: var(--space-2) 0 0;
-  font-size: clamp(1.375rem, 2.4vw, 1.875rem);
+  margin: var(--space-1) 0 0;
+  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: 0.01em;
@@ -114,125 +136,50 @@
 }
 
 .body {
-  margin: var(--space-2) 0 0;
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  /* 白 82%。最差是 01 的 #1b42a3，6.56:1 */
-  color: rgba(255, 255, 255, 0.82);
+  margin: var(--space-1) 0 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .tags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-1);
-  margin: var(--space-3) 0 0;
+  margin: var(--space-2) 0 0;
   padding: 0;
   list-style: none;
 }
 
 .tag {
-  padding: 0.4rem 0.9rem;
-  font-size: 0.8125rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--color-white);
-  background: rgba(255, 255, 255, 0.14);
+  /* 標籤落在遮罩較淡的區域，自己再帶一層底才夠實 */
+  background: rgba(var(--tone), 0.72);
   /* 邊框是純裝飾，資訊由文字本身承載，不受 1.4.11 的 3:1 約束 */
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.34);
   border-radius: 999px;
 }
 
-/* 照片吃掉卡片剩下的高度。min-height: 0 不能省——
-   flex 項目的預設 min-height 是 auto，圖片會把卡片撐破。 */
-.media {
-  display: block;
-  flex: 1 1 auto;
-  min-height: 0;
-  margin-top: var(--space-2);
-}
+/* 寬螢幕的卡片尺寸。
 
-/* 窄螢幕上卡片只有 320～400px 寬，同樣的文案換行多一倍，文字塊會吃掉卡片
-   三分之二的高度，照片只剩一條。這裡把內距、字級與間距整組收緊，
-   把高度讓給照片。768 以上不套用——那邊照片本來就有一半。 */
-@media (max-width: 767px) {
-  .text {
-    padding: var(--space-2);
+   這一段必須排在 .stack / .card 之後——CSS Modules 依原始順序輸出，
+   同權重下後面的贏。寫在前面的話 height 會被 .card 自己的 clamp() 蓋掉，
+   這個坑在這個專案已經踩過兩次。
+
+   高度**必須是定值，不能用 height: 100%**。左欄消息的捲動區是
+   `flex-basis: 0`，設計成「跟旁邊那張卡等高」；卡片若也把高度讓給列，
+   兩邊都不定高，整列就塌到各自的最小值（實測消息 654 → 399、
+   照片只露 0～37px）。由卡片定高度，消息透過自己的 height:100% 跟上。 */
+@media (min-width: 1024px) {
+  .stack {
+    /* 右欄約 594px，卡片收窄並露出下一張的邊角，當作「還有更多」的提示 */
+    --card-w: 20rem;
   }
 
-  .title {
-    margin-top: var(--space-1);
-  }
-
-  .body {
-    margin-top: var(--space-1);
-    font-size: 0.875rem;
-    line-height: 1.6;
-  }
-
-  .tags {
-    margin-top: var(--space-2);
-  }
-
-  .tag {
-    padding: 0.3rem 0.7rem;
-    font-size: 0.75rem;
-  }
-}
-
-.media img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* 增強：釘住捲動。
-   捲動時間軸把捲動位置直接映射成 transform，不需要 scroll 事件，
-   也就沒有節流問題（CLAUDE.md 對 header 的要求也是同一個理由）。
-
-   contain 0% ～ contain 100% 是「這個元素完整蓋住可視區」的那一段，
-   長度剛好是 stack 高度減掉一個可視區高度。把 stack 的高度設成
-   100svh + travel，捲 1px 卡片就移動 1px，不會有加速感。 */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .stack {
-      height: calc(100svh + var(--travel));
-      view-timeline: --focusStack block;
-    }
-
-    .viewport {
-      position: sticky;
-      top: var(--sticky-top);
-      display: flex;
-      align-items: center;
-      height: calc(100svh - var(--sticky-top));
-      overflow: hidden;
-      /* 一定要關掉基礎樣式的 scroll-snap。這一層是 overflow: hidden 的捲動容器，
-         內容又被動畫持續位移；留著 snap 的話瀏覽器會為了對齊反覆修正捲動位置，
-         而位移又來自動畫，兩者互相觸發，整個分頁會卡死。 */
-      scroll-snap-type: none;
-    }
-
-    /* 用長寫法，不要用 animation 簡寫。簡寫會把 animation-duration 設成 0s，
-       配上 fill: both 的結果是進度永遠停在 1——卡片一開始就在終點，不會動。
-       捲動時間軸要的是 duration: auto，讓整段動畫對應到 range 的長度。 */
-    .rail {
-      animation-name: railSlide;
-      animation-duration: auto;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: --focusStack;
-      animation-range: contain 0% contain 100%;
-      /* 明講這一層只有 transform 會變，讓它一開始就上獨立圖層。
-         捲動驅動的 transform 本來就跑在合成器上，這個提示是保險。 */
-      will-change: transform;
-    }
-  }
-}
-
-@keyframes railSlide {
-  to {
-    /* 100% 是 rail 自己的寬度，--view-w 是可視區寬度，
-       兩者相減就是「最後一張卡的右緣貼齊可視區右緣」的位移 */
-    transform: translateX(calc(var(--view-w) - 100%));
+  .card {
+    height: clamp(30rem, 62vh, 40rem);
   }
 }

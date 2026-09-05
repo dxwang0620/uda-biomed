@@ -241,15 +241,9 @@
    這四塊原本分屬兩個 Section，合併成一個容器是因為指定過幾次跨區塊的順序調整——
    兩個 Section 之間沒有任何 CSS 手段可以互換順序，也沒辦法指定誰排在哪一列。
 
-   四塊都是滿版堆疊，兩個斷點的差別只有順序：
-
-   | | 順序 |
-   | 窄螢幕 | 消息 → 卡片 → 四格數字 → 董事長談話（＝DOM 順序） |
-   | ≥1024 | 消息 → 四格數字 → 董事長談話 → 卡片（用 order 指定） |
-
-   寬螢幕下視覺順序與 DOM 順序不同（WCAG 1.3.2 的疑慮），這裡可以接受：
-   四塊各有自己的 h2、內容彼此獨立，先讀到哪一塊都不影響理解。
-   反過來讓窄螢幕錯位比較糟——手機是主要流量。
+   | | 版面 |
+   | 窄螢幕 | 依 DOM 上下堆疊：消息 → 卡片 → 四格數字 → 董事長談話 |
+   | ≥1024 | 第一列 消息｜研發重點卡片（兩欄），第二列 四格數字，第三列 董事長談話 |
 
    間距用 2 倍的 Section 內距補回來——原本兩個 Section 相鄰時上下內距會相加，
    合併後少了一份。 */
@@ -258,42 +252,67 @@
   flex-direction: column;
 }
 
-/* .cards 自帶 margin-top，而 .focusGroup 是 flex 項目、會建立 BFC，
-   margin 不會跟子元素合併，兩者會相加 */
-.focusGroup > .cards {
-  margin-top: 0;
-}
-
-/* 除了第一塊，每一塊都自己帶上緣間距。用 margin 而不是 flex gap：
-   order 改變視覺順序之後，gap 仍然正確，margin 也一樣正確，
-   但 margin 讓「第一塊不留白」這件事跟著 DOM 走，不會因為換序而多出一段空白。 */
+/* 除了第一塊，每一塊都自己帶上緣間距。用 margin 而不是 row-gap：
+   結語緊接在卡片之後，要的是小間距，其他幾塊要的是原本兩個 Section 相加的大間距，
+   row-gap 只有一個值，做不到兩種。 */
 .focusGroup,
 .statsBlock,
 .newsFocus > .chairman {
   margin-top: calc(var(--space-8) * 2);
 }
 
+.newsFocus > .note {
+  margin-top: var(--space-6);
+}
+
 @media (min-width: 1024px) {
-  .focusGroup,
-  .statsBlock,
-  .newsFocus > .chairman {
-    margin-top: calc(var(--space-12) * 2);
+  .newsFocus {
+    display: grid;
+    /* 左欄消息、右欄三張圖卡。
+
+       minmax(0, …) 不能省：fr 的最小值預設是 auto（＝min-content），
+       而右欄的卡片列是 width: max-content（三張卡約 1000px），
+       會把右欄撐開、把左欄擠到只剩 208px。夾成 0 之後欄寬才照 6:7 分，
+       卡片列超出的部分交給它自己的 overflow-x 捲動。 */
+    grid-template-columns: minmax(0, 6fr) minmax(0, 7fr);
+    column-gap: var(--space-4);
+    /* 列距全部交給各自的 margin，理由同上 */
+    row-gap: 0;
+    /* 列高由右欄的卡片決定（卡片是定值高度），左欄消息透過 .card 的
+       height:100% 跟上。不能用 stretch——消息的捲動區是 flex: 1 1 0，
+       被拉伸時固有高度會塌成 0，整列只剩標題的高度。 */
+    align-items: start;
   }
 
   .newsFocus > .newsBlock {
-    order: 1;
-  }
-
-  .statsBlock {
-    order: 2;
-  }
-
-  .newsFocus > .chairman {
-    order: 3;
+    grid-column: 1;
+    grid-row: 1;
   }
 
   .focusGroup {
-    order: 4;
+    grid-column: 2;
+    grid-row: 1;
+    /* 同上：grid 項目的預設 min-width 是 auto，不夾成 0 的話
+       裡面的 max-content 卡片列一樣會把欄撐開 */
+    min-width: 0;
+    margin-top: 0;
+  }
+
+  .newsFocus > .note {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .statsBlock {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    margin-top: calc(var(--space-12) * 2);
+  }
+
+  .newsFocus > .chairman {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    margin-top: calc(var(--space-12) * 2);
   }
 }
 

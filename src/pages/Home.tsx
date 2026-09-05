@@ -130,7 +130,7 @@ export default function Home() {
           多個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。
 
           DOM 順序＝窄螢幕的視覺順序：消息 → 卡片 → 四格數字 → 董事長談話。
-          1024 以上用 order 改成 消息 → 四格數字 → 董事長談話 → 卡片。 */}
+          1024 以上第一列是「消息｜卡片」兩欄，四格數字與董事長談話滿版排在下方。 */}
       <Section tone="translucent">
         <div className={styles.newsFocus}>
           <div className={`${styles.newsBlock} ${styles.reveal}`}>
@@ -176,18 +176,19 @@ export default function Home() {
               兩個 Section 之間沒辦法互換順序。 */}
           <div className={styles.focusGroup}>
             <FocusStack />
-
-            <p className={`${styles.note} ${styles.intro}`}>
-              R&amp;D can be broad, while market strategy must remain focused. UDA
-              currently starts with cancer detection; animal oncology, advanced
-              molecules, signal analysis, animal health and other cross-disciplinary
-              topics remain in R&amp;D. Focus does not mean expanding every market
-              direction at once; today we concentrate resources on cancer-detection
-              technology while converting broader research into technical reserves
-              and future innovation capacity.
-            </p>
           </div>
 
+          {/* 研發重點的結語。刻意不放在右欄——右欄只有 594px 寬，
+              這段 76ch 的文字擠進去會變成細長一條。滿版排在卡片下方。 */}
+          <p className={`${styles.note} ${styles.intro}`}>
+            R&amp;D can be broad, while market strategy must remain focused. UDA
+            currently starts with cancer detection; animal oncology, advanced
+            molecules, signal analysis, animal health and other cross-disciplinary
+            topics remain in R&amp;D. Focus does not mean expanding every market
+            direction at once; today we concentrate resources on cancer-detection
+            technology while converting broader research into technical reserves
+            and future innovation capacity.
+          </p>
 
           {/* 數字統計。刻意不放標題與出處說明（指定），所以沒有可指向的標題，
               改用 aria-label 說明它是什麼。
