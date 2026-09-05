@@ -73,7 +73,6 @@ export default function FocusStack() {
   const base = import.meta.env.BASE_URL
   const viewport = useRef<HTMLDivElement>(null)
   const rail = useRef<HTMLDivElement>(null)
-  const frame = useRef<number | undefined>(undefined)
 
   /* 把捲動進度寫成 CSS 變數 --p（0～1），主色線段的寬度直接吃它。
 
@@ -104,24 +103,21 @@ export default function FocusStack() {
     el.dataset.reached = String(reached)
   }, [])
 
-  /* scroll 事件用 rAF 節流。原生 scroll 一秒可以派發上百次，
-     每次都寫 style 是浪費——一幀畫一次就夠。 */
-  const onScroll = useCallback(() => {
-    if (frame.current !== undefined) return
-    frame.current = requestAnimationFrame(() => {
-      frame.current = undefined
-      sync()
-    })
-  }, [sync])
+  /* 直接在 scroll 事件裡更新，不做 rAF 節流。
 
+     原本是「先設一個 frame 旗標、等 rAF 回呼再清掉」。那個寫法有個閂鎖：
+     **只要那一幀沒跑到，旗標就永遠留著，之後所有 scroll 事件都被忽略**，
+     進度條卡在 0 不動——回報的「滑到第三張了，底下還沒走到第二顆圓點」
+     就是這個樣子。行動瀏覽器在慣性捲動、分頁不在前景、或合成緊繃時
+     都可能延後或吃掉那一幀。
+
+     不節流的代價很小：這裡只寫一個節點的兩個屬性（一個自訂屬性、
+     一個 data-*），而瀏覽器本來就把 scroll 事件併到每一幀派發。 */
   useEffect(() => {
     sync()
     // 視窗寬度變了，卡片寬與可捲距離都會變，進度要重算
     window.addEventListener('resize', sync)
-    return () => {
-      window.removeEventListener('resize', sync)
-      if (frame.current !== undefined) cancelAnimationFrame(frame.current)
-    }
+    return () => window.removeEventListener('resize', sync)
   }, [sync])
 
   return (
@@ -131,7 +127,7 @@ export default function FocusStack() {
       <div
         className={styles.viewport}
         ref={viewport}
-        onScroll={onScroll}
+        onScroll={sync}
         tabIndex={0}
         role="group"
         aria-label="現階段研發焦點"
