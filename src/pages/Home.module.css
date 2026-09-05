@@ -27,15 +27,6 @@
   color: var(--color-white);
 }
 
-.note {
-  margin-top: var(--space-4);
-  max-width: 76ch;
-  font-size: 1.0625rem;
-  font-weight: 600;
-  line-height: 1.6;
-  color: var(--color-white);
-}
-
 .pendingInline {
   padding-inline: var(--space-1);
   /* currentColor 而非固定色：這個標記同時出現在半透明區塊（白字）
@@ -252,18 +243,14 @@
   flex-direction: column;
 }
 
-/* 除了第一塊，每一塊都自己帶上緣間距。用 margin 而不是 row-gap：
-   結語緊接在卡片之後，要的是小間距，其他幾塊要的是原本兩個 Section 相加的大間距，
-   row-gap 只有一個值，做不到兩種。 */
+/* 除了第一塊，每一塊都自己帶上緣間距。用 margin 而不是 row-gap，
+   是因為 order 換序之後 row-gap 會落在不預期的位置。 */
 .focusGroup,
 .statsBlock,
 .newsFocus > .chairman {
   margin-top: calc(var(--space-8) * 2);
 }
 
-.newsFocus > .note {
-  margin-top: var(--space-6);
-}
 
 @media (min-width: 1024px) {
   .newsFocus {
@@ -298,20 +285,15 @@
     margin-top: 0;
   }
 
-  .newsFocus > .note {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-
   .statsBlock {
     grid-column: 1 / -1;
-    grid-row: 3;
+    grid-row: 2;
     margin-top: calc(var(--space-12) * 2);
   }
 
   .newsFocus > .chairman {
     grid-column: 1 / -1;
-    grid-row: 4;
+    grid-row: 3;
     margin-top: calc(var(--space-12) * 2);
   }
 }

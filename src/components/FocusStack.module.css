@@ -9,7 +9,9 @@
    配 scroll-snap 對齊，鍵盤與觸控都能操作。 */
 
 .stack {
-  --card-w: min(84vw, 24rem);
+  /* 88vw 在 390 寬時等於整個可視區，下一張完全看不到。
+     84vw 留 14px 的邊角當提示 */
+  --card-w: min(84vw, 26rem);
   --gap: var(--space-2);
 }
 
@@ -125,24 +127,10 @@
   color: rgba(255, 255, 255, 0.78);
 }
 
-/* 中文眉標。英文是主、中文降一階，靠字級與不透明度分層，不另外換顏色。
-
-   flex-basis: 100% 讓它自己佔一行。接在英文後面的話，窄卡片上會擠成
-   「CURRENT R&D / FOCUS  現階段研 / 發焦點」這種兩段各自斷行的樣子，
-   寬卡片上則會被卡片右緣裁掉。 */
-.eyebrowZh {
-  flex-basis: 100%;
-  margin-top: 2px;
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  /* 0.62 只有 3.23:1，不合格；0.80 是 4.63:1 */
-  color: rgba(255, 255, 255, 0.8);
-}
-
 .num {
+  font-family: var(--font-latin);
   font-size: 1.05rem;
+  font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--color-white);
 }
@@ -152,40 +140,23 @@
 }
 
 .title {
-  margin: var(--space-1) 0 0;
-  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-body);
+  font-size: clamp(1.375rem, 1.9vw, 1.75rem);
   font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0.01em;
+  line-height: 1.3;
+  /* CLAUDE.md：中文標題加 letter-spacing 0.02em */
+  letter-spacing: 0.02em;
   color: var(--color-white);
 }
 
-/* 中文標題。CLAUDE.md：中文標題加 letter-spacing 0.02em */
-.titleZh {
-  display: block;
-  margin-top: 2px;
+.body {
+  margin: var(--space-2) 0 0;
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.body {
-  margin: var(--space-1) 0 0;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.88);
-}
-
-/* 中文內文。CLAUDE.md：中文內文行高 1.75 */
-.bodyZh {
-  margin: var(--space-1) 0 0;
-  font-family: var(--font-body);
-  font-size: 0.8125rem;
+  /* CLAUDE.md：中文內文行高 1.75 */
   line-height: 1.75;
-  /* 0.76 只有 4.02:1，不合格；0.84 是 4.82:1 */
-  color: rgba(255, 255, 255, 0.84);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .tags {
@@ -198,8 +169,9 @@
 }
 
 .tag {
-  padding: 0.3rem 0.7rem;
-  font-size: 0.75rem;
+  padding: 0.35rem 0.85rem;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--color-white);
   /* 標籤落在遮罩較淡的區域，自己再帶一層底才夠實 */
@@ -221,8 +193,9 @@
    照片只露 0～37px）。由卡片定高度，消息透過自己的 height:100% 跟上。 */
 @media (min-width: 1024px) {
   .stack {
-    /* 卡片佔比加大（指定）。右欄同時從 7fr 放寬到 8fr，見 Home.module.css */
-    --card-w: 24rem;
+    /* 卡片再加寬（指定）。右欄 679px，卡片 32rem＝512，
+       下一張只露 151px——夠當「還有更多」的提示，又不會佔掉半個版面。 */
+    --card-w: 32rem;
   }
 
   .card {
@@ -237,16 +210,15 @@
    --p 是捲動進度（0～1），由元件在 scroll 時寫進來。 */
 .progress {
   position: relative;
-  height: 1.25rem;
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
 }
 
-/* 灰底線與藍色線段疊在同一條線上。用 transform 置中而不是算 top，
-   線寬改了不必跟著改位置。 */
+/* 底線與進度線疊在同一條線上，對齊圓點的中心。
+   圓點是 9px，加上 .dots 的 4px 上內距，中心在 8.5px。 */
 .track,
 .fill {
   position: absolute;
-  top: 50%;
+  top: 8.5px;
   height: 2px;
   transform: translateY(-50%);
   border-radius: 1px;
@@ -272,12 +244,51 @@
 .dots {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
-  height: 100%;
   margin: 0;
-  padding: 0;
+  padding: 4px 0 0;
   list-style: none;
+}
+
+/* 每一項是「圓點在上、標題在下」。三項分別靠左、置中、靠右，
+   不然頭尾兩個標題會超出軌道兩端。 */
+.dotItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.dotItem:first-child {
+  align-items: flex-start;
+}
+
+.dotItem:last-child {
+  align-items: flex-end;
+}
+
+.dotLabel {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  text-align: center;
+  /* 這一條疊在背景影片上，跟本區塊其餘反白文字同一個處理 */
+  color: var(--color-on-video-muted);
+  /* 影片最亮的畫面白字會消失。陰影不是無障礙的解法，
+     但能明顯改善，且不影響深色畫面 */
+  text-shadow: 0 1px 3px rgba(0, 24, 56, 0.55);
+}
+
+.dotItem:first-child .dotLabel {
+  text-align: left;
+}
+
+.dotItem:last-child .dotLabel {
+  text-align: right;
 }
 
 .dot {

@@ -4,25 +4,25 @@ import styles from './FocusStack.module.css'
 /**
  * 研發重點三張卡，橫向滑動。
  *
- * 版型依 `index_img/card1.jpg`～`card3.jpg`：編號＋眉標、大標、內文、膠囊標籤，
- * 每張卡自己的底色（色值從稿上取樣，見下方 TONE）。
+ * 版型與文案依 `index_img/card1.jpg`～`card3.jpg`：編號＋眉標、大標、內文、
+ * 膠囊標籤，每張卡自己的底色（色值從稿上取樣，見下方 TONE）。
  *
- * 照片（`card1-1`～`card3-1`）鋪滿整張卡，上面壓一層該卡色票的漸層遮罩，
- * 文字再壓在遮罩上——與內頁 hero 同一套語彙（指定）。
+ * **文案是中文（指定）。** 逐字抄自那三張稿，不是翻譯。全站其餘部分目前是
+ * 英文為主，這一區塊是例外。
  *
- * 原本是釘住捲動的橫向推進，搬到消息右邊之後那個做法不能用：釘住會把整個區塊
- * 固定住，左邊的消息也會跟著卡住。改成使用者自己滑的橫向卡片列，配 scroll-snap。
+ * 照片（`card1-1`～`card3-1`）鋪滿整張卡，上面壓一層該卡色票的遮罩，
+ * 文字再壓在遮罩上——與內頁 hero 同一套語彙。
+ *
+ * 底下有一條進度軌：線串起三個圓點、每顆底下掛該張卡的標題，往右滑時
+ * 主色由左往右延伸，走過的圓點留住主色。版型參考 UDA 現有站 founder-message
+ * 頁的 `.uda-letter-rail`（那邊是直的、對應閱讀章節）。
  */
 
 type Card = {
   /** 稿上的編號，01 / 02 / 03 */
   index: string
   title: string
-  /** 中文標題。與英文並列，逐字抄自 index_img 的三張稿，不是翻譯 */
-  titleZh: string
   body: string
-  /** 中文內文，同上，逐字抄稿 */
-  bodyZh: string
   tags: string[]
   /** public/media/ 下的檔名（不含副檔名），jpg 與 webp 各一份 */
   image: string
@@ -39,42 +39,33 @@ const TONE = ['tone1', 'tone2', 'tone3'] as const
 const CARDS: Card[] = [
   {
     index: '01',
-    title: 'Cancer Research & Detection Technology',
-    titleZh: '癌症研究與檢測技術',
-    body: 'Studies cancer-related biological signals, background interference, recognition and detection applications in the context of cancer biology and disease heterogeneity.',
-    bodyZh:
-      '從癌症生物學與疾病異質性出發，研究癌症相關生命訊號、背景干擾、辨識與檢測應用之間的關係。',
-    tags: ['Cancer Biology', 'Detection Research', 'Molecular Recognition'],
+    title: '癌症研究與檢測技術',
+    body: '從癌症生物學與疾病異質性出發，研究癌症相關生命訊號、背景干擾、辨識與檢測應用之間的關係。',
+    tags: ['癌症生物學', '檢測研究', '分子辨識'],
     image: 'focus-1',
     width: 1102,
     height: 884,
-    alt: 'UDA BIOMED specimen transport cases with temperature monitoring, sample tubes and a barcode scanner on a laboratory bench.',
+    alt: 'UDA BIOMED 檢體運送冷鏈箱、採樣管與條碼掃描器，放在實驗室檯面上。',
   },
   {
     index: '02',
-    title: 'UDA Biochip Technology',
-    titleZh: 'UDA 生物晶片技術',
-    body: 'Integrates molecular recognition, material interfaces, biosensing, microscale engineering and data analysis into a miniaturized platform for life-signal research and cancer-detection applications.',
-    bodyZh:
-      '整合分子辨識、材料介面、生物感測、微型工程與資料分析，建立生命訊號研究與癌症檢測應用的微型化技術平台。',
-    tags: ['Molecular Recognition', 'Sensing Integration', 'Platform Translation'],
+    title: 'UDA 生物晶片技術',
+    body: '整合分子辨識、材料介面、生物感測、微型工程與資料分析，建立生命訊號研究與癌症檢測應用的微型化技術平台。',
+    tags: ['分子辨識', '感測整合', '平台轉譯'],
     image: 'focus-2',
     width: 1400,
     height: 934,
-    alt: 'A pipette dispensing a droplet onto a UDA BIOMED microplate, annotated with molecular recognition, biosensing, material interface, microscale engineering and data analysis.',
+    alt: '移液器將液滴滴入 UDA BIOMED 微孔盤，畫面標註分子辨識、生物感測、材料介面、微型工程與資料分析。',
   },
   {
     index: '03',
-    title: 'Proto-Structural Biology',
-    titleZh: '原構生物學',
-    body: "UDA's original R&D framework for integrating structural biology, molecular biophysics and life-signal research from atomic and molecular structure to cellular state.",
-    bodyZh:
-      '從原子與分子結構到細胞狀態，作為 UDA 整合結構生物學、分子生物物理與生命訊號研究的原創研發框架。',
-    tags: ['Structural Research', 'Molecular Dynamics', 'UDA R&D Framework'],
+    title: '原構生物學',
+    body: '從原子與分子結構到細胞狀態，作為 UDA 整合結構生物學、分子生物物理與生命訊號研究的原創研發框架。',
+    tags: ['結構研究', '分子動態', 'UDA研發框架'],
     image: 'focus-3',
     width: 1079,
     height: 866,
-    alt: 'A UDA BIOMED research sample collection kit: sample tubes, swabs, instruction cards and a tamper-evident return pouch.',
+    alt: 'UDA BIOMED 研究採樣套組：採樣管、採樣棒、說明卡與防拆回郵袋。',
   },
 ]
 
@@ -84,7 +75,7 @@ export default function FocusStack() {
   const rail = useRef<HTMLDivElement>(null)
   const frame = useRef<number | undefined>(undefined)
 
-  /* 把捲動進度寫成 CSS 變數 --p（0～1），藍色線段的寬度直接吃它。
+  /* 把捲動進度寫成 CSS 變數 --p（0～1），主色線段的寬度直接吃它。
 
      刻意**不走 React state**：捲動時每幀 setState 會讓整個元件重繪，
      三張卡連照片一起重算，行動裝置上會頓。直接寫 DOM 的 style 與 dataset
@@ -122,21 +113,21 @@ export default function FocusStack() {
 
   return (
     <div className={styles.stack}>
-      {/* 退回成橫向捲動時，這一層才是捲動容器。捲動容器要自己拿得到焦點，
-          否則只用鍵盤的人捲不動它——Firefox 會自動給，Chrome 不會。
-          釘住捲動生效時它不會捲動，多一個 tab 停留點但不影響操作。 */}
+      {/* 捲動容器要自己拿得到焦點，否則只用鍵盤的人捲不動它——
+          Firefox 會自動給，Chrome 不會，所以明寫 tabIndex。 */}
       <div
         className={styles.viewport}
         ref={viewport}
         onScroll={onScroll}
         tabIndex={0}
         role="group"
-        aria-label="Current R&D focus"
+        aria-label="現階段研發焦點"
+        lang="zh-Hant"
       >
         <ol className={styles.rail}>
           {CARDS.map((card, i) => (
             <li key={card.index} className={`${styles.card} ${styles[TONE[i]]}`}>
-              {/* 照片是底層，遮罩由 .card::after 疊在它上面，文字再壓在最上層 */}
+              {/* 照片是底層，色調層疊在它上面，文字再壓在最上層 */}
               <picture className={styles.media}>
                 <source
                   srcSet={`${base}media/${card.image}.webp`}
@@ -158,23 +149,11 @@ export default function FocusStack() {
                   <span className={styles.slash} aria-hidden="true">
                     /
                   </span>
-                  CURRENT R&amp;D FOCUS
-                  <span className={styles.eyebrowZh} lang="zh-Hant">
-                    現階段研發焦點
-                  </span>
+                  現階段研發焦點
                 </p>
 
-                <h2 className={styles.title}>
-                  {card.title}
-                  <span className={styles.titleZh} lang="zh-Hant">
-                    {card.titleZh}
-                  </span>
-                </h2>
-
+                <h2 className={styles.title}>{card.title}</h2>
                 <p className={styles.body}>{card.body}</p>
-                <p className={styles.bodyZh} lang="zh-Hant">
-                  {card.bodyZh}
-                </p>
 
                 <ul role="list" className={styles.tags}>
                   {card.tags.map((tag) => (
@@ -184,21 +163,29 @@ export default function FocusStack() {
                   ))}
                 </ul>
               </div>
-
             </li>
           ))}
         </ol>
       </div>
 
-      {/* 進度軌。純粹是「現在滑到哪」的視覺提示，捲動位置本身在捲動容器上
-          已經有了，重複成一組可聚焦的控制項只會多出三個 tab 停留點，
-          所以整條對輔助技術隱藏。 */}
-      <div className={styles.progress} ref={rail} data-active="0" aria-hidden="true">
+      {/* 進度軌。圓點底下的標題在卡片上就有，這裡是重複的，純粹是
+          「現在滑到哪」的視覺提示；捲動位置本身在捲動容器上已經有了，
+          再做成一組可聚焦的控制項只會多出三個 tab 停留點，所以整條隱藏。 */}
+      <div
+        className={styles.progress}
+        ref={rail}
+        data-active="0"
+        aria-hidden="true"
+        lang="zh-Hant"
+      >
         <span className={styles.track} />
         <span className={styles.fill} />
         <ol className={styles.dots}>
           {CARDS.map((card) => (
-            <li key={card.index} className={styles.dot} />
+            <li key={card.index} className={styles.dotItem}>
+              <span className={styles.dot} />
+              <span className={styles.dotLabel}>{card.title}</span>
+            </li>
           ))}
         </ol>
       </div>

@@ -178,18 +178,6 @@ export default function Home() {
             <FocusStack />
           </div>
 
-          {/* 研發重點的結語。刻意不放在右欄——右欄只有 594px 寬，
-              這段 76ch 的文字擠進去會變成細長一條。滿版排在卡片下方。 */}
-          <p className={`${styles.note} ${styles.intro}`}>
-            R&amp;D can be broad, while market strategy must remain focused. UDA
-            currently starts with cancer detection; animal oncology, advanced
-            molecules, signal analysis, animal health and other cross-disciplinary
-            topics remain in R&amp;D. Focus does not mean expanding every market
-            direction at once; today we concentrate resources on cancer-detection
-            technology while converting broader research into technical reserves
-            and future innovation capacity.
-          </p>
-
           {/* 數字統計。刻意不放標題與出處說明（指定），所以沒有可指向的標題，
               改用 aria-label 說明它是什麼。
               ⚠️ 後兩個數字是佔位值，見 StatCounters 內的說明。
