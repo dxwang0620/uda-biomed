@@ -259,6 +259,7 @@
 }
 
 .focusGroup,
+.statsBlock,
 .newsFocus > .chairman {
   margin-top: calc(var(--space-8) * 2);
 }
@@ -283,9 +284,17 @@
     margin-top: 0;
   }
 
-  .focusGroup {
+  /* 寬螢幕的列序：第一列消息｜董事長、第二列四格數字、第三列研發重點卡片。
+     窄螢幕不套用，那邊照 DOM 順序：消息 → 卡片 → 董事長 → 四格數字。 */
+  .statsBlock {
     grid-column: 1 / -1;
     grid-row: 2;
+    margin-top: 0;
+  }
+
+  .focusGroup {
+    grid-column: 1 / -1;
+    grid-row: 3;
     margin-top: 0;
   }
 }
