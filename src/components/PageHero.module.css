@@ -5,14 +5,13 @@
   /* 波浪高度只在這裡定義一次。先前 padding 與 .wave 各寫一份相同的 clamp，
      改其中一個就會走位。
 
-     21.4vw ＝ 100 ÷ 4.68，也就是素材（959×205）自己的長寬比。
-     色帶是滿版寬度，所以用這個值高度就恰好等於原圖比例，
-     紋理（DNA、顯微鏡、燒瓶）不會被壓扁。
+     24.4vw ＝ 100 ÷ 4.094，也就是 SVG viewBox（1400×342）的長寬比。
+     色帶是滿版寬度，所以用這個值高度就恰好等於原比例，曲線不會被壓扁。
 
-     下限 96px 是為了手機——21.4vw 在 375 寬只有 80px，色帶會細成一條邊。
-     上限 420px 對應約 1963px 的視窗，再寬就讓它略微壓縮，
+     下限 96px 是為了手機——24.4vw 在 375 寬只有 91px，色帶會細成一條邊。
+     上限 420px 對應約 1721px 的視窗，再寬就讓它略微壓縮，
      否則超寬螢幕上色帶會失控地厚。 */
-  --wave-h: clamp(96px, 21.4vw, 420px);
+  --wave-h: clamp(96px, 24.4vw, 420px);
 
   /* 下緣要讓開波浪色帶，否則文字會被蓋住 */
   padding-block: var(--space-6) calc(var(--wave-h) + var(--space-6));
@@ -156,13 +155,7 @@
   width: 100%;
   height: var(--wave-h);
   pointer-events: none;
-}
-
-/* fill 而非 cover：等同原本 SVG 的 preserveAspectRatio="none"，
-   讓色帶永遠貼齊容器兩側與下緣。cover 會為了保比例把曲線頂端裁掉。 */
-.wave img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
+  /* SVG 的兩條路徑都用 currentColor，顏色從這裡給——
+     之後要換色改這一行就好，不必重新輸出素材 */
+  color: var(--color-navy);
 }
