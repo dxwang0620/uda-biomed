@@ -80,9 +80,15 @@
    而照片是橫的（1102×884，比例 1.25），object-fit: cover 會把兩側各切掉一大塊
    ——實測手機**只用到原圖橫向的 42%**，畫面只剩中間一條。
 
-   改成用 aspect-ratio 固定成 5:4（三張原圖分別是 1.25 / 1.50 / 1.25），
-   寬度吃滿卡片、高度由比例決定，橫向幾乎不再被裁。高度若超過卡片，
-   上緣會被卡片的 overflow: hidden 切掉——那是可接受的方向，寬度不受影響。
+   改成用 aspect-ratio 固定比例，寬度吃滿卡片、高度由比例決定。
+
+   比例從 5:4 改成 1:1（指定「漸層早一點開始」）：5:4 時照片上緣落在手機卡片的
+   58%，而文字 43% 就結束了，中間夾一段平色，漸層等於從 64% 才開始化開。
+   1:1 讓照片上緣提到 47%，緊接在文字下方。代價是橫向裁切變多——
+   三張原圖是 1.25 / 1.50 / 1.25，5:4 時用到 100 / 83 / 100%，1:1 是 80 / 67 / 80%。
+
+   高度若超過卡片，上緣會被卡片的 overflow: hidden 切掉——那是可接受的方向，
+   寬度不受影響。
 
    **不要加 max-height 去夾。** aspect-ratio 的高度被夾住時寬度會跟著縮，
    這個坑 PageHero 已經踩過一次（見 PageHero.module.css 的註解）。 */
@@ -90,7 +96,7 @@
   position: absolute;
   inset: auto 0 0;
   width: 100%;
-  aspect-ratio: 5 / 4;
+  aspect-ratio: 1 / 1;
   z-index: 0;
   display: block;
 }
@@ -118,10 +124,10 @@
   background: linear-gradient(
     180deg,
     rgb(var(--tone)) 0%,
-    rgba(var(--tone), 0.94) 14%,
-    rgba(var(--tone), 0.62) 42%,
-    rgba(var(--tone), 0.26) 72%,
-    rgba(var(--tone), 0.08) 100%
+    rgba(var(--tone), 0.96) 30%,
+    rgba(var(--tone), 0.9) 44%,
+    rgba(var(--tone), 0.52) 68%,
+    rgba(var(--tone), 0.14) 100%
   );
 }
 
@@ -255,8 +261,8 @@
   width: calc(var(--p, 0) * 100%);
   /* 主色，不是 accent（指定） */
   background: var(--color-primary);
-  /* 只是把每幀之間的跳動抹平，不是動畫。太長會拖在手指後面 */
-  transition: width 0.12s linear;
+  /* 不做 transition。進度本來就是每幀由 rAF 更新，已經是連續的；
+     再補 0.12s 的補間只會讓線拖在手指後面，滑到第三張時看起來還沒走完。 */
 }
 
 .dots {

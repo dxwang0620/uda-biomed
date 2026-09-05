@@ -90,11 +90,17 @@ export default function FocusStack() {
     el.style.setProperty('--p', String(p))
 
     /* 圓點預設是白的，藍線走到才變主色（指定）。
-       reached = 藍線已經走過幾顆。還沒開始滑（p 為 0）時是 0 顆，
-       三顆都維持白色；一開始滑就吃到第一顆，滑到底三顆全亮。
-       1e-6 是浮點誤差的緩衝，否則 p 剛好落在 0.5 時 floor 會少算一顆。 */
+       reached = 藍線已經走過幾顆。還沒開始滑時是 0 顆，三顆都維持白色。
+
+       EDGE 是 2% 的容差，不是浮點誤差的緩衝。捲到最後一張時 scrollLeft
+       常常停在 656.5 / 657 這種位置（snap 對齊、裝置像素比、慣性收尾都會差
+       一點），p 因此永遠差一點到 1，第三顆就不會亮——實際回報就是
+       「已經滑到第三張，圓點還沒到」。 */
+    const EDGE = 0.02
     const reached =
-      p <= 0 ? 0 : Math.min(CARDS.length, Math.floor(p * (CARDS.length - 1) + 1e-6) + 1)
+      p <= 0
+        ? 0
+        : Math.min(CARDS.length, Math.floor(p * (CARDS.length - 1) + EDGE) + 1)
     el.dataset.reached = String(reached)
   }, [])
 
