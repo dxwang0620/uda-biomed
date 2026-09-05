@@ -189,6 +189,27 @@ export default function Home() {
           </div>
 
           <blockquote className={`${styles.card} ${styles.chairman} ${styles.reveal}`}>
+            {/* 肖像。照片來自 index_img/message/，佔卡片右半（指定），左緣用
+                遮罩淡出。
+
+                用 mask 而不是疊一層漸層色：這張卡是半透明玻璃疊在背景影片上，
+                左側是「玻璃 ＋ 影片」，用色票漸層永遠接不上那個底；
+                遮罩讓照片本身淡到全透明，露出的就是旁邊同一片玻璃，才真的無縫。 */}
+            <picture className={styles.portrait}>
+              <source
+                srcSet={`${import.meta.env.BASE_URL}media/chairman.webp`}
+                type="image/webp"
+              />
+              <img
+                src={`${import.meta.env.BASE_URL}media/chairman.jpg`}
+                alt="UDA BIOMED 董事長黎恭楷於辦公室，背後為 UDA BIOMED 招牌。"
+                width={900}
+                height={754}
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+
             {/* 示意檔把標題當成小眉標，大字引言才是視覺主體。
                 但語意上這仍是本區塊的標題，所以維持 h2，只是樣式收小。
 
@@ -242,29 +263,7 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* 肖像欄。照片來自 index_img/message/，3:4 直式同示意檔。
 
-                  原圖是 1370×1148 的橫幅（人物偏左、右側是 UDA 招牌），
-                  裁成 3:4 一定會切掉一邊；object-position 往左上偏，
-                  保住人物與桌上的「董事長 Chairman」名牌。 */}
-              <div className={styles.portrait}>
-                <picture className={styles.portraitFrame}>
-                  <source
-                    srcSet={`${import.meta.env.BASE_URL}media/chairman.webp`}
-                    type="image/webp"
-                  />
-                  <img
-                    src={`${import.meta.env.BASE_URL}media/chairman.jpg`}
-                    alt="UDA BIOMED 董事長黎恭楷於辦公室，背後為 UDA BIOMED 招牌。"
-                    width={900}
-                    height={754}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </picture>
-                <p className={styles.portraitRole}>Chairman</p>
-                <p className={styles.portraitOrg}>UDA BIOMED</p>
-              </div>
             </div>
 
             {/* 署名。名字取自 index_img/message/S__215490575_0.jpg，
