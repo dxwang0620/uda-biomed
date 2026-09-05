@@ -639,18 +639,26 @@ hover 那一整組包在 `@media (hover: hover) and (pointer: fine)` 裡（觸�
 
 ### 動畫
 
-捲進畫面時跑一次，之後**每次滑過或點下再從 0 跑一次**（指定）。
+**每次捲進畫面都從 0 重跑一次**（指定），不是只跑第一次。
 
-用 `onPointerEnter`：觸控裝置按下時也會派發，一個事件同時涵蓋滑鼠與觸控，
-不必分開處理。重播前先 `cancelAnimationFrame` 取消上一輪——不取消的話兩個
-rAF 迴圈會同時寫同一個數字，畫面會跳。四格各自獨立，滑過其中一格不影響其他三格。
+`IntersectionObserver` 因此不 disconnect，改用一個「目前在不在畫面內」的旗標，
+只在由外進內的那一刻觸發。**進場與離場用不同的門檻：40% 進、5% 出。**
+同一個門檻的話，捲動停在邊界上輕微晃動就會反覆跨越，數字會一直重跑。
+
+重播前先 `cancelAnimationFrame` 取消上一輪——不取消的話兩個 rAF 迴圈會同時寫
+同一個數字，畫面會跳。四格各自獨立。
 
 `prefers-reduced-motion: reduce` 時重播也不跑動畫，直接顯示終值。
 
-> 測試上的坑：React 的 `onPointerEnter` **不是**直接監聽 `pointerenter`，
-> 而是由 root 上的 `pointerover` / `pointerout` 合成出來的。
-> 用 `dispatchEvent(new PointerEvent('pointerenter'))` 驗證會完全沒有反應，
-> 要派發 `pointerover`（`bubbles: true`）才會觸發。
+實測（1920 寬，真實滑鼠捲動）：進場 `0.3B / 1M / 0 / 0` 開始跑 →
+捲到研發卡片區 → 捲回來 `0.6B / 1M / 1 / 1`，確實從 0 重跑 → 跑完
+`8.3B / 20M / 12 / 8`。
+
+> 驗證上踩到兩個坑，之後要測動畫記得：
+> 1. **背景分頁的 rAF 與 IntersectionObserver 都不會跑。** 用 `scrollTo()` 加
+>    讀值完全量不到東西，四格永遠是 0。要用真實的捲動事件讓 renderer 保持活著。
+> 2. React 的 `onPointerEnter` **不是**直接監聽 `pointerenter`，而是由 root 上的
+>    `pointerover` / `pointerout` 合成的。派發 `pointerenter` 不會觸發任何東西。
 
 
 `IntersectionObserver`（threshold 0.4）觸發，`requestAnimationFrame` 逐幀更新，

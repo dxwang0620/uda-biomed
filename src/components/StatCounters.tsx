@@ -58,18 +58,20 @@ const STATS: Stat[] = [
 const DURATION = 1600
 
 /**
- * 把數字從 0 跑到目標值。捲進畫面時跑一次，之後每次滑過／點下再跑一次。
+ * 把數字從 0 跑到目標值。**每次捲進畫面都重跑一次**，不是只跑第一次。
  *
  * 用 requestAnimationFrame 而不是 setInterval：setInterval 的間隔不保證，
  * 掉幀時數字會跳動。這裡以實際經過時間換算進度，掉幀只會少畫幾格。
  *
  * `prefers-reduced-motion` 時直接顯示終值，不跑動畫——重播也一樣不跑。
+ *
+ * 註：`run` 仍然回傳出去，但目前只有 observer 在用。
  */
 function useCountUp(target: number | null, decimals: number) {
   const [shown, setShown] = useState(0)
   const ref = useRef<HTMLSpanElement>(null)
   const raf = useRef<number | undefined>(undefined)
-  const started = useRef(false)
+  const inView = useRef(false)
 
   /** 從 0 重跑一次。重播前先取消上一輪，否則兩個 rAF 迴圈會同時寫同一個數字 */
   const run = useCallback(() => {
@@ -101,19 +103,27 @@ function useCountUp(target: number | null, decimals: number) {
     raf.current = requestAnimationFrame(tick)
   }, [target])
 
-  // 第一次進畫面時自己跑一次
+  /* 每次捲進畫面都重跑一次（指定），不是只跑第一次。
+     所以 observer 不 disconnect，改用一個「目前在不在畫面內」的旗標，
+     只在由外進內的那一刻觸發。
+
+     進場與離場用不同的門檻（40% 進、5% 出）。同一個門檻的話，
+     捲動停在邊界上輕微晃動就會反覆跨越，數字會一直重跑。 */
   useEffect(() => {
     const el = ref.current
     if (target === null || !el) return
 
     const io = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0].isIntersecting || started.current) return
-        started.current = true
-        io.disconnect()
-        run()
+      ([entry]) => {
+        const ratio = entry.intersectionRatio
+        if (!inView.current && ratio >= 0.4) {
+          inView.current = true
+          run()
+        } else if (inView.current && ratio < 0.05) {
+          inView.current = false
+        }
       },
-      { threshold: 0.4 },
+      { threshold: [0, 0.05, 0.4] },
     )
     io.observe(el)
     return () => io.disconnect()
@@ -166,15 +176,12 @@ function usePress() {
 }
 
 function StatCell({ stat }: { stat: Stat }) {
-  const { ref, text, run } = useCountUp(stat.value, stat.decimals ?? 0)
+  const { ref, text } = useCountUp(stat.value, stat.decimals ?? 0)
   const { pressed, handlers } = usePress()
 
   return (
     <li
       className={`${styles.cell} ${pressed ? styles.pressed : ''}`}
-      /* 滑過（或觸控裝置上點下）就讓數字重跑一次。用 pointerenter 而不是
-         mouseenter：觸控裝置按下時也會派發，一個事件同時涵蓋兩種輸入。 */
-      onPointerEnter={run}
       {...handlers}
     >
       <span className={styles.value} ref={ref}>
