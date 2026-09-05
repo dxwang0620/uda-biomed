@@ -121,14 +121,37 @@
   content: '';
   position: absolute;
   inset: 0;
+  /* 窄螢幕的色標。色標是相對「照片框」算的，而照片框在卡片裡的佔比兩個斷點
+     差很多——窄螢幕照片只佔卡片下半（上緣 48%），桌機幾乎鋪滿（上緣 6%）。
+     同一組色標之下，窄螢幕的 0.9 會落在卡片 71%、桌機是 47%，看起來就是
+     手機的漸層拉得特別下面。
+
+     窄螢幕的文字整段都在照片之上（文字止於 43%、照片起於 48%），
+     不必為文字留高濃度區，所以色標可以一路提前。 */
   background: linear-gradient(
     180deg,
     rgb(var(--tone)) 0%,
-    rgba(var(--tone), 0.96) 30%,
-    rgba(var(--tone), 0.9) 44%,
-    rgba(var(--tone), 0.52) 68%,
-    rgba(var(--tone), 0.14) 100%
+    rgba(var(--tone), 0.82) 8%,
+    rgba(var(--tone), 0.45) 30%,
+    rgba(var(--tone), 0.18) 60%,
+    rgba(var(--tone), 0.06) 100%
   );
+}
+
+/* 桌機的色標必須晚一些：照片幾乎鋪滿整張卡，文字底端落在照片框的 41%，
+   那裡的濃度不能低於 0.9，否則白字掉到 AA 以下。
+   這一段要排在上面那組之後才蓋得掉。 */
+@media (min-width: 1024px) {
+  .media::after {
+    background: linear-gradient(
+      180deg,
+      rgb(var(--tone)) 0%,
+      rgba(var(--tone), 0.96) 30%,
+      rgba(var(--tone), 0.9) 44%,
+      rgba(var(--tone), 0.52) 68%,
+      rgba(var(--tone), 0.14) 100%
+    );
+  }
 }
 
 .text {
@@ -250,15 +273,19 @@
 
 /* 軌道是透明白（指定）。這一整塊疊在背景影片上，白色不論影片深淺都看得見，
    深色系的軌道在暗畫面會整條消失。 */
+/* 左右各內縮半顆圓點。圓點是 9px，第一顆靠左、最後一顆靠右對齊，
+   中心因此落在 4.5px 與「寬度 − 4.5px」；線段若從 0 拉到 100%，
+   兩端會各多出 4.5px，看起來就是沒對準（實測線段 0→358、圓點中心 5 與 354）。 */
 .track {
-  left: 0;
-  right: 0;
+  left: 4.5px;
+  right: 4.5px;
   background: rgba(255, 255, 255, 0.45);
 }
 
 .fill {
-  left: 0;
-  width: calc(var(--p, 0) * 100%);
+  left: 4.5px;
+  /* 同上：可跑的距離是扣掉兩端各半顆之後的長度 */
+  width: calc(var(--p, 0) * (100% - 9px));
   /* 主色，不是 accent（指定） */
   background: var(--color-primary);
   /* 不做 transition。進度本來就是每幀由 rAF 更新，已經是連續的；
