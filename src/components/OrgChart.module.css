@@ -45,19 +45,23 @@
   text-align: center;
 }
 
+/* 連接線**只畫在兩列之間的空隙**，不是貫穿整格。
+
+   原本是 top: 0; bottom: 0 貫穿整個 li，再靠 z-index 壓在方塊底下。
+   但這一格裡有節點、附掛清單、還有 DutyNode 自己的浮出說明圖層，
+   堆疊順序不穩定——實測線仍然畫在「創辦人」與委員會方塊上面（指定不可）。
+
+   改成只佔 padding-bottom 那一段（列與列之間的空白），
+   線就不可能跟任何方塊重疊，不必再靠 z-index 去壓。 */
 .spineItem::before {
   content: '';
   position: absolute;
-  top: 0;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 2px;
+  height: var(--space-4);
   background: var(--color-border);
-}
-
-.spineItem:first-child::before {
-  top: 1.5rem;
 }
 
 .spineItem:last-child {
