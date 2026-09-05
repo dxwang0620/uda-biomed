@@ -126,13 +126,6 @@ export default function Home() {
         <HeroCarousel />
       </HeroVideo>
 
-      {/* 數字統計。刻意不放標題與出處說明（指定），所以區塊沒有可用的
-          標題可指向，改用 aria-label 說明它是什麼。
-          ⚠️ 後兩個數字是佔位值，見 StatCounters 內的說明。 */}
-      <Section tone="translucent">
-        <StatCounters />
-      </Section>
-
       {/* 消息、研發重點卡片、董事長談話三塊。
           多個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。
 
@@ -267,6 +260,13 @@ export default function Home() {
             </div>
           </blockquote>
         </div>
+      </Section>
+
+      {/* 數字統計。刻意不放標題與出處說明（指定），所以區塊沒有可用的
+          標題可指向，改用 aria-label 說明它是什麼。
+          ⚠️ 後兩個數字是佔位值，見 StatCounters 內的說明。 */}
+      <Section tone="translucent">
+        <StatCounters />
       </Section>
 
       <Section tone="translucent" labelledBy="platform-heading">
