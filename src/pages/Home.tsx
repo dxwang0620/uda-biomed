@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Calendar, ChevronDown, ImageIcon } from 'lucide-react'
+import { Calendar, ChevronDown } from 'lucide-react'
 import ContactSwitch from '../components/ContactSwitch.tsx'
 import FocusStack from '../components/FocusStack.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
@@ -20,6 +20,22 @@ import styles from './Home.module.css'
    看起來就跟正式內容一樣。哪些欄位是假的記錄在 docs/content-home.md。
 
    縮圖沒有素材，走佔位框。你給圖之後把 .newsThumb 換成 <img> 即可。 */
+/* 縮圖取自 web_img 根目錄的辦公環境照（S__215490584～588）。
+
+   ⚠️ **配圖與新聞內容無關。** 這幾則消息本身是佔位草稿（日期、標題、摘要都是編的，
+   見下方 NEWS 的說明），照片只是辦公室環境照，指定「隨機加上去」。
+   實際消息進來時，圖也要一起換成該則消息的圖。
+
+   五張輪流用在六則消息上——`web_img` 裡另外兩張（S__215490582／583）
+   與研發重點卡片的照片是同一張，同一頁重複出現不好看，所以沒有採用。 */
+const NEWS_THUMBS = [
+  { file: 'news-1', alt: 'UDA BIOMED 辦公室入口通道，左側為會客區，前方指標牌標示各部門方向。' },
+  { file: 'news-2', alt: 'UDA BIOMED 走廊，指標牌標示研發部、品質部與實驗區，右側為會議室。' },
+  { file: 'news-3', alt: 'UDA BIOMED 主管樓層走廊，指標牌標示總經理室、副總室與辦公室主任。' },
+  { file: 'news-4', alt: 'UDA BIOMED 研發部入口，牆面標示醫材開發、藥物研發、軟體開發與生技產品。' },
+  { file: 'news-5', alt: 'UDA BIOMED 接待櫃檯與品牌牆，後方為玻璃隔間的會議室。' },
+]
+
 const NEWS = [
   {
     category: 'Research',
@@ -147,12 +163,27 @@ export default function Home() {
               aria-labelledby="news-heading"
             >
               <ol className={styles.newsList}>
-                {NEWS.map(({ category, date, title, excerpt }) => (
+                {NEWS.map(({ category, date, title, excerpt }, i) => (
                   <li key={title} className={styles.newsItem}>
-                    {/* 縮圖佔位。純裝飾，圖進來之後換成 <img>，版面不動。 */}
-                    <div className={styles.newsThumb} aria-hidden="true">
-                      <ImageIcon size={20} strokeWidth={1.5} />
-                    </div>
+                    {/* 縮圖。圖與這則消息的內容無關，見 NEWS_THUMBS 的說明。 */}
+                    <picture className={styles.newsThumb}>
+                      <source
+                        srcSet={`${import.meta.env.BASE_URL}media/${
+                          NEWS_THUMBS[i % NEWS_THUMBS.length].file
+                        }.webp`}
+                        type="image/webp"
+                      />
+                      <img
+                        src={`${import.meta.env.BASE_URL}media/${
+                          NEWS_THUMBS[i % NEWS_THUMBS.length].file
+                        }.jpg`}
+                        alt={NEWS_THUMBS[i % NEWS_THUMBS.length].alt}
+                        width={480}
+                        height={270}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
 
                     <div className={styles.newsBody}>
                       <p className={styles.newsMeta}>
