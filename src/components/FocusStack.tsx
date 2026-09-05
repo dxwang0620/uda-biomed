@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useRef } from 'react'
 import styles from './FocusStack.module.css'
 
 /**
@@ -66,6 +67,45 @@ const CARDS: Card[] = [
 
 export default function FocusStack() {
   const base = import.meta.env.BASE_URL
+  const viewport = useRef<HTMLDivElement>(null)
+  const rail = useRef<HTMLDivElement>(null)
+  const frame = useRef<number | undefined>(undefined)
+
+  /* 把捲動進度寫成 CSS 變數 --p（0～1），藍色線段的寬度直接吃它。
+
+     刻意**不走 React state**：捲動時每幀 setState 會讓整個元件重繪，
+     三張卡連照片一起重算，行動裝置上會頓。直接寫 DOM 的 style 與 dataset
+     只動這一個節點。 */
+  const sync = useCallback(() => {
+    const vp = viewport.current
+    const el = rail.current
+    if (!vp || !el) return
+
+    const max = vp.scrollWidth - vp.clientWidth
+    const p = max > 0 ? vp.scrollLeft / max : 0
+    el.style.setProperty('--p', String(p))
+    el.dataset.active = String(Math.round(p * (CARDS.length - 1)))
+  }, [])
+
+  /* scroll 事件用 rAF 節流。原生 scroll 一秒可以派發上百次，
+     每次都寫 style 是浪費——一幀畫一次就夠。 */
+  const onScroll = useCallback(() => {
+    if (frame.current !== undefined) return
+    frame.current = requestAnimationFrame(() => {
+      frame.current = undefined
+      sync()
+    })
+  }, [sync])
+
+  useEffect(() => {
+    sync()
+    // 視窗寬度變了，卡片寬與可捲距離都會變，進度要重算
+    window.addEventListener('resize', sync)
+    return () => {
+      window.removeEventListener('resize', sync)
+      if (frame.current !== undefined) cancelAnimationFrame(frame.current)
+    }
+  }, [sync])
 
   return (
     <div className={styles.stack}>
@@ -74,6 +114,8 @@ export default function FocusStack() {
           釘住捲動生效時它不會捲動，多一個 tab 停留點但不影響操作。 */}
       <div
         className={styles.viewport}
+        ref={viewport}
+        onScroll={onScroll}
         tabIndex={0}
         role="group"
         aria-label="Current R&D focus"
@@ -119,6 +161,19 @@ export default function FocusStack() {
               </div>
 
             </li>
+          ))}
+        </ol>
+      </div>
+
+      {/* 進度軌。純粹是「現在滑到哪」的視覺提示，捲動位置本身在捲動容器上
+          已經有了，重複成一組可聚焦的控制項只會多出三個 tab 停留點，
+          所以整條對輔助技術隱藏。 */}
+      <div className={styles.progress} ref={rail} data-active="0" aria-hidden="true">
+        <span className={styles.track} />
+        <span className={styles.fill} />
+        <ol className={styles.dots}>
+          {CARDS.map((card) => (
+            <li key={card.index} className={styles.dot} />
           ))}
         </ol>
       </div>

@@ -183,3 +183,78 @@
     height: clamp(30rem, 62vh, 40rem);
   }
 }
+
+/* 進度軌。版型參考 UDA 現有站 founder-message 的 .uda-letter-rail：
+   一條細線串起圓點，走過的部分變藍。那邊是直的、對應閱讀章節，
+   這裡轉成水平、對應橫向捲動的位置。
+
+   --p 是捲動進度（0～1），由元件在 scroll 時寫進來。 */
+.progress {
+  position: relative;
+  height: 1.25rem;
+  margin-top: var(--space-2);
+}
+
+/* 灰底線與藍色線段疊在同一條線上。用 transform 置中而不是算 top，
+   線寬改了不必跟著改位置。 */
+.track,
+.fill {
+  position: absolute;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+  border-radius: 1px;
+}
+
+.track {
+  left: 0;
+  right: 0;
+  background: rgba(var(--color-primary-rgb), 0.22);
+}
+
+.fill {
+  left: 0;
+  width: calc(var(--p, 0) * 100%);
+  background: var(--color-accent);
+  /* 只是把每幀之間的跳動抹平，不是動畫。太長會拖在手指後面 */
+  transition: width 0.12s linear;
+}
+
+.dots {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-white);
+  box-shadow: inset 0 0 0 2px rgba(var(--color-primary-rgb), 0.3);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* 目前所在的那一顆。data-active 由元件寫入，
+   不用 :nth-child 以外的手段是因為圓點固定就三顆。 */
+.progress[data-active='0'] .dot:nth-child(1),
+.progress[data-active='1'] .dot:nth-child(2),
+.progress[data-active='2'] .dot:nth-child(3) {
+  background: var(--color-accent);
+  box-shadow: inset 0 0 0 2px var(--color-accent);
+  transform: scale(1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill,
+  .dot {
+    transition: none;
+  }
+}

@@ -109,6 +109,34 @@
 窄螢幕 `clamp(28rem, 68vh, 36rem)`、寬螢幕 `clamp(30rem, 62vh, 40rem)`。
 實測照片露出 101～185px。
 
+### 進度軌（圓點連線）
+
+版型參考 UDA 現有站 `founder-message` 頁的 `.uda-letter-rail`。那邊是**直的**：
+sticky 側欄、2px 灰線（`#e4e7ec`）＋ 藍色進度條（`#0443a9`）＋ 五個章節項目，
+每項一個 8px 圓點，目前章節加 `is-active`。
+
+這裡轉成**水平**、對應橫向捲動的位置：灰線串起三顆圓點，往右滑時藍色由左往右
+延伸，滑到哪一張哪一顆圓點亮起。
+
+實作：捲動時把進度寫成 CSS 變數 `--p`（0～1），藍線寬度是 `calc(var(--p) * 100%)`，
+亮起的圓點靠 `data-active` 加 `:nth-child`。
+
+兩個刻意的選擇：
+
+1. **不走 React state。** 捲動時每幀 `setState` 會讓整個元件重繪，三張卡連照片
+   一起重算，行動裝置上會頓。直接寫 DOM 的 `style` 與 `dataset`，只動那一個節點。
+2. **scroll 事件用 rAF 節流。** 原生 scroll 一秒可以派發上百次，一幀畫一次就夠。
+
+整條 `aria-hidden`：它是「現在滑到哪」的視覺提示，捲動位置在捲動容器上已經有了，
+再做成一組可聚焦的控制項只會多出三個 tab 停留點。
+
+實測（1920 寬）：`scrollLeft 336 / 398` → `--p = 0.844`，藍線 502 / 594，
+`data-active = 2`，第三顆圓點亮起。
+
+> 測試上的坑：**背景分頁不會派發 rAF**，而元件的節流正是用 rAF。
+> 用 `dispatchEvent(new Event('scroll'))` 加 `await requestAnimationFrame` 去驗證
+> 會直接掛住（我第一次就把分頁測到逾時）。要用真實的捲動事件。
+
 ### 橫向移動怎麼做的
 
 參考 UDA 現有站的 `.uda-scroll-stack`。那一段實測是 **JS 依捲動進度寫 inline
