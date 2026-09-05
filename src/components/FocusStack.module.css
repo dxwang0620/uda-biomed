@@ -97,14 +97,23 @@
   object-fit: cover;
 }
 
-/* 整張卡的淡色調，讓照片統一在該卡的色系裡，但不擋住它。
-   文字的可讀性不靠這一層，靠 .text 自己那一層（見下）。 */
-.card::after {
+/* 照片上的色票漸層。上緣重、下緣幾乎放掉，讓照片從卡片的實色裡浮出來，
+   而不是硬生生接一條邊。
+
+   照片改成只佔下緣一條之後，原本那層平均 0.22 的淡色調就沒有漸層感了
+   （回報「漸層顏色沒了」）。漸層掛在照片這一層而不是整張卡，
+   色標才會對齊照片的上緣，不受卡片高度影響。 */
+.media::after {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 1;
-  background: rgba(var(--tone), 0.22);
+  background: linear-gradient(
+    180deg,
+    rgba(var(--tone), 0.92) 0%,
+    rgba(var(--tone), 0.6) 22%,
+    rgba(var(--tone), 0.28) 55%,
+    rgba(var(--tone), 0.12) 100%
+  );
 }
 
 /* 文字自己帶遮罩，而不是靠整張卡的百分比漸層。
@@ -294,6 +303,9 @@
   /* 影片最亮的畫面白字會消失。陰影不是無障礙的解法，
      但能明顯改善，且不影響深色畫面 */
   text-shadow: 0 1px 3px rgba(0, 24, 56, 0.55);
+  transition:
+    color 0.2s ease,
+    text-shadow 0.2s ease;
 }
 
 .dotItem:first-child .dotLabel {
@@ -324,6 +336,20 @@
 .progress[data-reached='3'] .dotItem:nth-child(-n + 3) .dot {
   background: var(--color-primary);
   box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+/* 標籤跟著圓點一起變主色（指定）。
+
+   ⚠️ 這一條疊在背景影片上，而**主色是深藍**：影片畫面亮的時候讀得很清楚
+   （對白 11.29:1），暗的時候會糊進背景（對黑 1.83:1）。白字剛好相反。
+   兩種都沒辦法在不可控的影片上保證合格，這是指定的選擇，陰影留著減緩。 */
+.progress[data-reached='1'] .dotItem:nth-child(-n + 1) .dotLabel,
+.progress[data-reached='2'] .dotItem:nth-child(-n + 2) .dotLabel,
+.progress[data-reached='3'] .dotItem:nth-child(-n + 3) .dotLabel {
+  color: var(--color-primary);
+  font-weight: 600;
+  /* 深色字配深色陰影只會更糊，換成淺色描邊 */
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.65);
 }
 
 /* 最新走到的那一顆再放大一點，跟先前走過的區分開 */
