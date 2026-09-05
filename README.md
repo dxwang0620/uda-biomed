@@ -155,6 +155,15 @@ for n in 1 2 3; do
 done
 ```
 
+董事長肖像（`index_img/message/S__215490576_0.jpg` → `chairman`）：
+
+```bash
+ffmpeg -y -i "index_img/message/S__215490576_0.jpg" -vf "scale=900:-2:flags=lanczos" \
+  -q:v 4 public/media/chairman.jpg
+ffmpeg -y -i "index_img/message/S__215490576_0.jpg" -vf "scale=900:-2:flags=lanczos" \
+  -q:v 78 public/media/chairman.webp
+```
+
 產出：
 
 | 檔案 | jpg | webp |
@@ -162,6 +171,7 @@ done
 | `focus-1` | 91 KB | 58 KB |
 | `focus-2` | 98 KB | 61 KB |
 | `focus-3` | 99 KB | 64 KB |
+| `chairman` | 72 KB | 46 KB |
 
 `<picture>` 先給 webp、再退回 jpg，兩份都要留——webp 的支援度雖然夠，
 但 jpg 是那個「一定不會出事」的退路。

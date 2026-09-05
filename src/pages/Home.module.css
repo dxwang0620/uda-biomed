@@ -593,7 +593,7 @@
 
 @media (min-width: 480px) {
   .chairmanBody {
-    grid-template-columns: minmax(0, 1fr) 8rem;
+    grid-template-columns: minmax(0, 1fr) 11rem;
     align-items: start;
   }
 }
@@ -612,19 +612,30 @@
 
 /* 堆疊時（480px 以下）肖像會吃滿整欄寬，3:4 一乘就變成 293x391 的大方塊，
    把卡片拉到 1340px 高。示意檔裡它本來就只是側欄的小圖，所以限寬。 */
+/* 8rem（128px）對佔位框夠用，但放真的照片就太小了，人臉幾乎看不出來。
+   放寬到 11rem，卡片本身在桌機有 1086px 寬，空間綽綽有餘。 */
 .portrait {
-  max-width: 8rem;
+  max-width: 11rem;
 }
 
-/* 肖像佔位。3:4 直式同示意檔；照片進來後換成 <img>，比例不用動。 */
+/* 肖像。3:4 直式同示意檔。
+   <picture> 預設 inline 且沒有高度，img 的 height:100% 會無從解析而退回 auto，
+   object-fit 形同沒設——必須讓 picture 自己撐起比例。 */
 .portraitFrame {
-  display: grid;
-  place-items: center;
+  display: block;
+  overflow: hidden;
   aspect-ratio: 3 / 4;
   border-radius: var(--radius);
-  color: var(--color-text-on-glass);
   background: rgba(255, 255, 255, calc(var(--glass) + 0.12));
-  border: 1px dashed rgba(5, 16, 31, 0.35);
+}
+
+.portraitFrame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 原圖是橫幅、人物偏左，裁成 3:4 時往左上取景才保得住人物與名牌 */
+  object-position: 34% 22%;
 }
 
 .portraitRole {
@@ -653,6 +664,25 @@
   margin-top: auto;
   padding-top: var(--space-3);
   border-top: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.15));
+}
+
+/* 署名。中文名為主、拉丁拼寫降一階，跟 wordmark 的處理一致。 */
+.signatureName {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-text-on-glass);
+}
+
+.signatureLatin {
+  font-family: var(--font-latin);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
 }
 
 .signatureLabel {

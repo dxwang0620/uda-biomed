@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Calendar, ChevronDown, ImageIcon, User } from 'lucide-react'
+import { Calendar, ChevronDown, ImageIcon } from 'lucide-react'
 import ContactSwitch from '../components/ContactSwitch.tsx'
 import FocusStack from '../components/FocusStack.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
@@ -242,19 +242,40 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* 肖像欄。3:4 直式，同示意檔。沒有照片，走佔位框。 */}
+              {/* 肖像欄。照片來自 index_img/message/，3:4 直式同示意檔。
+
+                  原圖是 1370×1148 的橫幅（人物偏左、右側是 UDA 招牌），
+                  裁成 3:4 一定會切掉一邊；object-position 往左上偏，
+                  保住人物與桌上的「董事長 Chairman」名牌。 */}
               <div className={styles.portrait}>
-                <div className={styles.portraitFrame} aria-hidden="true">
-                  <User size={26} strokeWidth={1.5} />
-                </div>
+                <picture className={styles.portraitFrame}>
+                  <source
+                    srcSet={`${import.meta.env.BASE_URL}media/chairman.webp`}
+                    type="image/webp"
+                  />
+                  <img
+                    src={`${import.meta.env.BASE_URL}media/chairman.jpg`}
+                    alt="UDA BIOMED 董事長黎恭楷於辦公室，背後為 UDA BIOMED 招牌。"
+                    width={900}
+                    height={754}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
                 <p className={styles.portraitRole}>Chairman</p>
                 <p className={styles.portraitOrg}>UDA BIOMED</p>
               </div>
             </div>
 
+            {/* 署名。名字取自 index_img/message/S__215490575_0.jpg，
+                那張圖只是排版好的名字，沒有手寫筆跡，所以直接用文字排——
+                可縮放、可選取、讀屏讀得到，不必再多一個圖檔。 */}
             <footer className={styles.signature}>
               <span className={styles.signatureLabel}>Signed</span>
-              <span className={styles.pendingInline}>To add: name</span>
+              <span className={styles.signatureName}>
+                <span lang="zh-Hant">黎恭楷</span>
+                <span className={styles.signatureLatin}>Kung-kai Lee</span>
+              </span>
             </footer>
               </div>
             </div>
