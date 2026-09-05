@@ -36,10 +36,13 @@
   list-style: none;
 }
 
-/* 每一層之間的縱向連接線。最後一層不畫，否則會有一段懸空的線。 */
+/* 治理層（股東會 → 副總經理）整段置中（指定）。
+   節點是 inline-block，靠 text-align 置中；連接線跟著移到中軸，
+   否則線會留在原來的 left: 1.25rem，跟節點對不上。 */
 .spineItem {
   position: relative;
   padding-bottom: var(--space-4);
+  text-align: center;
 }
 
 .spineItem::before {
@@ -47,7 +50,8 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
   width: 2px;
   background: var(--color-border);
 }
@@ -75,11 +79,14 @@
 
 /* ---------- 側邊分支 ---------- */
 
+/* 附掛項目（創辦人、總經理室、副總室）跟著置中，
+   原本是靠 margin-left 縮排排在節點左下 */
 .aside {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-1);
-  margin: var(--space-1) 0 0 var(--space-4);
+  margin: var(--space-1) 0 0;
   padding: 0;
   list-style: none;
 }
