@@ -243,6 +243,17 @@
   flex-direction: column;
 }
 
+/* 董事長談話這一塊要 height: auto，覆寫掉 .card 的 height: 100%。
+
+   .card 的 height: 100% 是給「同一列並排的兩張卡要等高」用的（消息｜研發卡片）。
+   董事長談話自己獨佔一列，沒有要跟誰對齊，而它又帶了 192px 的 margin-top：
+   百分比高度對著 auto 的列解析、列高又包含那個 margin，Chrome 算出來是 731px，
+   而內容只有 513px——多出來的 218px 就是卡片底部那格空白，而且卡片還會
+   溢出 Section 底部 96px，把區塊之間的間距吃掉。 */
+.newsFocus > .chairman {
+  height: auto;
+}
+
 /* 除了第一塊，每一塊都自己帶上緣間距。用 margin 而不是 row-gap，
    是因為 order 換序之後 row-gap 會落在不預期的位置。
 
