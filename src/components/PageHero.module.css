@@ -26,14 +26,24 @@
   }
 }
 
-/* 有照片時給 hero 一個下限高度，否則照片被壓成一條 */
+/* 有照片時給 hero 一個下限高度，否則照片被壓成一條。
+
+   高度寫成「波浪高 ＋ 一段淨高」而不是固定值：波浪是不透明的色帶，
+   蓋掉的就是照片下緣，固定 560px 時 1512 寬的波浪（242px）會吃掉
+   照片 43%（回報「波浪擋住圖片下面很多」）。
+
+   用 calc 之後，不論波浪怎麼調，照片永遠留得下這段淨高：
+   窄螢幕 21rem（336px）、1024 以上 26rem（416px）。
+
+   窄螢幕的加項不能低於 21rem：原本是固定 420px、波浪 96px，淨高 324px；
+   一開始寫 15rem 會讓 hero 掉到 320px，照片反而更小、被蓋的比例更高。 */
 .hero:has(.media) {
-  min-height: 420px;
+  min-height: calc(var(--wave-h) + 21rem);
 }
 
 @media (min-width: 1024px) {
   .hero:has(.media) {
-    min-height: 560px;
+    min-height: calc(var(--wave-h) + 26rem);
   }
 }
 
