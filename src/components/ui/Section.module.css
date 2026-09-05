@@ -1,5 +1,7 @@
+/* 窄螢幕的上下內距比原本小一階（指定）：4rem → 3rem，
+   相鄰兩個區塊之間因此從 8rem 收成 6rem。1024 以上維持 6rem 不動。 */
 .section {
-  padding-block: var(--space-8);
+  padding-block: var(--space-6);
   /* 內部的滿版出血（例如首頁文字區的遮罩）會超出視窗右緣造成橫向捲軸。
      用 clip 而非 hidden：clip 不會建立捲動容器，也不影響 sticky／fixed 後代。 */
   overflow-x: clip;

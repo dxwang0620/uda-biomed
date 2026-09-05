@@ -244,11 +244,15 @@
 }
 
 /* 除了第一塊，每一塊都自己帶上緣間距。用 margin 而不是 row-gap，
-   是因為 order 換序之後 row-gap 會落在不預期的位置。 */
+   是因為 order 換序之後 row-gap 會落在不預期的位置。
+
+   值是 2 倍的 Section 內距——這幾塊原本分屬不同 Section，相鄰時上下內距會相加，
+   合併成一個容器後少了一份，要自己補回來。Section 的窄螢幕內距改成 3rem，
+   這裡跟著改成 6rem。 */
 .focusGroup,
 .statsBlock,
 .newsFocus > .chairman {
-  margin-top: calc(var(--space-8) * 2);
+  margin-top: calc(var(--space-6) * 2);
 }
 
 
