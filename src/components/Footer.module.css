@@ -13,10 +13,13 @@
   }
 }
 
+/* 不套 .container，跟 header 一樣橫跨整個視窗、左右用 --edge-inline 留邊（指定）。
+   套 .container 的話寬螢幕上會被夾在 1200px 內置中，與 header 對不齊。 */
 .inner {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  padding-inline: var(--edge-inline);
 }
 
 @media (min-width: 768px) {
@@ -84,6 +87,7 @@
 
 .legal {
   margin-top: var(--space-4);
+  padding-inline: var(--edge-inline);
   padding-top: var(--space-3);
   border-top: 1px solid var(--color-on-navy-border);
   font-size: var(--text-small);

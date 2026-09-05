@@ -88,6 +88,25 @@ ol[role='list'] {
 /* ---------- 版面 ---------- */
 /* mobile-first：手機為 base，往上用 min-width 疊加 */
 
+/* 滿版元素（header、footer）的左右留白。這兩塊都不套 .container——
+   它們要橫跨整個視窗、內容靠兩端，而不是被 1200px 的容器夾在中間。
+   抽成變數是為了兩邊一定同步，改一處就好。 */
+:root {
+  --edge-inline: var(--space-2);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --edge-inline: var(--space-4);
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --edge-inline: var(--space-6);
+  }
+}
+
 .container {
   width: 100%;
   max-width: var(--container);

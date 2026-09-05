@@ -12,7 +12,7 @@ import styles from './Footer.module.css'
 export default function Footer() {
   return (
     <footer className={`${styles.footer} on-navy`}>
-      <div className={`container ${styles.inner}`}>
+      <div className={styles.inner}>
         {/* 頁尾空間較大，用含標語的完整鎖定圖；header 因為只有 80px 高，
             那三行標語會小到看不清，所以只放字標。 */}
         <Link to="/" className={styles.wordmark} aria-label={`${SITE.name} home`}>
@@ -34,7 +34,7 @@ export default function Footer() {
         </nav>
       </div>
 
-      <div className={`container ${styles.legal}`}>
+      <div className={styles.legal}>
         <p>
           © {new Date().getFullYear()} {SITE.name}
         </p>

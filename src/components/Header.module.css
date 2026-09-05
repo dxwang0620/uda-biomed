@@ -40,19 +40,8 @@
   gap: var(--space-2);
   height: 100%;
   padding-block: var(--space-1);
-  padding-inline: var(--space-2);
-}
-
-@media (min-width: 768px) {
-  .inner {
-    padding-inline: var(--space-4);
-  }
-}
-
-@media (min-width: 1440px) {
-  .inner {
-    padding-inline: var(--space-6);
-  }
+  /* 值定義在 global.css 的 --edge-inline，footer 用同一個 */
+  padding-inline: var(--edge-inline);
 }
 
 /* ---------- 兩種外觀 ---------- */
