@@ -540,6 +540,25 @@ transform 本來就在合成器上跑，這個提示是保險。
 4. **hover 效果包在 `@media (hover: hover) and (pointer: fine)` 裡。**
    觸控裝置上 `:hover` 點過就黏著不放，那一格會一直維持深藍。
 
+### 觸控裝置的按壓效果
+
+hover 那一整組包在 `@media (hover: hover) and (pointer: fine)` 裡（觸控上 `:hover`
+點過會黏著不放），結果是**手機點下去完全沒有回饋**。補了一個 `.pressed`：
+
+- 用 **pointer 事件**加 class，不用 `:active`。`:active` 在 iOS Safari 上對非互動
+  元素不一定會觸發，除非頁面剛好有 touch 監聽器，不能依賴。
+- 放開後**至少維持 260ms** 再收。手指點一下常常不到 100ms，不留最短顯示時間的話
+  效果會一閃而過，等於沒有。
+- `-webkit-tap-highlight-color: transparent`，否則 Android Chrome 的預設灰色閃光
+  會蓋在自己的效果上。
+
+`.pressed` 的樣式跟 hover 完全相同，但**不能合併成同一組選擇器**——hover 那組必須
+留在 hover media query 裡，`.pressed` 要在所有裝置生效。所以是重複一份，
+`prefers-reduced-motion` 的關閉規則也兩邊都列。
+
+這四格不是互動元素（點了不會發生任何事），按壓效果純粹是回饋，
+沒有加 `role`、也沒有加 `tabindex`，避免暗示它可以點開什麼。
+
 ### 其餘三格為什麼是縮小、不是降透明度
 
 `.grid:has(.cell:hover) .cell:not(:hover)` 讓沒被滑到的三格退後一點。
