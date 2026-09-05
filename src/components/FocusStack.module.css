@@ -18,6 +18,13 @@
   scroll-snap-type: x mandatory;
   /* 卡片有陰影與圓角，捲動時上下不要被裁掉 */
   padding-block: var(--space-1);
+  /* 藏掉原生捲軸（指定）——底下的進度軌已經在講同一件事，
+     兩條並排只是重複。捲動本身不受影響。 */
+  scrollbar-width: none;
+}
+
+.viewport::-webkit-scrollbar {
+  display: none;
 }
 
 .rail {
@@ -35,9 +42,9 @@
   isolation: isolate;
   overflow: hidden;
   flex: 0 0 var(--card-w);
-  /* 卡片要夠高，文字才不會把照片壓光。窄螢幕實測：384 高時文字就佔了 346，
-     照片只露 38px，等於沒有 */
-  height: clamp(28rem, 68vh, 36rem);
+  /* 卡片要夠高，文字才不會把照片壓光。加了中文之後文字又長高約 150px，
+     實測 544 高時照片只剩 46px，所以再往上調一階。 */
+  height: clamp(34rem, 78vh, 42rem);
   border-radius: var(--radius-lg);
   scroll-snap-align: start;
   box-shadow: 0 12px 32px rgba(0, 48, 104, 0.24);
@@ -75,45 +82,63 @@
   object-fit: cover;
 }
 
-/* 色票漸層遮罩。文字集中在上半部，所以上面壓得重、下緣幾乎放掉，
-   讓照片在底部看得清楚。
-
-   0.82 是下限，由對比度決定：白字疊在「色票遮罩 ＋ 純白照片」上
-   （card1-1 與 card3-1 都有大片近白的區域，這是最不利的情況），
-   0.82 時三張卡分別是 5.6 / 5.9 / 10.4，最差 5.6:1，過 AA；
-   0.70 只有 4.15，不合格。算法與數值見 docs/content-home.md。 */
+/* 整張卡的淡色調，讓照片統一在該卡的色系裡，但不擋住它。
+   文字的可讀性不靠這一層，靠 .text 自己那一層（見下）。 */
 .card::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(
-    180deg,
-    rgba(var(--tone), 0.96) 0%,
-    rgba(var(--tone), 0.93) 42%,
-    rgba(var(--tone), 0.82) 58%,
-    rgba(var(--tone), 0.45) 78%,
-    rgba(var(--tone), 0.12) 100%
-  );
+  background: rgba(var(--tone), 0.22);
 }
 
+/* 文字自己帶遮罩，而不是靠整張卡的百分比漸層。
+
+   卡片高度會隨斷點與文案長度變，用卡片百分比定漸層的話文字底部常常落在
+   已經淡掉的區段——加中文之前文字佔 63%、加了之後佔 73%，同一組色標
+   底下那幾行的實際遮罩從 0.82 掉到 0.53。讓遮罩跟著文字塊走就沒有這個問題。
+
+   下緣 12% 才開始淡出，接到照片上。 */
 .text {
   position: relative;
-  /* 壓在遮罩之上 */
+  /* 壓在色調層之上 */
   z-index: 2;
   padding: var(--space-3);
+  background: linear-gradient(
+    180deg,
+    rgba(var(--tone), 0.95) 0%,
+    rgba(var(--tone), 0.9) 88%,
+    rgba(var(--tone), 0) 100%
+  );
 }
 
 .eyebrow {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--space-1);
+  gap: 0 var(--space-1);
   margin: 0;
   font-family: var(--font-latin);
   font-size: var(--text-eyebrow);
   font-weight: 700;
   letter-spacing: var(--tracking-eyebrow);
   color: rgba(255, 255, 255, 0.78);
+}
+
+/* 中文眉標。英文是主、中文降一階，靠字級與不透明度分層，不另外換顏色。
+
+   flex-basis: 100% 讓它自己佔一行。接在英文後面的話，窄卡片上會擠成
+   「CURRENT R&D / FOCUS  現階段研 / 發焦點」這種兩段各自斷行的樣子，
+   寬卡片上則會被卡片右緣裁掉。 */
+.eyebrowZh {
+  flex-basis: 100%;
+  margin-top: 2px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  /* 0.62 只有 3.23:1，不合格；0.80 是 4.63:1 */
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .num {
@@ -135,11 +160,32 @@
   color: var(--color-white);
 }
 
+/* 中文標題。CLAUDE.md：中文標題加 letter-spacing 0.02em */
+.titleZh {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
 .body {
   margin: var(--space-1) 0 0;
   font-size: 0.875rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.88);
+}
+
+/* 中文內文。CLAUDE.md：中文內文行高 1.75 */
+.bodyZh {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  line-height: 1.75;
+  /* 0.76 只有 4.02:1，不合格；0.84 是 4.82:1 */
+  color: rgba(255, 255, 255, 0.84);
 }
 
 .tags {
@@ -175,12 +221,12 @@
    照片只露 0～37px）。由卡片定高度，消息透過自己的 height:100% 跟上。 */
 @media (min-width: 1024px) {
   .stack {
-    /* 右欄約 594px，卡片收窄並露出下一張的邊角，當作「還有更多」的提示 */
-    --card-w: 20rem;
+    /* 卡片佔比加大（指定）。右欄同時從 7fr 放寬到 8fr，見 Home.module.css */
+    --card-w: 24rem;
   }
 
   .card {
-    height: clamp(30rem, 62vh, 40rem);
+    height: clamp(34rem, 68vh, 44rem);
   }
 }
 
@@ -206,16 +252,19 @@
   border-radius: 1px;
 }
 
+/* 軌道是透明白（指定）。這一整塊疊在背景影片上，白色不論影片深淺都看得見，
+   深色系的軌道在暗畫面會整條消失。 */
 .track {
   left: 0;
   right: 0;
-  background: rgba(var(--color-primary-rgb), 0.22);
+  background: rgba(255, 255, 255, 0.45);
 }
 
 .fill {
   left: 0;
   width: calc(var(--p, 0) * 100%);
-  background: var(--color-accent);
+  /* 主色，不是 accent（指定） */
+  background: var(--color-primary);
   /* 只是把每幀之間的跳動抹平，不是動畫。太長會拖在手指後面 */
   transition: width 0.12s linear;
 }
@@ -235,21 +284,28 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--color-white);
-  box-shadow: inset 0 0 0 2px rgba(var(--color-primary-rgb), 0.3);
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.7);
   transition:
+    background-color 0.2s ease,
     box-shadow 0.2s ease,
     transform 0.2s ease;
 }
 
-/* 目前所在的那一顆。data-active 由元件寫入，
-   不用 :nth-child 以外的手段是因為圓點固定就三顆。 */
+/* 走過的圓點留住主色，不是只有目前那一顆（指定）。
+   data-active 由元件寫入，圓點固定三顆所以直接列出來。 */
+.progress[data-active='0'] .dot:nth-child(-n + 1),
+.progress[data-active='1'] .dot:nth-child(-n + 2),
+.progress[data-active='2'] .dot:nth-child(-n + 3) {
+  background: var(--color-primary);
+  box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+/* 目前那一顆再放大一點，跟已經走過的區分開 */
 .progress[data-active='0'] .dot:nth-child(1),
 .progress[data-active='1'] .dot:nth-child(2),
 .progress[data-active='2'] .dot:nth-child(3) {
-  background: var(--color-accent);
-  box-shadow: inset 0 0 0 2px var(--color-accent);
-  transform: scale(1.25);
+  transform: scale(1.3);
 }
 
 @media (prefers-reduced-motion: reduce) {

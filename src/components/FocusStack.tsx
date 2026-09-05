@@ -18,7 +18,11 @@ type Card = {
   /** 稿上的編號，01 / 02 / 03 */
   index: string
   title: string
+  /** 中文標題。與英文並列，逐字抄自 index_img 的三張稿，不是翻譯 */
+  titleZh: string
   body: string
+  /** 中文內文，同上，逐字抄稿 */
+  bodyZh: string
   tags: string[]
   /** public/media/ 下的檔名（不含副檔名），jpg 與 webp 各一份 */
   image: string
@@ -36,7 +40,10 @@ const CARDS: Card[] = [
   {
     index: '01',
     title: 'Cancer Research & Detection Technology',
+    titleZh: '癌症研究與檢測技術',
     body: 'Studies cancer-related biological signals, background interference, recognition and detection applications in the context of cancer biology and disease heterogeneity.',
+    bodyZh:
+      '從癌症生物學與疾病異質性出發，研究癌症相關生命訊號、背景干擾、辨識與檢測應用之間的關係。',
     tags: ['Cancer Biology', 'Detection Research', 'Molecular Recognition'],
     image: 'focus-1',
     width: 1102,
@@ -46,7 +53,10 @@ const CARDS: Card[] = [
   {
     index: '02',
     title: 'UDA Biochip Technology',
+    titleZh: 'UDA 生物晶片技術',
     body: 'Integrates molecular recognition, material interfaces, biosensing, microscale engineering and data analysis into a miniaturized platform for life-signal research and cancer-detection applications.',
+    bodyZh:
+      '整合分子辨識、材料介面、生物感測、微型工程與資料分析，建立生命訊號研究與癌症檢測應用的微型化技術平台。',
     tags: ['Molecular Recognition', 'Sensing Integration', 'Platform Translation'],
     image: 'focus-2',
     width: 1400,
@@ -56,7 +66,10 @@ const CARDS: Card[] = [
   {
     index: '03',
     title: 'Proto-Structural Biology',
+    titleZh: '原構生物學',
     body: "UDA's original R&D framework for integrating structural biology, molecular biophysics and life-signal research from atomic and molecular structure to cellular state.",
+    bodyZh:
+      '從原子與分子結構到細胞狀態，作為 UDA 整合結構生物學、分子生物物理與生命訊號研究的原創研發框架。',
     tags: ['Structural Research', 'Molecular Dynamics', 'UDA R&D Framework'],
     image: 'focus-3',
     width: 1079,
@@ -146,10 +159,22 @@ export default function FocusStack() {
                     /
                   </span>
                   CURRENT R&amp;D FOCUS
+                  <span className={styles.eyebrowZh} lang="zh-Hant">
+                    現階段研發焦點
+                  </span>
                 </p>
 
-                <h2 className={styles.title}>{card.title}</h2>
+                <h2 className={styles.title}>
+                  {card.title}
+                  <span className={styles.titleZh} lang="zh-Hant">
+                    {card.titleZh}
+                  </span>
+                </h2>
+
                 <p className={styles.body}>{card.body}</p>
+                <p className={styles.bodyZh} lang="zh-Hant">
+                  {card.bodyZh}
+                </p>
 
                 <ul role="list" className={styles.tags}>
                   {card.tags.map((tag) => (

@@ -274,7 +274,7 @@
        而右欄的卡片列是 width: max-content（三張卡約 1000px），
        會把右欄撐開、把左欄擠到只剩 208px。夾成 0 之後欄寬才照 6:7 分，
        卡片列超出的部分交給它自己的 overflow-x 捲動。 */
-    grid-template-columns: minmax(0, 6fr) minmax(0, 7fr);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
     column-gap: var(--space-4);
     /* 列距全部交給各自的 margin，理由同上 */
     row-gap: 0;
