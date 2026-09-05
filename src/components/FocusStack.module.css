@@ -69,10 +69,23 @@
   --tone: 12, 19, 47;
 }
 
-/* 照片鋪滿整張卡 */
+/* 照片貼齊卡片下緣，並維持接近原圖的長寬比。
+
+   原本是 inset: 0 鋪滿整張卡。問題是卡片很直（手機 328×624，比例 0.52）
+   而照片是橫的（1102×884，比例 1.25），object-fit: cover 會把兩側各切掉一大塊
+   ——實測手機**只用到原圖橫向的 42%**，畫面只剩中間一條。
+
+   改成用 aspect-ratio 固定成 5:4（三張原圖分別是 1.25 / 1.50 / 1.25），
+   寬度吃滿卡片、高度由比例決定，橫向幾乎不再被裁。高度若超過卡片，
+   上緣會被卡片的 overflow: hidden 切掉——那是可接受的方向，寬度不受影響。
+
+   **不要加 max-height 去夾。** aspect-ratio 的高度被夾住時寬度會跟著縮，
+   這個坑 PageHero 已經踩過一次（見 PageHero.module.css 的註解）。 */
 .media {
   position: absolute;
-  inset: 0;
+  inset: auto 0 0;
+  width: 100%;
+  aspect-ratio: 5 / 4;
   z-index: 0;
   display: block;
 }
@@ -303,19 +316,20 @@
     transform 0.2s ease;
 }
 
-/* 走過的圓點留住主色，不是只有目前那一顆（指定）。
-   data-active 由元件寫入，圓點固定三顆所以直接列出來。 */
-.progress[data-active='0'] .dot:nth-child(-n + 1),
-.progress[data-active='1'] .dot:nth-child(-n + 2),
-.progress[data-active='2'] .dot:nth-child(-n + 3) {
+/* 圓點預設白色，藍線走到才變主色，走過的留住主色（指定）。
+   data-reached 由元件寫入，是「藍線已經走過幾顆」；
+   reached 為 0 時三顆都是白的。圓點固定三顆所以直接列出來。 */
+.progress[data-reached='1'] .dotItem:nth-child(-n + 1) .dot,
+.progress[data-reached='2'] .dotItem:nth-child(-n + 2) .dot,
+.progress[data-reached='3'] .dotItem:nth-child(-n + 3) .dot {
   background: var(--color-primary);
   box-shadow: inset 0 0 0 2px var(--color-primary);
 }
 
-/* 目前那一顆再放大一點，跟已經走過的區分開 */
-.progress[data-active='0'] .dot:nth-child(1),
-.progress[data-active='1'] .dot:nth-child(2),
-.progress[data-active='2'] .dot:nth-child(3) {
+/* 最新走到的那一顆再放大一點，跟先前走過的區分開 */
+.progress[data-reached='1'] .dotItem:nth-child(1) .dot,
+.progress[data-reached='2'] .dotItem:nth-child(2) .dot,
+.progress[data-reached='3'] .dotItem:nth-child(3) .dot {
   transform: scale(1.3);
 }
 

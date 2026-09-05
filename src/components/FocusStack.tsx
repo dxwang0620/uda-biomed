@@ -88,7 +88,14 @@ export default function FocusStack() {
     const max = vp.scrollWidth - vp.clientWidth
     const p = max > 0 ? vp.scrollLeft / max : 0
     el.style.setProperty('--p', String(p))
-    el.dataset.active = String(Math.round(p * (CARDS.length - 1)))
+
+    /* 圓點預設是白的，藍線走到才變主色（指定）。
+       reached = 藍線已經走過幾顆。還沒開始滑（p 為 0）時是 0 顆，
+       三顆都維持白色；一開始滑就吃到第一顆，滑到底三顆全亮。
+       1e-6 是浮點誤差的緩衝，否則 p 剛好落在 0.5 時 floor 會少算一顆。 */
+    const reached =
+      p <= 0 ? 0 : Math.min(CARDS.length, Math.floor(p * (CARDS.length - 1) + 1e-6) + 1)
+    el.dataset.reached = String(reached)
   }, [])
 
   /* scroll 事件用 rAF 節流。原生 scroll 一秒可以派發上百次，
@@ -174,7 +181,7 @@ export default function FocusStack() {
       <div
         className={styles.progress}
         ref={rail}
-        data-active="0"
+        data-reached="0"
         aria-hidden="true"
         lang="zh-Hant"
       >
