@@ -151,6 +151,11 @@
 }
 
 /* 核心定位區塊的標籤列。與卡內的 .tags 分開，兩者的間距規則不同。 */
+/* 核心定位底下的「了解更多」。標籤列之後留一段，不要貼著。 */
+.moreRow {
+  margin: var(--space-4) 0 0;
+}
+
 .tagRow {
   display: flex;
   flex-wrap: wrap;

@@ -4,6 +4,7 @@ import FocusStack from '../components/FocusStack.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
 import StatCounters from '../components/StatCounters.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
+import Button from '../components/ui/Button.tsx'
 import Card from '../components/ui/Card.tsx'
 import Placeholder from '../components/ui/Placeholder.tsx'
 import Section from '../components/ui/Section.tsx'
@@ -204,6 +205,39 @@ export default function Home() {
         </div>
       </Section>
 
+      <Section tone="translucent" labelledBy="positioning-heading">
+        <div className={styles.intro}>
+        <h2 id="positioning-heading" className={styles.sectionTitle}>
+          UDA BIOMED core positioning
+        </h2>
+        <p className={styles.lede}>
+          UDA BIOMED is a biomedical technology company centered on
+          innovation-driven R&amp;D. Its current public focus is cancer research and
+          detection technology, supported by UDA Biochip Technology as a key
+          platform; Proto-Structural Biology serves as one of UDA&rsquo;s original
+          frameworks for integrating structural biology, molecular biophysics,
+          biochemistry, materials science and life-signal research. UDA emphasizes
+          validation, intellectual property and translational development so that
+          technology can progress from concepts and data toward co-development and
+          licensing partnerships.
+        </p>
+        </div>
+        <ul role="list" className={styles.tagRow}>
+          {POSITIONING_TAGS.map((tag) => (
+            <li key={tag} className={styles.tagLarge}>
+              {tag}
+            </li>
+          ))}
+        </ul>
+
+        {/* 與 hero 主要 CTA 同一個變體（橘底、hover 轉深藍），指定要一致。 */}
+        <p className={styles.moreRow}>
+          <Button to="/research" variant="accent">
+            Learn more
+          </Button>
+        </p>
+      </Section>
+
       <Section tone="translucent" labelledBy="platform-heading">
         <div className={styles.intro}>
         {/* 參考影片只拍到「… verifiable technology platform」，
@@ -240,32 +274,6 @@ export default function Home() {
                 <h3 className={styles.cardTitle}>{title}</h3>
                 <p className={styles.cardBody}>{body}</p>
               </Card>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section tone="translucent" labelledBy="positioning-heading">
-        <div className={styles.intro}>
-        <h2 id="positioning-heading" className={styles.sectionTitle}>
-          UDA BIOMED core positioning
-        </h2>
-        <p className={styles.lede}>
-          UDA BIOMED is a biomedical technology company centered on
-          innovation-driven R&amp;D. Its current public focus is cancer research and
-          detection technology, supported by UDA Biochip Technology as a key
-          platform; Proto-Structural Biology serves as one of UDA&rsquo;s original
-          frameworks for integrating structural biology, molecular biophysics,
-          biochemistry, materials science and life-signal research. UDA emphasizes
-          validation, intellectual property and translational development so that
-          technology can progress from concepts and data toward co-development and
-          licensing partnerships.
-        </p>
-        </div>
-        <ul role="list" className={styles.tagRow}>
-          {POSITIONING_TAGS.map((tag) => (
-            <li key={tag} className={styles.tagLarge}>
-              {tag}
             </li>
           ))}
         </ul>
