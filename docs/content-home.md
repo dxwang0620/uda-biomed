@@ -490,22 +490,22 @@ Cross-Disciplinary R&D／Intellectual Property／Industry Collaboration
   governance and respect for life, advancing R&D value alongside social
   responsibility.
 
-### 三張照片卡 `[需確認]`
+### 三格 To add 方塊 `[待補]`
 
-依指示把原本兩個 `<Placeholder>` 擴充成三張照片卡，標題用 **R&D Portfolio Snapshot**。
+依指示補到三格，每格塞一張配圖。**樣式與文案維持原樣**——虛線框、To add 標籤、
+標題、說明文字都沒有動，只是 `<Placeholder>` 多了一個可選的 `image` 屬性。
 
-- 卡片標題用參考網站列在這一段底下的子項：**Science / Data / Life**
-- 原本 `<Placeholder>` 內的說明文字依指示刪除（抄錄見下方「區塊六」）
-- 照片：`public/media/resp-1`～`resp-3`（800px 寬，jpg 49～96K、webp 32～86K）
-  - resp-1 ← `web_img/research/S__213983245.jpg`（研發部入口）
-  - resp-2 ← `web_img/technology/pic.jpg`（研發部／品質部／實驗區走廊）
-  - resp-3 ← `web_img/about/pic.jpg`（廠區外觀）
-- 遮罩由下往上，白字最差情況 11.4:1（照片該處為純白時），算法同其他遮罩
+| 格 | 標題 | 配圖 | 來源 |
+| --- | --- | --- | --- |
+| 1 | R&D Portfolio Snapshot | `resp-1` | `web_img/research/S__213983245.jpg`（研發部入口） |
+| 2 | Corporate Responsibility — sub-items | `resp-2` | `web_img/technology/pic.jpg`（品質部／實驗區走廊） |
+| 3 | `[待補：第三格標題]` | `resp-3` | `web_img/about/pic.jpg`（廠區外觀） |
 
-> ⚠️ **標題與內容對不上，需要你決定。** 參考網站的 R&D Portfolio Snapshot
-> 底下是三個數字（見區塊六），不是 Science / Data / Life——後者是企業責任的子項。
-> 現在的做法是把兩者併在一起，因為數字我不抄。要照參考網站的結構做，
-> 請提供三個數字與各自的標籤，我把卡片內容換掉。
+照片 800px 寬（jpg 49～96K、webp 32～86K），`aspect-ratio: 16/9`、`object-fit: cover`。
+**配圖與各格內容沒有對應關係**，這幾格本身就是待補的佔位，所以 `alt=""` 當裝飾處理。
+
+> ⚠️ 第三格的標題與說明還沒有內容。參考網站這一段底下的子項
+> （Scientific & Data Integrity 等）影片中讀不完整，需要你提供。
 >
 > ⚠️ resp-1／resp-2 的場景與上方最新消息的縮圖重複。現有素材只有六個辦公
 > 環境場景，五個已用在消息列上，避不開；有別的照片再換。

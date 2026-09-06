@@ -11,13 +11,35 @@ import styles from './Placeholder.module.css'
  */
 export default function Placeholder({
   title,
+  image,
   children,
 }: {
   title: string
+  /** 配圖。純裝飾，`public/media/` 下的檔名（不含副檔名） */
+  image?: string
   children: React.ReactNode
 }) {
   return (
     <div className={styles.placeholder}>
+      {/* 配圖與內容沒有對應關係，這一格本身就是待補的佔位，
+          所以當裝飾處理、alt="" */}
+      {image ? (
+        <picture className={styles.media}>
+          <source
+            srcSet={`${import.meta.env.BASE_URL}media/${image}.webp`}
+            type="image/webp"
+          />
+          <img
+            src={`${import.meta.env.BASE_URL}media/${image}.jpg`}
+            alt=""
+            width={800}
+            height={450}
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      ) : null}
+
       <p className={styles.tag}>To add</p>
       <p className={styles.title}>{title}</p>
       <div className={styles.body}>{children}</div>

@@ -10,6 +10,22 @@
   color: var(--placeholder-fg, var(--color-text-muted));
 }
 
+/* 配圖。切齊虛線框的內緣，下方留一段再接 To add 標籤。 */
+.media {
+  display: block;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .tag {
   display: inline-block;
   padding: 2px var(--space-1);

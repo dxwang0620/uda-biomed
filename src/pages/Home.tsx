@@ -5,6 +5,7 @@ import HeroCarousel from '../components/HeroCarousel.tsx'
 import StatCounters from '../components/StatCounters.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
 import Button from '../components/ui/Button.tsx'
+import Placeholder from '../components/ui/Placeholder.tsx'
 import Section from '../components/ui/Section.tsx'
 import styles from './Home.module.css'
 
@@ -26,19 +27,6 @@ import styles from './Home.module.css'
 
    五張輪流用在六則消息上——`web_img` 裡另外兩張（S__215490582／583）
    與研發重點卡片的照片是同一張，同一頁重複出現不好看，所以沒有採用。 */
-/* 企業責任的三張卡。三個標題是參考網站列在這一段底下的子項（Science /
-   Data & Life），不是我擬的。原本兩個 <Placeholder> 的說明文字依指示刪除，
-   抄錄留在 docs/content-home.md。
-
-   ⚠️ 照片只是辦公環境照，與標題沒有對應關係；resp-1／resp-2 的場景與
-   上方最新消息的縮圖重複——現有素材只有六個場景，全都已用在消息列上。
-   之後有別的照片再換。 */
-const RESPONSIBILITY = [
-  { title: 'Science', file: 'resp-1' },
-  { title: 'Data', file: 'resp-2' },
-  { title: 'Life', file: 'resp-3' },
-]
-
 const NEWS_THUMBS = [
   { file: 'news-1', alt: 'UDA BIOMED 辦公室入口通道，左側為會客區，前方指標牌標示各部門方向。' },
   { file: 'news-2', alt: 'UDA BIOMED 走廊，指標牌標示研發部、品質部與實驗區，右側為會議室。' },
@@ -265,31 +253,19 @@ export default function Home() {
           </p>
         </div>
 
-        <div className={styles.snapshot}>
-          <h3 className={styles.snapshotTitle}>R&amp;D Portfolio Snapshot</h3>
-          <ul role="list" className={styles.respCards}>
-            {RESPONSIBILITY.map(({ title, file }) => (
-              <li key={title} className={styles.respCard}>
-                {/* 照片是辦公環境照，與卡片標題沒有對應關係，所以 alt=""
-                    當裝飾處理——標題本身就是可讀的文字。 */}
-                <picture className={styles.respMedia}>
-                  <source
-                    srcSet={`${import.meta.env.BASE_URL}media/${file}.webp`}
-                    type="image/webp"
-                  />
-                  <img
-                    src={`${import.meta.env.BASE_URL}media/${file}.jpg`}
-                    alt=""
-                    width={800}
-                    height={450}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </picture>
-                <h4 className={styles.respCardTitle}>{title}</h4>
-              </li>
-            ))}
-          </ul>
+        <div className={styles.todos}>
+          {/* 依指示補到三格，每格塞一張配圖。文案維持原樣。 */}
+          <Placeholder title="R&D Portfolio Snapshot" image="resp-1">
+            Three headline figures with a disclaimer. The figures were not read
+            off a handheld recording; supply them, or drop this block.
+          </Placeholder>
+          <Placeholder title="Corporate Responsibility — sub-items" image="resp-2">
+            Sub-headings such as Science, Data &amp; Life sit under this section
+            in the reference but could not be read in full.
+          </Placeholder>
+          <Placeholder title="[待補：第三格標題]" image="resp-3">
+            [待補：說明文字]
+          </Placeholder>
         </div>
       </Section>
 

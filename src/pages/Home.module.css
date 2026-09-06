@@ -173,6 +173,20 @@
   }
 }
 
+/* ---------- 待補 ---------- */
+
+.todos {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 1024px) {
+  .todos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
 /* ---------- 最新消息 / 董事長有話說 ---------- */
 
 /* 左消息、右董事長。手機一欄堆疊。
@@ -508,86 +522,5 @@
   to {
     opacity: 1;
     transform: none;
-  }
-}
-
-/* ── 企業責任：R&D Portfolio Snapshot 的三張照片卡 ───────────────── */
-
-.snapshot {
-  margin-top: var(--space-6);
-}
-
-.snapshotTitle {
-  margin: 0 0 var(--space-3);
-  font-family: var(--font-latin);
-  font-size: var(--text-h2);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--color-white);
-}
-
-.respCards {
-  display: grid;
-  gap: var(--space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.respCard {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-  /* 照片是 16:9，裁成 4:3 會切掉左右——三張的主體都在畫面中段，切得掉 */
-  aspect-ratio: 4 / 3;
-  display: flex;
-  align-items: flex-end;
-}
-
-.respMedia {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.respMedia img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* 由下往上的深藍遮罩。標題壓在底部，落在卡片高度的 89% 處，該處遮罩
-   濃度 0.895；即使照片在那裡是純白（最差情況），合成後白字仍有 11.4:1，
-   遠高於 AA。算法與其他遮罩一致，見 docs/design-node.md。 */
-.respMedia::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    0deg,
-    rgba(10, 37, 64, 0.95) 0%,
-    rgba(10, 37, 64, 0.82) 26%,
-    rgba(10, 37, 64, 0.35) 58%,
-    rgba(10, 37, 64, 0.12) 100%
-  );
-}
-
-.respCardTitle {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  padding: var(--space-3);
-  font-family: var(--font-latin);
-  font-size: var(--text-h2);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: var(--color-white);
-}
-
-@media (min-width: 768px) {
-  .respCards {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-3);
   }
 }
