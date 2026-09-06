@@ -9,9 +9,6 @@
    配 scroll-snap 對齊，鍵盤與觸控都能操作。 */
 
 .stack {
-  /* 88vw 在 390 寬時等於整個可視區，下一張完全看不到。
-     84vw 留 14px 的邊角當提示 */
-  --card-w: min(84vw, 26rem);
   --gap: var(--space-2);
 }
 
@@ -37,10 +34,15 @@
   display: none;
 }
 
+/* 一次只顯示一張（指定）。
+
+   卡片列的寬度必須是 100%（＝可視區寬），卡片的百分比寬才有東西可以對齊；
+   原本是 `width: max-content`，那樣卡片的百分比會對著「三張卡的總寬」解析，
+   等於自己算自己。現在卡片各佔 100% 並溢出這一層，捲動由 .viewport 負責。 */
 .rail {
   display: flex;
   gap: var(--gap);
-  width: max-content;
+  width: 100%;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -51,7 +53,7 @@
   /* 遮罩與文字都要疊在照片上，各自建立層級 */
   isolation: isolate;
   overflow: hidden;
-  flex: 0 0 var(--card-w);
+  flex: 0 0 100%;
   /* 卡片要夠高，文字才不會把照片壓光。加了中文之後文字又長高約 150px，
      實測 544 高時照片只剩 46px，所以再往上調一階。 */
   height: clamp(26rem, 62vh, 34rem);
@@ -138,9 +140,9 @@
   background: linear-gradient(
     180deg,
     rgb(var(--tone)) 0%,
-    rgba(var(--tone), 0.88) 12%,
-    rgba(var(--tone), 0.45) 32%,
-    rgba(var(--tone), 0.18) 60%,
+    rgba(var(--tone), 0.92) 22%,
+    rgba(var(--tone), 0.5) 42%,
+    rgba(var(--tone), 0.18) 70%,
     rgba(var(--tone), 0.06) 100%
   );
 }
@@ -154,9 +156,9 @@
     background: linear-gradient(
       180deg,
       rgb(var(--tone)) 0%,
-      rgba(var(--tone), 0.96) 35%,
-      rgba(var(--tone), 0.9) 54%,
-      rgba(var(--tone), 0.5) 74%,
+      rgba(var(--tone), 0.96) 45%,
+      rgba(var(--tone), 0.9) 66%,
+      rgba(var(--tone), 0.5) 82%,
       rgba(var(--tone), 0.14) 100%
     );
   }
@@ -247,12 +249,6 @@
    兩邊都不定高，整列就塌到各自的最小值（實測消息 654 → 399、
    照片只露 0～37px）。由卡片定高度，消息透過自己的 height:100% 跟上。 */
 @media (min-width: 1024px) {
-  .stack {
-    /* 卡片再加寬（指定）。右欄 679px，卡片 38rem＝608，
-       下一張露 55px 的邊角。 */
-    --card-w: 38rem;
-  }
-
   /* 寬螢幕的照片維持 1:1；窄螢幕改用 4:3，卡片變矮之後
      1:1 會把照片上緣頂到文字中間去 */
   .media {
