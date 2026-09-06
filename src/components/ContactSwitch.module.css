@@ -161,28 +161,18 @@
 }
 
 @media (min-width: 900px) {
-  /* 桌機一律展開，收合交給 flex 的寬度動畫 */
+  /* **一開始兩側都收合**（指定），與窄螢幕一致——原本桌機有一條
+     「一律展開」的覆寫（`grid-template-rows: 1fr`），一進頁面兩張表單就攤開。
+     現在共用基礎規則：預設 0fr，`.open` 才長出來。
+
+     收合側的高度必須真的收掉，不能只靠 visibility——`visibility: hidden`
+     會保留版面，七個 KYC 欄位被擠進窄帶後高度暴增，反而把整列撐得比展開前
+     還高（實測 836 → 1422）。 */
   .body {
-    grid-template-rows: 1fr;
     overflow-y: auto;
   }
 
-  .bodyInner {
-    visibility: visible;
-    transition: none;
-  }
-
-  .shut .bodyInner {
-    visibility: hidden;
-    transition: visibility 0s linear 720ms;
-  }
-
-  /* 收合側的高度也要收掉，不能只靠 visibility——visibility: hidden
-     會保留版面，七個欄位被擠進 5.5rem 的窄帶後高度暴增，
-     反而把整列撐得比展開前還高（實測 836 → 1422）。
-     用和手機同一套 0fr，順便有過場。 */
   .shut .body {
-    grid-template-rows: 0fr;
     opacity: 0;
     pointer-events: none;
     transition:
@@ -190,10 +180,11 @@
       opacity 240ms ease;
   }
 
-  .open .body,
-  .panel:not(.shut) .body {
+  .open .body {
     opacity: 1;
-    transition: opacity 400ms ease 260ms;
+    transition:
+      grid-template-rows 720ms cubic-bezier(0.65, 0, 0.35, 1),
+      opacity 400ms ease 260ms;
   }
 }
 
