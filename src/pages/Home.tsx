@@ -1,5 +1,4 @@
 import { Calendar } from 'lucide-react'
-import ChairmanMessage from '../components/ChairmanMessage.tsx'
 import ContactSwitch from '../components/ContactSwitch.tsx'
 import FocusStack from '../components/FocusStack.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
@@ -125,11 +124,12 @@ export default function Home() {
         <HeroCarousel />
       </HeroVideo>
 
-      {/* 消息、研發重點卡片、四格數字、董事長談話四塊。
+      {/* 消息、研發重點卡片、四格數字三塊。
           多個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。
 
-          DOM 順序＝窄螢幕的視覺順序：消息 → 卡片 → 四格數字 → 董事長談話。
-          1024 以上第一列是「消息｜卡片」兩欄，四格數字與董事長談話滿版排在下方。 */}
+          DOM 順序＝窄螢幕的視覺順序：消息 → 卡片 → 四格數字。
+          1024 以上第一列是「消息｜卡片」兩欄，四格數字滿版排在下方。
+          （董事長談話原本在這裡，依指示移到 ABOUT 頁，首頁不再有。） */}
       <Section tone="translucent">
         <div className={styles.newsFocus}>
           <div className={`${styles.newsBlock} ${styles.reveal}`}>
@@ -201,11 +201,6 @@ export default function Home() {
           <div className={styles.statsBlock}>
             <StatCounters />
           </div>
-
-          <ChairmanMessage
-            className={`${styles.chairmanSlot} ${styles.reveal}`}
-            headingId="chairman-heading"
-          />
         </div>
       </Section>
 

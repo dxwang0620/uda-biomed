@@ -1,20 +1,21 @@
-/* 董事長談話。首頁與 ABOUT 共用。
+/* 董事長談話。目前只用在 ABOUT。
 
    版型參考 index_img/chairman_message_page_mockup_classic.html：
    眉標 → 大字引言 ＋ 短橫線 → 內文 ＋ 肖像 → 署名。
 
-   兩種外觀（由 tone 決定）：
-   - glass：半透明白玻璃，用在首頁——那一區疊在背景影片上，卡片要透得出影片。
-   - solid：深藍實底，用在 ABOUT——那頁沒有影片，半透明白疊在白底上等於
-     看不見卡片邊界。實底同時把這一區從前面的白／淺灰區塊區隔出來。
+   深藍實底、白字。ABOUT 沒有背景影片，半透明白疊在白底上等於看不見卡片邊界；
+   實底同時把這一區從前面的白／淺灰區塊區隔出來。
 
-   兩種外觀的文字顏色不同，所以卡片內所有前景色都走 --ink 系列的變數，
-   規則本身只寫一次。 */
+   （原本另有一套半透明玻璃的外觀給首頁用，首頁那份依指示移除後就沒有使用者了，
+   一併刪掉，不留沒人跑過的分支。） */
 
 .card {
-  --ink: var(--color-text-on-glass);
-  --ink-muted: rgba(5, 16, 31, 0.72);
-  --hairline: rgba(255, 255, 255, calc(var(--glass) + 0.15));
+  /* 卡片內所有前景色都走這三個變數，規則本身只寫一次 */
+  --ink: var(--color-on-navy);
+  --ink-muted: var(--color-on-navy-muted);
+  --hairline: var(--color-on-navy-border);
+  /* 沿用首頁玻璃卡的透明度尺標，卡片內幾條線還在用它換算 */
+  --glass: 0.25;
 
   display: flex;
   flex-direction: column;
@@ -24,46 +25,13 @@
   padding: var(--space-3);
   border-radius: 16px;
   color: var(--ink);
+  /* 白字 on --color-navy 是 12.94:1 */
+  background: var(--color-navy);
+  box-shadow: 0 8px 32px rgba(0, 24, 56, 0.18);
   /* 肖像是絕對定位的圖層，需要定位基準與獨立的層級 */
   position: relative;
   isolation: isolate;
   overflow: hidden;
-}
-
-/* 首頁：半透明白玻璃。--glass 與首頁其他卡片同一個值，
-   手機不做 backdrop-filter 的理由見 docs/content-home.md。 */
-.glass {
-  --glass: 0.25;
-
-  background: rgba(255, 255, 255, var(--glass));
-  border: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.1));
-  box-shadow: 0 8px 32px rgba(0, 24, 56, 0.18);
-}
-
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .glass {
-    -webkit-backdrop-filter: blur(4px) saturate(1.35);
-    backdrop-filter: blur(4px) saturate(1.35);
-  }
-}
-
-@media (max-width: 1023px), (hover: none) {
-  .glass {
-    --glass: 0.55;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-}
-
-/* ABOUT：深藍實底、白字。白字 on --color-navy 是 12.94:1。 */
-.solid {
-  --glass: 0.25;
-  --ink: var(--color-on-navy);
-  --ink-muted: var(--color-on-navy-muted);
-  --hairline: var(--color-on-navy-border);
-
-  background: var(--color-navy);
-  box-shadow: 0 8px 32px rgba(0, 24, 56, 0.18);
 }
 
 
@@ -196,7 +164,14 @@
 
 
 @media (min-width: 1024px) {
-  /* 貼在卡片右半，滿高。z-index 0 搭配卡片的 isolation，
+  /* 中間區域加高（指定），同時給肖像足夠的高度不被上下裁：
+     38rem＝608，扣掉肖像上緣的 6.5rem 之後是 504，
+     剛好等於 42% 寬（595）除以原圖比例 1.19。 */
+  .card {
+    min-height: 38rem;
+  }
+
+  /* 貼在卡片右半。z-index 0 搭配卡片的 isolation，
      文字與眉標各自拉到 1，否則絕對定位的圖層會蓋在靜態文字之上。 */
   .portrait {
     position: absolute;
@@ -210,7 +185,15 @@
        （引言換行時會長高），不會更矮。 */
     inset: 6.5rem 0 0 auto;
     z-index: 0;
-    width: 52%;
+    /* 42% 是由「不裁切」反推的。肖像框若比原圖（比例 1.19）寬，
+       object-fit: cover 會依寬度放大、上下對裁——實測 52% 寬時框是
+       736×437（比例 1.68），上下各裁掉約 21%，人物的頭髮就在那一段
+       （回報「頭髮被切到」）。
+
+       卡片高度配 38rem 時，42% 讓框變成 595×504（比例 1.18），
+       與原圖幾乎相同，上下都不裁。兩個值要一起改：卡片每高 1px，
+       肖像可以多 0.07% 寬。 */
+    width: 42%;
     margin-top: 0;
     aspect-ratio: auto;
     border-radius: 0;

@@ -243,29 +243,6 @@
   flex-direction: column;
 }
 
-/* 董事長談話這一塊要 height: auto，覆寫掉 .card 的 height: 100%。
-
-   .card 的 height: 100% 是給「同一列並排的兩張卡要等高」用的（消息｜研發卡片）。
-   董事長談話自己獨佔一列，沒有要跟誰對齊，而它又帶了 192px 的 margin-top：
-   百分比高度對著 auto 的列解析、列高又包含那個 margin，Chrome 算出來是 731px，
-   而內容只有 513px——多出來的 218px 就是卡片底部那格空白，而且卡片還會
-   溢出 Section 底部 96px，把區塊之間的間距吃掉。 */
-.newsFocus > .chairmanSlot {
-  height: auto;
-}
-
-/* 除了第一塊，每一塊都自己帶上緣間距。用 margin 而不是 row-gap，
-   是因為 order 換序之後 row-gap 會落在不預期的位置。
-
-   值是 2 倍的 Section 內距——這幾塊原本分屬不同 Section，相鄰時上下內距會相加，
-   合併成一個容器後少了一份，要自己補回來。Section 的窄螢幕內距改成 3rem，
-   這裡跟著改成 6rem。 */
-.focusGroup,
-.statsBlock,
-.newsFocus > .chairmanSlot {
-  margin-top: calc(var(--space-6) * 2);
-}
-
 
 @media (min-width: 1024px) {
   .newsFocus {
@@ -303,12 +280,6 @@
   .statsBlock {
     grid-column: 1 / -1;
     grid-row: 2;
-    margin-top: calc(var(--space-12) * 2);
-  }
-
-  .newsFocus > .chairmanSlot {
-    grid-column: 1 / -1;
-    grid-row: 3;
     margin-top: calc(var(--space-12) * 2);
   }
 }
@@ -554,11 +525,6 @@
       animation: reveal linear both;
       animation-timeline: view();
       animation-range: entry 5% cover 30%;
-    }
-
-    /* 右邊那塊晚一點進場，兩塊才不會像同一個東西 */
-    .chairmanSlot.reveal {
-      animation-range: entry 5% cover 42%;
     }
   }
 }

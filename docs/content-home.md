@@ -727,29 +727,13 @@ transparent。`prefers-reduced-motion: reduce` 時移除 transition。
 箭頭展開時轉 180 度。`prefers-reduced-motion: reduce` 時三者的
 transition 全部移除。
 
-### 抽成共用元件（首頁 ＋ ABOUT）
+### 已移出首頁
 
-`src/components/ChairmanMessage.tsx`，首頁與 ABOUT 共用同一份內容
-（2026-09-06 依指示加到 ABOUT 最下層）。抽成元件而不是複製一份：
-談話全文是同一份草稿，複製會變成兩份各自漂移。
+董事長談話**已依指示從首頁移除**（2026-09-06），改放在 ABOUT 頁最下層，
+細節見 `docs/content-about.md`。這一節以下關於內容、肖像與署名的說明仍然適用，
+只是實際出現的位置換了。
 
-兩種外觀由 `tone` 決定：
-
-| tone | 用在 | 樣子 | 理由 |
-| ---- | ---- | ---- | ---- |
-| `glass` | 首頁 | 25% 白玻璃 ＋ backdrop-filter | 那一區疊在背景影片上，卡片要透得出影片 |
-| `solid` | ABOUT | `--color-navy` 實底、白字 | 那頁沒有影片，半透明白疊在白底上等於看不見卡片邊界 |
-
-卡片內所有前景色都走 `--ink` / `--ink-muted` / `--hairline` 變數，
-規則只寫一次，兩種外觀各自覆寫那三個值。白字 on navy 是 12.94:1。
-
-`headingId` 是必要的 prop：兩頁各自的 `h2` id 不能撞名，
-展開鈕的 `aria-controls` 也由它推導。
-
-> 搬移時 `.newsFocus > .chairman` 這幾條**留在 Home**（那是 grid 定位，
-> 屬於版面不屬於元件），改名成 `.chairmanSlot` 由使用端傳入 `className`。
-> 驗證方式是搬完後量首頁那張卡：底色 `rgba(255,255,255,0.25)`、
-> 字色 `#05101f`、grid 第 3 列、上緣 192px、`blur(4px)`，與搬移前一致。
+首頁 `.newsFocus` 因此剩三塊：消息、研發重點卡片、四格數字。
 
 ### 談話內容 —— 全文 `[草稿]`、署名與肖像 `[已提供]`
 

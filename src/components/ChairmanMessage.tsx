@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react'
 import styles from './ChairmanMessage.module.css'
 
 /**
- * 董事長談話。首頁與 ABOUT 共用同一份內容。
+ * 董事長談話。目前只用在 ABOUT 頁最下層。
  *
  * 版型參考 `index_img/chairman_message_page_mockup_classic.html`：
  * 眉標 → 大字引言 ＋ 短橫線 → 內文 ＋ 肖像 → 署名。
@@ -16,11 +16,9 @@ import styles from './ChairmanMessage.module.css'
  * 成果、數據、時程、獎項或合作對象。配上真實肖像與署名之後，這段話等於掛在
  * 本人名下，上線前需要本人或客戶確認。
  *
- * 抽成元件而不是在兩頁各放一份：內容是同一份草稿，複製會變成兩份各自漂移。
+ * 原本首頁也有一份，依指示移除；抽成元件的形式保留下來，
+ * 之後若要再放到別頁不必再拆一次。
  */
-
-/** 卡片外觀。glass 給首頁（疊在背景影片上），solid 給 ABOUT（沒有影片的頁面）。 */
-type Tone = 'glass' | 'solid'
 
 const QUOTE = 'Patience is not the opposite of urgency.'
 
@@ -31,15 +29,13 @@ const MESSAGE = [
 ]
 
 type Props = {
-  tone?: Tone
-  /** 讓使用端安排版面位置（首頁靠它在 grid 裡定位） */
+  /** 讓使用端安排版面位置 */
   className?: string
   /** 標題的 id，供 aria-labelledby 用。同一頁只會出現一次，但兩頁不能撞名 */
   headingId?: string
 }
 
 export default function ChairmanMessage({
-  tone = 'glass',
   className,
   headingId = 'chairman-heading',
 }: Props) {
@@ -48,13 +44,12 @@ export default function ChairmanMessage({
 
   return (
     <blockquote
-      className={[styles.card, styles[tone], className ?? ''].filter(Boolean).join(' ')}
+      className={[styles.card, className ?? ''].filter(Boolean).join(' ')}
     >
       {/* 肖像。照片來自 index_img/message/，佔卡片右半（指定），左緣淡出。
 
-          用 mask 而不是疊一層漸層色：glass 外觀是半透明玻璃疊在背景影片上，
-          照片左邊那一片是「玻璃 ＋ 影片」，色票漸層永遠接不上那個底。
-          遮罩讓照片自己淡到全透明，露出的就是旁邊同一片底，兩種外觀都成立。 */}
+          用 mask 而不是疊一層漸層色：遮罩讓照片自己淡到全透明，露出的就是
+          旁邊同一片底，不必假設那個底是什麼顏色。 */}
       <picture className={styles.portrait}>
         <source
           srcSet={`${import.meta.env.BASE_URL}media/chairman.webp`}
@@ -73,9 +68,7 @@ export default function ChairmanMessage({
       {/* 示意檔把標題當成小眉標，大字引言才是視覺主體。
           但語意上這仍是本區塊的標題，所以維持 h2，只是樣式收小。
 
-          眉標與引言整組放進深色區塊，是為了讓引言能用白字：glass 外觀是
-          25% 白疊在影片上，影片亮的時候會合成成純白，白字直接消失（1.00:1）。
-          深色底不透明才撐得住。 */}
+          眉標與引言整組放進深色區塊，是設計稿的結構。 */}
       <div className={styles.chairmanHead}>
         <h2 id={headingId} className={styles.chairmanEyebrow}>
           Message from the Chairman

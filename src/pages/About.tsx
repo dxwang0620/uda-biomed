@@ -179,13 +179,11 @@ export default function About() {
         </div>
       </Section>
 
-      {/* 董事長談話，與首頁同一份內容（指定加在最下層）。
-          這一頁沒有背景影片，所以用 solid 外觀：半透明白疊在白底上等於
-          看不見卡片邊界，深藍實底同時把這一區從前面的白／淺灰區塊區隔出來。
-
-          標題 id 與首頁不同，兩頁各自獨立。 */}
+      {/* 董事長談話（指定加在最下層；首頁那份已依指示移除）。
+          深藍實底：這一頁沒有背景影片，半透明白疊在白底上等於看不見卡片邊界，
+          實底同時把這一區從前面的白／淺灰區塊區隔出來。 */}
       <Section tone="tint">
-        <ChairmanMessage tone="solid" headingId="about-chairman-heading" />
+        <ChairmanMessage headingId="about-chairman-heading" />
       </Section>
 
       <CtaBand
