@@ -432,19 +432,24 @@ Chrome 卡死，已改用 `--view-w`。代價是 Windows 上寬度小於 1232px 
   and final product form are disclosed progressively in line with R&D and
   intellectual-property strategy.
 
-三張卡：
-
-| 卡片 | 內文 |
-| --- | --- |
-| Scientific Foundation | Builds testable research questions from established cancer biology and detection science. |
-| Validated | Accumulates evidence through reproducibility, stability, interference assessment and analytical performance. |
-| Translatable | Connects IP, co-development and industry collaboration according to R&D maturity. |
-
-浮動標籤（參考網站疊在插圖上）：
-
-- Interference Control — Assessing background variation and potential interference
-- Recognition Interface — Building measurable and comparable recognition conditions
-- Translation & IP — Connecting IP, co-development and industry collaboration
+> **版面**：這一段不再自成一個 Section。依指示搬到四格數字上方，
+> 與最新消息／三張研發卡同一個容器內，桌機橫跨兩欄。
+>
+> **已刪除**（依指示整組移除，抄錄留存於此，之後要復原可直接取用）：
+>
+> 三張卡：
+>
+> | 卡片 | 內文 |
+> | --- | --- |
+> | Scientific Foundation | Builds testable research questions from established cancer biology and detection science. |
+> | Validated | Accumulates evidence through reproducibility, stability, interference assessment and analytical performance. |
+> | Translatable | Connects IP, co-development and industry collaboration according to R&D maturity. |
+>
+> 浮動標籤（參考網站疊在插圖上）：
+>
+> - Interference Control — Assessing background variation and potential interference
+> - Recognition Interface — Building measurable and comparable recognition conditions
+> - Translation & IP — Connecting IP, co-development and industry collaboration
 
 ---
 

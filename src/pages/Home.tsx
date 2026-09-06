@@ -5,7 +5,6 @@ import HeroCarousel from '../components/HeroCarousel.tsx'
 import StatCounters from '../components/StatCounters.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
 import Button from '../components/ui/Button.tsx'
-import Card from '../components/ui/Card.tsx'
 import Placeholder from '../components/ui/Placeholder.tsx'
 import Section from '../components/ui/Section.tsx'
 import styles from './Home.module.css'
@@ -77,35 +76,7 @@ const NEWS = [
 
 
 
-const PLATFORM = [
-  {
-    title: 'Scientific Foundation',
-    body: 'Builds testable research questions from established cancer biology and detection science.',
-  },
-  {
-    title: 'Validated',
-    body: 'Accumulates evidence through reproducibility, stability, interference assessment and analytical performance.',
-  },
-  {
-    title: 'Translatable',
-    body: 'Connects IP, co-development and industry collaboration according to R&D maturity.',
-  },
-]
 
-const PLATFORM_PILLS = [
-  {
-    title: 'Interference Control',
-    body: 'Assessing background variation and potential interference',
-  },
-  {
-    title: 'Recognition Interface',
-    body: 'Building measurable and comparable recognition conditions',
-  },
-  {
-    title: 'Translation & IP',
-    body: 'Connecting IP, co-development and industry collaboration',
-  },
-]
 
 const POSITIONING_TAGS = [
   'Cancer Detection Technology',
@@ -193,6 +164,29 @@ export default function Home() {
             <FocusStack />
           </div>
 
+          {/* 技術平台的標題與導言。依指示搬到四格數字上面；
+              原本那一段底下的三張卡（Scientific Foundation / Validated /
+              Translatable）與三格特性（Interference Control / Recognition
+              Interface / Translation & IP）依指示整組刪除。 */}
+          <div className={styles.platformIntro}>
+            {/* 參考影片只拍到「… verifiable technology platform」，
+                前半段是依上下文擬的草稿，見 docs/content-home.md */}
+            <h2 id="platform-heading" className={styles.sectionTitle}>
+              Building a verifiable technology platform
+            </h2>
+            <p className={styles.lede}>
+              UDA Biochip Technology integrates molecular recognition, material
+              interfaces, biosensing, microscale engineering, signal transduction
+              and data analysis as a key platform for life-signal research and
+              cancer-detection technology. Our focus is not only on acquiring
+              signals, but also on whether they can be recognized, compared,
+              validated and progressively translated into results with application
+              potential. Core designs, material structures, recognition mechanisms
+              and final product form are disclosed progressively in line with
+              R&amp;D and intellectual-property strategy.
+            </p>
+          </div>
+
           {/* 數字統計。刻意不放標題與出處說明（指定），所以沒有可指向的標題，
               改用 aria-label 說明它是什麼。
               ⚠️ 後兩個數字是佔位值，見 StatCounters 內的說明。
@@ -236,47 +230,6 @@ export default function Home() {
             Learn more
           </Button>
         </p>
-      </Section>
-
-      <Section tone="translucent" labelledBy="platform-heading">
-        <div className={styles.intro}>
-        {/* 參考影片只拍到「… verifiable technology platform」，
-            前半段是依上下文擬的草稿，見 docs/content-home.md */}
-        <h2 id="platform-heading" className={styles.sectionTitle}>
-          Building a verifiable technology platform
-        </h2>
-        <p className={styles.lede}>
-          UDA Biochip Technology integrates molecular recognition, material
-          interfaces, biosensing, microscale engineering, signal transduction and
-          data analysis as a key platform for life-signal research and
-          cancer-detection technology. Our focus is not only on acquiring signals,
-          but also on whether they can be recognized, compared, validated and
-          progressively translated into results with application potential. Core
-          designs, material structures, recognition mechanisms and final product
-          form are disclosed progressively in line with R&amp;D and
-          intellectual-property strategy.
-        </p>
-        </div>
-
-        <ul role="list" className={styles.pills}>
-          {PLATFORM_PILLS.map(({ title, body }) => (
-            <li key={title} className={styles.pill}>
-              <strong className={styles.pillTitle}>{title}</strong>
-              <span className={styles.pillBody}>{body}</span>
-            </li>
-          ))}
-        </ul>
-
-        <ul role="list" className={styles.cards}>
-          {PLATFORM.map(({ title, body }) => (
-            <li key={title}>
-              <Card className={styles.card}>
-                <h3 className={styles.cardTitle}>{title}</h3>
-                <p className={styles.cardBody}>{body}</p>
-              </Card>
-            </li>
-          ))}
-        </ul>
       </Section>
 
       <Section tone="translucent" labelledBy="responsibility-heading">
