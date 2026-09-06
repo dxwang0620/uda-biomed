@@ -490,8 +490,27 @@ Cross-Disciplinary R&D／Intellectual Property／Industry Collaboration
   governance and respect for life, advancing R&D value alongside social
   responsibility.
 
-底下的子項（Science, Data & Life、Scientific & Data Integrity 等）影片中讀不完整，
-仍為 `[待補]`。
+### 三張照片卡 `[需確認]`
+
+依指示把原本兩個 `<Placeholder>` 擴充成三張照片卡，標題用 **R&D Portfolio Snapshot**。
+
+- 卡片標題用參考網站列在這一段底下的子項：**Science / Data / Life**
+- 原本 `<Placeholder>` 內的說明文字依指示刪除（抄錄見下方「區塊六」）
+- 照片：`public/media/resp-1`～`resp-3`（800px 寬，jpg 49～96K、webp 32～86K）
+  - resp-1 ← `web_img/research/S__213983245.jpg`（研發部入口）
+  - resp-2 ← `web_img/technology/pic.jpg`（研發部／品質部／實驗區走廊）
+  - resp-3 ← `web_img/about/pic.jpg`（廠區外觀）
+- 遮罩由下往上，白字最差情況 11.4:1（照片該處為純白時），算法同其他遮罩
+
+> ⚠️ **標題與內容對不上，需要你決定。** 參考網站的 R&D Portfolio Snapshot
+> 底下是三個數字（見區塊六），不是 Science / Data / Life——後者是企業責任的子項。
+> 現在的做法是把兩者併在一起，因為數字我不抄。要照參考網站的結構做，
+> 請提供三個數字與各自的標籤，我把卡片內容換掉。
+>
+> ⚠️ resp-1／resp-2 的場景與上方最新消息的縮圖重複。現有素材只有六個辦公
+> 環境場景，五個已用在消息列上，避不開；有別的照片再換。
+
+其餘子項（Scientific & Data Integrity 等）影片中讀不完整，仍為 `[待補]`。
 
 > 頁面上的說明文字一律用英文——本站已確認只做英文，這些字會顯示給訪客看。
 
