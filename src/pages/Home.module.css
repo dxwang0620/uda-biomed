@@ -243,6 +243,24 @@
   flex-direction: column;
 }
 
+/* .cards 自帶 margin-top，而 .focusGroup 是 flex 項目、會建立 BFC，
+   margin 不會跟子元素合併，兩者會相加 */
+.focusGroup > .cards {
+  margin-top: 0;
+}
+
+/* 除了第一塊，每一塊都自己帶上緣間距。值是 2 倍的 Section 內距——
+   這幾塊原本分屬不同 Section，相鄰時上下內距會相加，合併成一個容器後
+   少了一份，要自己補回來。 */
+.focusGroup,
+.statsBlock {
+  margin-top: calc(var(--space-6) * 2);
+}
+
+.newsFocus > .note {
+  margin-top: var(--space-6);
+}
+
 
 @media (min-width: 1024px) {
   .newsFocus {
