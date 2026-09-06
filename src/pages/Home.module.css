@@ -137,6 +137,14 @@
   margin: var(--space-4) 0 0;
 }
 
+/* Button 預設 white-space: nowrap。技術平台那顆的字很長（桌機量到 418px），
+   375px 的可用寬只有 343px，不放行折行會撐出橫向捲軸。
+   特異性 0,1,1 高於 Button 自己的 0,1,0，跨 module 的先後順序不影響。 */
+.moreRow a {
+  white-space: normal;
+  text-align: center;
+}
+
 .tagRow {
   display: flex;
   flex-wrap: wrap;

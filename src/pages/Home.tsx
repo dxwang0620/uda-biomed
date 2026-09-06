@@ -185,6 +185,14 @@ export default function Home() {
               and final product form are disclosed progressively in line with
               R&amp;D and intellectual-property strategy.
             </p>
+
+            {/* 與核心定位那顆同一個變體（橘底、hover 轉深藍）。
+                指向 TECHNOLOGY——這一段講的就是技術平台。 */}
+            <p className={styles.moreRow}>
+              <Button to="/technology" variant="accent">
+                Global Disease Market Scenario Platform
+              </Button>
+            </p>
           </div>
 
           {/* 數字統計。刻意不放標題與出處說明（指定），所以沒有可指向的標題，

@@ -432,6 +432,10 @@ Chrome 卡死，已改用 `--view-w`。代價是 Windows 上寬度小於 1232px 
   and final product form are disclosed progressively in line with R&D and
   intellectual-property strategy.
 
+- **按鈕** `[待確認連結]`：Global Disease Market Scenario Platform → `/technology`
+  > 原話寫成 “Screnario”，判定為 Scenario 的筆誤，已用正確拼法。
+  > 連結目標沒有指定，先接 TECHNOLOGY（這一段講的就是技術平台），要改再說。
+
 > **版面**：這一段不再自成一個 Section。依指示搬到四格數字上方，
 > 與最新消息／三張研發卡同一個容器內，桌機橫跨兩欄。
 >
