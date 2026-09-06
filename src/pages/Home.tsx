@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Calendar, ChevronDown } from 'lucide-react'
+import { Calendar } from 'lucide-react'
+import ChairmanMessage from '../components/ChairmanMessage.tsx'
 import ContactSwitch from '../components/ContactSwitch.tsx'
 import FocusStack from '../components/FocusStack.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
@@ -75,22 +75,6 @@ const NEWS = [
   },
 ]
 
-/* 董事長談話草稿。版型參考 index_img/chairman_message_page_mockup_classic.html：
-   眉標 → 大字引言 + 短橫線 → 內文 + 直式肖像欄 → 簽名區。
-   示意檔是整頁版型，麵包屑、中/EN 切換、底部連結列不適用（那些頁面不存在）。
-
-   示意檔裡的營收、成長率、毛利率、員工數、人名都是通用模板的填充值，
-   一個都沒有沿用——那些正是 CLAUDE.md 禁止編造的東西。
-
-   這一段是理念陳述而非事實主張，所以可以擬，但刻意不含任何成果、數據、
-   時程、獎項或合作對象。署名待你提供，不自行填人名。 */
-const CHAIRMAN_QUOTE = 'Patience is not the opposite of urgency.'
-
-const CHAIRMAN_MESSAGE = [
-  'Our work begins with a simple conviction: that the earliest changes of disease are written in the molecules of the body, long before anything becomes visible. Reading them is difficult, and we do not pretend otherwise.',
-  'What we can commit to is discipline. Every question we pursue has to be answerable. Every method we build has to be reproducible by someone other than ourselves. Every result we report has to survive the scrutiny of clinicians who see patients rather than data.',
-  'Detection research rewards those willing to build carefully and verify repeatedly — and that is the company we intend to be, for our team and for anyone who shares the goal.',
-]
 
 
 const PLATFORM = [
@@ -134,7 +118,6 @@ const POSITIONING_TAGS = [
 
 export default function Home() {
   /* 董事長談話預設收合，點藍色區塊下緣的箭頭展開。 */
-  const [messageOpen, setMessageOpen] = useState(false)
 
   return (
     <>
@@ -219,97 +202,10 @@ export default function Home() {
             <StatCounters />
           </div>
 
-          <blockquote className={`${styles.card} ${styles.chairman} ${styles.reveal}`}>
-            {/* 肖像。照片來自 index_img/message/，佔卡片右半（指定），左緣用
-                遮罩淡出。
-
-                用 mask 而不是疊一層漸層色：這張卡是半透明玻璃疊在背景影片上，
-                左側是「玻璃 ＋ 影片」，用色票漸層永遠接不上那個底；
-                遮罩讓照片本身淡到全透明，露出的就是旁邊同一片玻璃，才真的無縫。 */}
-            <picture className={styles.portrait}>
-              <source
-                srcSet={`${import.meta.env.BASE_URL}media/chairman.webp`}
-                type="image/webp"
-              />
-              <img
-                src={`${import.meta.env.BASE_URL}media/chairman.jpg`}
-                alt="UDA BIOMED 董事長黎恭楷於辦公室，背後為 UDA BIOMED 招牌。"
-                width={900}
-                height={754}
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-
-            {/* 示意檔把標題當成小眉標，大字引言才是視覺主體。
-                但語意上這仍是本區塊的標題，所以維持 h2，只是樣式收小。
-
-                眉標與引言整組放進深色區塊，是為了讓引言能用白字：
-                卡片是 25% 白疊在影片上，影片亮的時候會合成成純白，
-                白字直接消失（1.00:1）。深色底不透明才撐得住。 */}
-            <div className={styles.chairmanHead}>
-              <h2 id="chairman-heading" className={styles.chairmanEyebrow}>
-                Message from the Chairman
-              </h2>
-              <p className={styles.pullQuote}>{CHAIRMAN_QUOTE}</p>
-              <span className={styles.quoteRule} aria-hidden="true" />
-
-              {/* 展開鈕跨在藍色區塊的下緣上。這是 disclosure 模式：
-                  aria-expanded 說明狀態、aria-controls 指向被控制的區塊，
-                  只有箭頭沒有文字，所以另外給一個唯讀的名稱。 */}
-              <button
-                type="button"
-                className={styles.toggle}
-                aria-expanded={messageOpen}
-                aria-controls="chairman-message"
-                onClick={() => setMessageOpen((v) => !v)}
-              >
-                <span className="visually-hidden">
-                  {messageOpen ? 'Hide the full message' : 'Read the full message'}
-                </span>
-                <ChevronDown
-                  size={20}
-                  strokeWidth={2.5}
-                  aria-hidden="true"
-                  className={styles.chevron}
-                />
-              </button>
-            </div>
-
-            {/* grid-template-rows 由 0fr 轉 1fr，是能對「高度 auto」做轉場的
-                做法；用 max-height 猜一個值會在內容長度改變時卡頓或截斷。
-                內層必須 overflow:hidden 且 min-height:0，格線列才收得起來。 */}
-            <div
-              id="chairman-message"
-              className={`${styles.collapse} ${messageOpen ? styles.collapseOpen : ''}`}
-            >
-              <div className={styles.collapseInner}>
-
-            <div className={styles.chairmanBody}>
-              <div className={styles.chairmanText}>
-                {CHAIRMAN_MESSAGE.map((para) => (
-                  <p key={para.slice(0, 24)} className={styles.quote}>
-                    {para}
-                  </p>
-                ))}
-              </div>
-
-
-            </div>
-
-            {/* 署名。名字取自 index_img/message/S__215490575_0.jpg，
-                那張圖只是排版好的名字，沒有手寫筆跡，所以直接用文字排——
-                可縮放、可選取、讀屏讀得到，不必再多一個圖檔。 */}
-            <footer className={styles.signature}>
-              <span className={styles.signatureLabel}>Signed</span>
-              <span className={styles.signatureName}>
-                <span lang="zh-Hant">黎恭楷</span>
-                <span className={styles.signatureLatin}>Kung-kai Lee</span>
-              </span>
-            </footer>
-              </div>
-            </div>
-          </blockquote>
+          <ChairmanMessage
+            className={`${styles.chairmanSlot} ${styles.reveal}`}
+            headingId="chairman-heading"
+          />
         </div>
       </Section>
 

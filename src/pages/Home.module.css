@@ -250,7 +250,7 @@
    百分比高度對著 auto 的列解析、列高又包含那個 margin，Chrome 算出來是 731px，
    而內容只有 513px——多出來的 218px 就是卡片底部那格空白，而且卡片還會
    溢出 Section 底部 96px，把區塊之間的間距吃掉。 */
-.newsFocus > .chairman {
+.newsFocus > .chairmanSlot {
   height: auto;
 }
 
@@ -262,7 +262,7 @@
    這裡跟著改成 6rem。 */
 .focusGroup,
 .statsBlock,
-.newsFocus > .chairman {
+.newsFocus > .chairmanSlot {
   margin-top: calc(var(--space-6) * 2);
 }
 
@@ -306,7 +306,7 @@
     margin-top: calc(var(--space-12) * 2);
   }
 
-  .newsFocus > .chairman {
+  .newsFocus > .chairmanSlot {
     grid-column: 1 / -1;
     grid-row: 3;
     margin-top: calc(var(--space-12) * 2);
@@ -542,198 +542,6 @@
 }
 
 
-/* ---------- 董事長 ----------
-   版型參考 index_img/chairman_message_page_mockup_classic.html：
-   眉標 → 大字引言 + 短橫線 → 內文 + 直式肖像欄 → 簽名區。
-   示意檔是整頁尺寸，這裡壓縮成卡片：肖像從 200px 收到 8rem，
-   麵包屑與底部連結列不做（那些頁面不存在）。 */
-
-.chairman {
-  gap: 0;
-  margin: 0;
-  /* 肖像是絕對定位的圖層，需要定位基準與獨立的層級 */
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.chairman > .chairmanHead,
-.chairman > .collapse {
-  position: relative;
-  z-index: 1;
-}
-
-/* 深色區塊，滿到卡片邊緣。負 margin 抵掉 .card 的 padding。
-   存在的理由是引言要用白字：卡片本身是 25% 白疊影片，影片亮時
-   合成成 #ffffff，白字對比 1.00:1 直接消失。實心底不透明，
-   白字 on --color-primary 是 12.21:1。數值見 docs/content-home.md。 */
-.chairmanHead {
-  /* 展開鈕要跨在下緣上，所以這一層當定位基準 */
-  position: relative;
-  width: calc(100% + var(--space-3) * 2);
-  margin: calc(var(--space-3) * -1) calc(var(--space-3) * -1) 0;
-  padding: var(--space-3);
-  /* 卡片外圓角 16px、邊框 1px，內側要 15px 才嵌得準（負 margin 只抵掉
-     padding，邊框仍在，所以這一塊是貼齊邊框內緣，寬度比卡片少 2px） */
-  border-radius: 15px 15px 0 0;
-  background: var(--color-primary);
-}
-
-/* 示意檔把標題當小眉標，大字引言才是視覺主體 */
-.chairmanEyebrow {
-  font-family: var(--font-latin);
-  font-size: var(--text-eyebrow);
-  font-weight: 700;
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
-  color: var(--color-white);
-  opacity: 0.8;
-}
-
-.pullQuote {
-  margin-top: var(--space-2);
-  max-width: 30ch;
-  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
-  font-weight: 600;
-  line-height: 1.45;
-  color: var(--color-white);
-}
-
-/* 示意檔的 40x2 短橫線。在深色底上要反白，不能再用主色。 */
-.quoteRule {
-  display: block;
-  width: 40px;
-  height: 2px;
-  margin-top: var(--space-2);
-  background: var(--color-white);
-  opacity: 0.55;
-}
-
-/* 內文在左、肖像欄在右。卡片本身不寬，窄一點就把肖像收到下面。 */
-.chairmanBody {
-  display: grid;
-  gap: var(--space-3);
-  width: 100%;
-  margin-top: var(--space-3);
-  /* 內文與底下簽名區的分隔線之間留白。堆疊時這裡的底是肖像欄，
-     沒有它會直接貼著線。 */
-  padding-bottom: var(--space-2);
-}
-
-@media (min-width: 1024px) {
-  .chairmanBody {
-    /* 右半是照片，文字收在左半，不要壓到人物身上 */
-    max-width: 52%;
-  }
-}
-
-.chairmanText {
-  display: grid;
-  gap: var(--space-2);
-  min-width: 0;
-}
-
-.quote {
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  color: var(--color-text-on-glass);
-}
-
-/* 堆疊時（480px 以下）肖像會吃滿整欄寬，3:4 一乘就變成 293x391 的大方塊，
-   把卡片拉到 1340px 高。示意檔裡它本來就只是側欄的小圖，所以限寬。 */
-/* 肖像。佔卡片右半（指定），左緣用遮罩淡出，卡片上不再有 Chairman / UDA BIOMED
-   那兩行字（指定移除）。
-
-   **用 mask 不用漸層色。** 這張卡是半透明玻璃疊在背景影片上，照片左邊那一片是
-   「玻璃 ＋ 影片」；疊一層色票漸層永遠接不上那個底，交界會顯出來。遮罩是讓照片
-   自己淡到全透明，露出的就是旁邊同一片玻璃，結構上無縫。
-   （研發卡片是實色底，所以那邊用漸層色就夠。）
-
-   窄螢幕沒有「右半部」可言，照片改成排在文字下方、由上往下淡入。 */
-.portrait {
-  display: block;
-  width: 100%;
-  margin-top: var(--space-3);
-  aspect-ratio: 4 / 3;
-  border-radius: var(--radius);
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 38%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 38%);
-}
-
-.portrait img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* 原圖是橫幅、人物偏左，往左上取景才保得住人物與桌上的名牌 */
-  object-position: 34% 22%;
-}
-
-@media (min-width: 1024px) {
-  /* 貼在卡片右半，滿高。z-index 0 搭配卡片的 isolation，
-     文字與眉標各自拉到 1，否則絕對定位的圖層會蓋在靜態文字之上。 */
-  .portrait {
-    position: absolute;
-    /* 從眉標帶下方開始，不是從卡片頂端。
-
-       滿高（inset: 0）時照片會被卡片頂端那條深藍眉標帶蓋住上緣——那條帶子
-       實測 130px 高，而人物的頭頂大約在 57px 處，整顆頭都在帶子底下。
-
-       6.5rem（104px）比帶子矮一些是刻意的：讓帶子壓在照片上緣之上，
-       蓋掉那條硬邊，看到的只有帶子自己的下緣線。帶子只會比這個值更高
-       （引言換行時會長高），不會更矮。 */
-    inset: 6.5rem 0 0 auto;
-    z-index: 0;
-    width: 52%;
-    margin-top: 0;
-    aspect-ratio: auto;
-    border-radius: 0;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 46%);
-    mask-image: linear-gradient(to right, transparent 0%, #000 46%);
-  }
-}
-
-.signature {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-1);
-  width: 100%;
-  margin-top: auto;
-  padding-top: var(--space-3);
-  border-top: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.15));
-}
-
-/* 署名。中文名為主、拉丁拼寫降一階，跟 wordmark 的處理一致。 */
-.signatureName {
-  display: inline-flex;
-  align-items: baseline;
-  gap: var(--space-1);
-  font-size: 1.0625rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--color-text-on-glass);
-}
-
-.signatureLatin {
-  font-family: var(--font-latin);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  opacity: 0.8;
-}
-
-.signatureLabel {
-  font-family: var(--font-latin);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-on-glass);
-  opacity: 0.75;
-}
-
-
 /* ---------- 捲動進場 ---------- */
 
 /* 用原生的 animation-timeline: view()，不裝動畫函式庫。
@@ -749,7 +557,7 @@
     }
 
     /* 右邊那塊晚一點進場，兩塊才不會像同一個東西 */
-    .chairman.reveal {
+    .chairmanSlot.reveal {
       animation-range: entry 5% cover 42%;
     }
   }
@@ -764,111 +572,5 @@
   to {
     opacity: 1;
     transform: none;
-  }
-}
-
-
-/* ---------- 董事長談話：展開鈕與收合 ---------- */
-
-/* 圓鈕跨在藍色區塊的下緣上，一半在藍底、一半在卡片上。
-   白底深藍箭頭在兩種底色上都清楚（白 on --color-primary 是 12.21:1）。 */
-.toggle {
-  position: absolute;
-  right: var(--space-3);
-  /* -22px＝高度的一半，圓心正好落在藍色區塊的下緣線上 */
-  bottom: -22px;
-  display: grid;
-  place-items: center;
-  /* 44×44 是 CLAUDE.md 的觸控目標下限 */
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  color: var(--color-primary);
-  background: var(--color-white);
-  border: 0;
-  border-radius: 50%;
-  box-shadow: 0 2px 10px rgba(0, 24, 56, 0.28);
-  cursor: pointer;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease;
-}
-
-.toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 24, 56, 0.34);
-}
-
-.toggle:focus-visible {
-  outline: 3px solid var(--color-white);
-  outline-offset: 3px;
-}
-
-/* 箭頭本身轉 180 度表示已展開 */
-.chevron {
-  transition: transform 260ms cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-.toggle[aria-expanded='true'] .chevron {
-  transform: rotate(180deg);
-}
-
-/* 0fr → 1fr 是目前唯一能對「高度 auto」做轉場的穩定做法。
-   用 max-height 猜一個值，內容一長就會被截斷、或在收合時卡頓。 */
-.collapse {
-  display: grid;
-  grid-template-rows: 0fr;
-  width: 100%;
-  opacity: 0;
-  transition:
-    grid-template-rows 340ms cubic-bezier(0.32, 0.72, 0, 1),
-    opacity 220ms ease;
-}
-
-/* 這兩個屬性缺一不可：沒有 overflow 內容不會被裁，
-   沒有 min-height:0 格線列收不到 0。 */
-.collapseInner {
-  overflow: hidden;
-  min-height: 0;
-}
-
-.collapseOpen {
-  grid-template-rows: 1fr;
-  opacity: 1;
-  /* 展開時內容比較晚出現，收合時先淡出，兩邊的節奏才對 */
-  transition:
-    grid-template-rows 340ms cubic-bezier(0.32, 0.72, 0, 1),
-    opacity 260ms ease 120ms;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .toggle,
-  .chevron,
-  .collapse,
-  .collapseOpen {
-    transition: none;
-  }
-}
-
-
-/* 桌機不收合：兩欄並排時版面夠寬，藏起內容沒有意義，
-   收合反而讓右欄空掉一大塊。1024 是 .split 換成兩欄的同一個斷點。
-
-   用 CSS 而不是 JS 判斷寬度：matchMedia 的 change 事件在背景分頁不會派發，
-   純 CSS 沒有這個問題，且不必為了視窗大小多一份 state。
-
-   這一段必須放在 .collapseOpen 之後——兩者特異性相同，靠順序決勝，
-   收合狀態下才會由這裡覆寫。 */
-@media (min-width: 1024px) {
-  .toggle {
-    display: none;
-  }
-
-  .collapse,
-  .collapseOpen {
-    grid-template-rows: 1fr;
-    opacity: 1;
-    /* 桌機沒有展開這個動作，留著轉場只會在載入時閃一下 */
-    transition: none;
   }
 }
