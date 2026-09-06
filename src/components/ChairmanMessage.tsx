@@ -46,25 +46,6 @@ export default function ChairmanMessage({
     <blockquote
       className={[styles.card, className ?? ''].filter(Boolean).join(' ')}
     >
-      {/* 肖像。照片來自 index_img/message/，佔卡片右半（指定），左緣淡出。
-
-          用 mask 而不是疊一層漸層色：遮罩讓照片自己淡到全透明，露出的就是
-          旁邊同一片底，不必假設那個底是什麼顏色。 */}
-      <picture className={styles.portrait}>
-        <source
-          srcSet={`${import.meta.env.BASE_URL}media/chairman.webp`}
-          type="image/webp"
-        />
-        <img
-          src={`${import.meta.env.BASE_URL}media/chairman.jpg`}
-          alt="UDA BIOMED 董事長黎恭楷於辦公室，背後為 UDA BIOMED 招牌。"
-          width={900}
-          height={754}
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
-
       {/* 示意檔把標題當成小眉標，大字引言才是視覺主體。
           但語意上這仍是本區塊的標題，所以維持 h2，只是樣式收小。
 
@@ -115,6 +96,31 @@ export default function ChairmanMessage({
               ))}
             </div>
           </div>
+
+          {/* 肖像。照片來自 index_img/message/，桌機佔卡片右半（指定），
+              左緣淡出。
+
+              放在收合區裡面：窄螢幕收合時卡片只有眉標與引言，照片跟著
+              內文一起展開（指定）。桌機不收合，這一層永遠是開的，
+              改用絕對定位貼到卡片右半——所以 1024 以上要把 .collapseInner
+              的 overflow 放開，不然絕對定位的圖層會被裁掉。
+
+              用 mask 而不是疊一層漸層色：遮罩讓照片自己淡到全透明，
+              露出的就是旁邊同一片底，不必假設那個底是什麼顏色。 */}
+          <picture className={styles.portrait}>
+            <source
+              srcSet={`${import.meta.env.BASE_URL}media/chairman.webp`}
+              type="image/webp"
+            />
+            <img
+              src={`${import.meta.env.BASE_URL}media/chairman.jpg`}
+              alt="UDA BIOMED 董事長黎恭楷於辦公室，背後為 UDA BIOMED 招牌。"
+              width={900}
+              height={754}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
 
           {/* 署名。名字取自 index_img/message/S__215490575_0.jpg，
               那張圖只是排版好的名字、沒有手寫筆跡，所以直接用文字排——
