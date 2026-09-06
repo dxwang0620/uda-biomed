@@ -91,32 +91,21 @@ export default function FocusStack() {
     const p = vp.scrollLeft >= max - 1 ? 1 : raw
     el.style.setProperty('--p', String(p))
 
-    /* 圓點看的是「哪一張卡目前佔畫面最多」，不是捲動比例。
+    /* 圓點在「藍線走到它」的那一刻才亮，跟線用同一個依據。
 
-       兩者不一樣，因為卡片列右側留了下一張的邊角：第三張卡佔滿畫面時，
-       捲動比例其實只有七、八成，用比例判斷的話圓點要等捲到最底才會亮——
-       回報的「已經滑到第三頁，底下滑軌還沒到指定位置」就是這個落差。
+       先前用的是「哪一張卡目前佔畫面最多」，那是為了有露邊的版型：
+       第三張卡佔滿畫面時捲動比例只有七、八成，用比例判斷圓點會太晚亮。
+       改成一次只顯示一張之後，每張卡剛好落在捲動範圍的 0 / 50% / 100%，
+       那個補償不再需要——留著反而讓圓點在兩張卡的中點就先變色，
+       線還沒走到（回報「線還沒到圓點就變藍」）。
 
-       還沒開始滑（p 為 0）時維持 0 顆，三顆都是白的（指定）。 */
-    const track = vp.firstElementChild as HTMLElement | null
-    const left = vp.scrollLeft
-    const right = left + vp.clientWidth
-    let dominant = 0
-    let widest = -1
-    Array.from(track?.children ?? []).forEach((node, i) => {
-      const card = node as HTMLElement
-      /* offsetLeft 是相對於定位祖先（這裡一路到 body），不是相對於捲動容器。
-         扣掉卡片列自己的偏移才會跟 scrollLeft 同一個基準——
-         不扣的話三張卡的座標都比可視區大好幾百，永遠算成第一張。 */
-      const cardLeft = card.offsetLeft - (track?.offsetLeft ?? 0)
-      const visible =
-        Math.min(cardLeft + card.offsetWidth, right) - Math.max(cardLeft, left)
-      if (visible > widest) {
-        widest = visible
-        dominant = i
-      }
-    })
-    el.dataset.reached = String(p <= 0 ? 0 : dominant + 1)
+       還沒開始滑（p 為 0）時維持 0 顆，三顆都是白的（指定）。
+       1e-3 是浮點與次像素的緩衝，否則 p 停在 0.4999 時中間那顆不會亮。 */
+    const reached =
+      p <= 0
+        ? 0
+        : CARDS.filter((_, i) => p + 1e-3 >= i / (CARDS.length - 1)).length
+    el.dataset.reached = String(reached)
   }, [])
 
   /* 直接在 scroll 事件裡更新，不做 rAF 節流。
