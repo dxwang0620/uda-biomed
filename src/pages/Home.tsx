@@ -5,7 +5,6 @@ import HeroCarousel from '../components/HeroCarousel.tsx'
 import StatCounters from '../components/StatCounters.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
 import Button from '../components/ui/Button.tsx'
-import Placeholder from '../components/ui/Placeholder.tsx'
 import Section from '../components/ui/Section.tsx'
 import styles from './Home.module.css'
 
@@ -27,6 +26,37 @@ import styles from './Home.module.css'
 
    五張輪流用在六則消息上——`web_img` 裡另外兩張（S__215490582／583）
    與研發重點卡片的照片是同一張，同一頁重複出現不好看，所以沒有採用。 */
+/* R&D Portfolio Snapshot 的三格。
+ *
+ * ⚠️ **三段內文都是草稿，依指示先擬。** 三個項目名稱取自參考網站這一段的
+ * 免責聲明原句——它寫明那些數字是用來說明「research organization、technical
+ * planning、collaboration-discussion structure」——所以項目本身有依據，
+ * 但底下的敘述是我擬的。
+ *
+ * 刻意不含任何成果、數據、時程、臨床階段、論文、專利或合作對象：
+ * 那些是 CLAUDE.md 明訂不能編的。參考網站的三個數字（影片中看似 18／27／43）
+ * 一樣沒有採用。上線前需要你或客戶改寫確認。 */
+const SNAPSHOT = [
+  {
+    n: '01',
+    title: 'Research organization',
+    body: 'Research is organized around cancer detection, with molecular recognition, material interfaces and signal analysis run as parallel workstreams rather than a single linear pipeline.',
+    file: 'resp-1',
+  },
+  {
+    n: '02',
+    title: 'Technical planning',
+    body: 'Each workstream is planned in stages, from question definition through reproducibility and interference assessment, so that a method advances only when the previous stage holds.',
+    file: 'resp-2',
+  },
+  {
+    n: '03',
+    title: 'Collaboration structure',
+    body: 'Discussions with clinical, academic and industry groups are held at defined maturity points, keeping intellectual property and co-development terms aligned with what has been validated.',
+    file: 'resp-3',
+  },
+]
+
 const NEWS_THUMBS = [
   { file: 'news-1', alt: 'UDA BIOMED 辦公室入口通道，左側為會客區，前方指標牌標示各部門方向。' },
   { file: 'news-2', alt: 'UDA BIOMED 走廊，指標牌標示研發部、品質部與實驗區，右側為會議室。' },
@@ -253,19 +283,33 @@ export default function Home() {
           </p>
         </div>
 
-        <div className={styles.todos}>
-          {/* 依指示補到三格，每格塞一張配圖。文案維持原樣。 */}
-          <Placeholder title="R&D Portfolio Snapshot" image="resp-1">
-            Three headline figures with a disclaimer. The figures were not read
-            off a handheld recording; supply them, or drop this block.
-          </Placeholder>
-          <Placeholder title="Corporate Responsibility — sub-items" image="resp-2">
-            Sub-headings such as Science, Data &amp; Life sit under this section
-            in the reference but could not be read in full.
-          </Placeholder>
-          <Placeholder title="[待補：第三格標題]" image="resp-3">
-            [待補：說明文字]
-          </Placeholder>
+        <div className={styles.snapshot}>
+          <p className={styles.eyebrow}>R&amp;D PORTFOLIO SNAPSHOT</p>
+
+          <ul role="list" className={styles.snapCards}>
+            {SNAPSHOT.map(({ n, title, body, file }) => (
+              <li key={title} className={styles.snapCard}>
+                {/* 配圖是辦公環境照，與這一格的內容沒有對應關係，alt="" 當裝飾 */}
+                <picture className={styles.snapMedia}>
+                  <source
+                    srcSet={`${import.meta.env.BASE_URL}media/${file}.webp`}
+                    type="image/webp"
+                  />
+                  <img
+                    src={`${import.meta.env.BASE_URL}media/${file}.jpg`}
+                    alt=""
+                    width={800}
+                    height={450}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                <p className={styles.snapTag}>{n}</p>
+                <h3 className={styles.snapTitle}>{title}</h3>
+                <p className={styles.snapBody}>{body}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </Section>
 

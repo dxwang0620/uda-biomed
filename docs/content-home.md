@@ -490,25 +490,29 @@ Cross-Disciplinary R&D／Intellectual Property／Industry Collaboration
   governance and respect for life, advancing R&D value alongside social
   responsibility.
 
-### 三格 To add 方塊 `[待補]`
+### R&D Portfolio Snapshot 三格 `[草稿]`
 
-依指示補到三格，每格塞一張配圖。**樣式與文案維持原樣**——虛線框、To add 標籤、
-標題、說明文字都沒有動，只是 `<Placeholder>` 多了一個可選的 `image` 屬性。
+依指示把原本的 To add 方塊改成正式內容。**外觀維持原樣**——虛線框、圓角、小標籤、
+配圖位置都沒變，只是標籤從 `To add` 換成編號 `01／02／03`，內容換成文案。
 
 | 格 | 標題 | 配圖 | 來源 |
 | --- | --- | --- | --- |
-| 1 | R&D Portfolio Snapshot | `resp-1` | `web_img/research/S__213983245.jpg`（研發部入口） |
-| 2 | Corporate Responsibility — sub-items | `resp-2` | `web_img/technology/pic.jpg`（品質部／實驗區走廊） |
-| 3 | `[待補：第三格標題]` | `resp-3` | `web_img/about/pic.jpg`（廠區外觀） |
+| 01 | Research organization | `resp-1` | `web_img/research/S__213983245.jpg`（研發部入口） |
+| 02 | Technical planning | `resp-2` | `web_img/technology/pic.jpg`（品質部／實驗區走廊） |
+| 03 | Collaboration structure | `resp-3` | `web_img/about/pic.jpg`（廠區外觀） |
 
-照片 800px 寬（jpg 49～96K、webp 32～86K），`aspect-ratio: 16/9`、`object-fit: cover`。
-**配圖與各格內容沒有對應關係**，這幾格本身就是待補的佔位，所以 `alt=""` 當裝飾處理。
-
-> ⚠️ 第三格的標題與說明還沒有內容。參考網站這一段底下的子項
-> （Scientific & Data Integrity 等）影片中讀不完整，需要你提供。
+> ⚠️ **三段內文都是草稿，依指示先擬（「第三格直接先幫我掰」）。**
 >
-> ⚠️ resp-1／resp-2 的場景與上方最新消息的縮圖重複。現有素材只有六個辦公
-> 環境場景，五個已用在消息列上，避不開；有別的照片再換。
+> 三個項目名稱有依據：參考網站這一段的免責聲明原句寫明那些數字是用來說明
+> 「research organization、technical planning、collaboration-discussion structure」，
+> 項目就照這三個切分。**但底下的敘述是我寫的。**
+>
+> 內文刻意不含任何成果、數據、時程、臨床階段、論文、專利或合作對象——
+> 那些是 CLAUDE.md 明訂不能編的。參考網站的三個數字（影片中看似 18／27／43）
+> 一樣沒有採用。**上線前需要你或客戶改寫確認。**
+>
+> ⚠️ 配圖與各格內容沒有對應關係（`alt=""` 當裝飾）；resp-1／resp-2 的場景與
+> 上方最新消息的縮圖重複，現有素材只有六個辦公環境場景，避不開。
 
 其餘子項（Scientific & Data Integrity 等）影片中讀不完整，仍為 `[待補]`。
 
