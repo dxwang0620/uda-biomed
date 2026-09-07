@@ -414,7 +414,7 @@
 /* 一列 = 縮圖 + 內容，依 index_img/part1.jpeg */
 .newsItem {
   display: grid;
-  grid-template-columns: 5.5rem 1fr;
+  grid-template-columns: 7rem 1fr;
   gap: var(--space-2);
   align-items: start;
   padding-block: var(--space-3);
@@ -483,10 +483,13 @@
 /* 縮圖。原本是虛線佔位框，照片進來後換成 <picture>。
    <picture> 預設 inline 且沒有高度，img 的 height:100% 會退回 auto、
    object-fit 形同沒設——必須讓 picture 自己撐起比例。 */
+/* 手機的縮圖。比例跟著原圖走（480×270＝16:9），cover 因此不裁——
+   原本是 4:3，從 16:9 的原圖裁掉左右各約 25%，看起來像被放大過（回報「比例很怪」）。
+   欄寬同時從 5.5rem 加到 7rem，不然 16:9 之下只有 50px 高。 */
 .newsThumb {
   display: block;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
   border-radius: 10px;
   background: rgba(255, 255, 255, calc(var(--glass) + 0.12));
 }
@@ -516,14 +519,20 @@
   justify-content: flex-end;
 }
 
+/* 一開始就是藍底白箭頭，hover 轉橘（指定）。
+
+   ⚠️ hover 之下白箭頭疊在 --color-orange 上是 2.60:1，低於 WCAG 1.4.11 對
+   圖形物件的 3:1。這是全站橘色既有的取捨（見 docs/design-node.md），
+   靜止狀態的藍底白箭頭是 12.21:1，合格。 */
 .newsArrow {
   display: grid;
   place-items: center;
   /* 觸控目標 44×44 */
   width: 44px;
   height: 44px;
-  color: var(--color-primary);
-  border: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.3));
+  color: var(--color-white);
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
   border-radius: 50%;
   transition:
     background-color 160ms ease,
@@ -532,9 +541,8 @@
 }
 
 .newsArrow:hover {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--color-white);
+  background: var(--color-orange);
+  border-color: var(--color-orange);
   transform: translateX(2px);
 }
 
