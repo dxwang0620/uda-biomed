@@ -81,6 +81,20 @@
   text-align: center;
   /* 首頁的兩顆主要按鈕用較大的圓角，與站上其他按鈕（2px）刻意不同 */
   border-radius: 15px;
+  /* 收窄左右內距（指定「不要那麼長」）。Button 的 md 是 --space-4（32px），
+     這裡改 --space-3，兩顆各短 16px。只改這兩顆，站上其他 md 鈕不動。
+     寬度的大宗其實是標籤字數，不是內距。 */
+  padding-inline: var(--space-3);
+}
+
+/* 橘鈕加白外框（指定）。Button 的 accent 變體邊框與底色同為橘，
+   在影片上兩顆按鈕的外框一深一淺，看起來不成對；改成白框之後
+   與右邊那顆（onDark，白框透明底）對齊，也把橘色從影片裡框出來。
+
+   hover 轉深藍時白框保留，不然翻色瞬間邊界會整個消失。 */
+.actions > a:first-child,
+.actions > a:first-child:hover {
+  border-color: var(--color-on-navy);
 }
 
 @media (min-width: 560px) {
