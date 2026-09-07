@@ -411,28 +411,32 @@
   }
 }
 
-/* 一列 = 縮圖 + 內容，依 index_img/part1.jpeg */
+/* 一列 = 縮圖 + 內容，依 index_img/part1.jpeg。
+
+   手機（基準）：縮圖改成鋪滿整列的模糊背景（指定）。窄螢幕放不下並排的
+   縮圖欄，縮成 7rem 之後照片小到看不出是什麼；當背景反而讓每一則有自己的
+   視覺，也不必再為比例操心——鋪滿之後不論原圖比例都不會出現怪框。
+   桌機仍是並排的縮圖欄，見檔案最後的 1024 區段。 */
 .newsItem {
+  position: relative;
+  isolation: isolate;
   display: grid;
-  grid-template-columns: 7rem 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-2);
   align-items: start;
-  padding-block: var(--space-3);
-  /* 左右留一點，hover 的底色才不會貼著字 */
-  padding-inline: var(--space-2);
-  border-radius: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.15));
+  padding: var(--space-3);
+  border-radius: 12px;
+  overflow: hidden;
   transition: background-color 160ms ease;
+}
+
+.newsItem + .newsItem {
+  margin-top: var(--space-2);
 }
 
 .newsItem:hover {
   /* 比卡片濃一階，跟 .tag 用同一組級距 */
   background: rgba(255, 255, 255, calc(var(--glass) + 0.14));
-}
-
-/* 圓角底色蓋不住直線分隔線，hover 時把它收掉 */
-.newsItem:hover {
-  border-bottom-color: transparent;
 }
 
 .newsItem:hover .newsTitle {
@@ -446,52 +450,38 @@
   }
 }
 
-.newsItem:first-child {
-  padding-top: var(--space-1);
-}
-
-.newsItem:last-child {
-  border-bottom: 0;
-}
-
-/* 桌機兩欄時的列樣式。
-
-   - stretch：縮圖跟著整列拉高，右下的箭頭才對得齊。格線的列高由同一列
-     最高的那則決定，所以兩欄的箭頭會落在同一條線上。
-   - 縮圖欄 10rem：拉滿列高之後，6.5rem 寬配 158px 高＝比例 0.66，而原圖是
-     16:9，cover 會把它裁成一條窄長的直片；10rem 之下框接近 1:1（實測
-     160×174），裁掉的少得多。
-
-   手機維持 start ＋ 4:3：一欄時列本來就矮，拉滿只會變成細長條。
-
-   這一段必須留在最後：檔案前面也有同權重的 .newsItem 規則，
-   CSS Modules 依原始順序輸出，同權重下後面的贏。 */
-@media (min-width: 1024px) {
-  .newsItem {
-    grid-template-columns: 10rem 1fr;
-    align-items: stretch;
-  }
-
-  .newsThumb {
-    height: 100%;
-    aspect-ratio: auto;
-  }
-}
 
 /* 縮圖佔位。刻意留白而不是塞其他頁的照片：草稿標題配上真照片，
    只會讓假內容更像真的。圖進來之後換成 <img>，尺寸與圓角不用動。 */
 /* 縮圖。原本是虛線佔位框，照片進來後換成 <picture>。
    <picture> 預設 inline 且沒有高度，img 的 height:100% 會退回 auto、
    object-fit 形同沒設——必須讓 picture 自己撐起比例。 */
-/* 手機的縮圖。比例跟著原圖走（480×270＝16:9），cover 因此不裁——
-   原本是 4:3，從 16:9 的原圖裁掉左右各約 25%，看起來像被放大過（回報「比例很怪」）。
-   欄寬同時從 5.5rem 加到 7rem，不然 16:9 之下只有 50px 高。 */
+/* 手機：照片鋪滿整列當模糊背景（指定）。 */
 .newsThumb {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   display: block;
   overflow: hidden;
-  aspect-ratio: 16 / 9;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, calc(var(--glass) + 0.12));
+}
+
+.newsThumb img {
+  /* scale 是為了蓋掉模糊在邊緣造成的透明羽化，不放大的話四邊會透出底色 */
+  filter: blur(10px);
+  transform: scale(1.15);
+}
+
+/* 白幕。文字是深色（#05101f），壓在照片上必須有底。
+
+   0.55：白幕疊在**純黑**的照片上（最差情況）合成後亮度 0.2633，
+   深色字對它是 **5.69:1**；照片是白的那一端則是 18.5:1。
+   0.68 也試過，但辦公環境照本身就亮，白幕再厚一點就整片糊掉看不出是什麼。
+   **0.5 以下會掉到 4.5:1 以下，不要再往下調。** */
+.newsThumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .newsThumb img {
@@ -641,5 +631,57 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* 桌機兩欄時的列樣式。
+
+   - stretch：縮圖跟著整列拉高，右下的箭頭才對得齊。格線的列高由同一列
+     最高的那則決定，所以兩欄的箭頭會落在同一條線上。
+   - 縮圖欄 10rem：拉滿列高之後，6.5rem 寬配 158px 高＝比例 0.66，而原圖是
+     16:9，cover 會把它裁成一條窄長的直片；10rem 之下框接近 1:1（實測
+     160×174），裁掉的少得多。
+
+   手機是模糊背景（見基準規則），這一段把它改回並排的縮圖欄：
+   縮圖回到文件流、模糊與白幕都收掉，列與列之間改回分隔線。
+
+   這一段必須留在最後：檔案前面也有同權重的 .newsItem 規則，
+   CSS Modules 依原始順序輸出，同權重下後面的贏。 */
+@media (min-width: 1024px) {
+  .newsItem {
+    grid-template-columns: 10rem 1fr;
+    align-items: stretch;
+    overflow: visible;
+    padding: var(--space-3) var(--space-2);
+    border-radius: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, calc(var(--glass) + 0.15));
+  }
+
+  .newsItem + .newsItem {
+    margin-top: 0;
+  }
+
+  /* 圓角底色蓋不住直線分隔線，hover 時把它收掉 */
+  .newsItem:hover {
+    border-bottom-color: transparent;
+  }
+
+  .newsThumb {
+    position: static;
+    /* z-index 必須跟著收掉。縮圖在手機是 -1（躲到內容後面當背景），
+       桌機它是格線項目，-1 一樣生效，會被 .newsItem hover 的底色蓋住。 */
+    z-index: auto;
+    height: 100%;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, calc(var(--glass) + 0.12));
+  }
+
+  .newsThumb img {
+    filter: none;
+    transform: none;
+  }
+
+  .newsThumb::after {
+    display: none;
   }
 }
