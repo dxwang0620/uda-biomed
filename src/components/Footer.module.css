@@ -25,7 +25,7 @@
 @media (min-width: 768px) {
   .inner {
     flex-direction: row;
-    /* 標語兩行、導覽一列、聯絡一行——center 讓三者在視覺上對得起來 */
+    /* 標語兩行、聯絡一行——center 讓兩者在視覺上對得起來 */
     align-items: center;
     justify-content: space-between;
     gap: var(--space-6);
@@ -91,49 +91,6 @@
   .contact:hover svg {
     transform: none;
   }
-}
-
-/* 1024 以下不放這一列。ABOUT～CONTACT 在那個寬度是漢堡選單的內容
-   （header 也是 1024 收成漢堡），頁尾再列一次只是把頁面拉長。
-
-   斷點從 768 提到 1024 的另一個理由：頁尾現在是「標語｜導覽｜聯絡」三段，
-   768px 之下扣掉左右留白只剩 704px，光導覽五個項目就要 521px，
-   三段一定擠不下。1024 之上才排得開。 */
-.nav {
-  display: none;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-@media (min-width: 1024px) {
-  .nav {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-}
-
-.link {
-  display: inline-flex;
-  align-items: center;
-  /* 觸控目標 */
-  min-height: 44px;
-  font-family: var(--font-latin);
-  font-size: var(--text-nav);
-  font-weight: var(--weight-nav);
-  letter-spacing: var(--tracking-nav);
-  color: var(--color-on-navy);
-  text-decoration: none;
-  transition: opacity var(--duration) var(--ease);
-}
-
-.link:hover {
-  opacity: 0.7;
-}
-
-.link[aria-current='page'] {
-  font-weight: 700;
 }
 
 .legal {
