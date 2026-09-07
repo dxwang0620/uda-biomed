@@ -267,7 +267,6 @@
 /* 除了第一塊，每一塊都自己帶上緣間距。值是 2 倍的 Section 內距——
    這幾塊原本分屬不同 Section，相鄰時上下內距會相加，合併成一個容器後
    少了一份，要自己補回來。 */
-.focusGroup,
 .platformIntro {
   margin-top: calc(var(--space-6) * 2);
 }
@@ -285,43 +284,9 @@
 
 
 @media (min-width: 1024px) {
-  .newsFocus {
-    display: grid;
-    /* 左欄消息、右欄三張圖卡。
-
-       minmax(0, …) 不能省：fr 的最小值預設是 auto（＝min-content），
-       而右欄的卡片列是 width: max-content（三張卡約 1000px），
-       會把右欄撐開、把左欄擠到只剩 208px。夾成 0 之後欄寬才照 6:7 分，
-       卡片列超出的部分交給它自己的 overflow-x 捲動。 */
-    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
-    column-gap: var(--space-4);
-    /* 列距全部交給各自的 margin，理由同上 */
-    row-gap: 0;
-    /* 列高由右欄的卡片決定（卡片是定值高度），左欄消息透過 .card 的
-       height:100% 跟上。不能用 stretch——消息的捲動區是 flex: 1 1 0，
-       被拉伸時固有高度會塌成 0，整列只剩標題的高度。 */
-    align-items: start;
-  }
-
-  .newsFocus > .newsBlock {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .focusGroup {
-    grid-column: 2;
-    grid-row: 1;
-    /* 同上：grid 項目的預設 min-width 是 auto，不夾成 0 的話
-       裡面的 max-content 卡片列一樣會把欄撐開 */
-    min-width: 0;
-    margin-top: 0;
-  }
-
-  /* 技術平台的導言橫跨兩欄，夾在卡片列與四格數字之間。
-     大間距移到它身上——它現在才是接在卡片列下面的那一塊。 */
+  /* 技術平台的導言與消息之間拉開一點——原本這個間距是靠格線的
+     row 2 與大 margin 做的，格線拆掉後由 margin 自己扛。 */
   .platformIntro {
-    grid-column: 1 / -1;
-    grid-row: 2;
     margin-top: calc(var(--space-12) * 2);
   }
 }
@@ -347,24 +312,14 @@
      否則 overflow 不會生效。 */
   flex: 1 1 auto;
   min-height: 0;
-  /* 手機是上下堆疊，沒有「旁邊那張」可以對齊，需要自己的高度上限 */
-  max-height: 25rem;
+  /* 高度上限。研發卡片搬走之後這一塊變成滿版、旁邊沒有可對齊的卡片，
+     所有寬度都吃這個值——原本 1024 以上另有一組覆寫，把高度交給右欄的
+     卡片決定（flex-basis: 0 ＋ max-height: none），那組已經沒有意義，
+     留著只會讓高度塌到 min-height 的 18rem。 */
+  max-height: 28rem;
   overflow-y: auto;
   /* 捲到底不要把整頁一起帶著捲 */
   overscroll-behavior: contain;
-}
-
-/* 桌機兩欄並排，高度交給旁邊那張卡片決定 */
-@media (min-width: 1024px) {
-  .newsScroll {
-    /* flex-basis 必須是 0 不能是 auto。auto 會把清單的內容高度算進卡片，
-       而卡片是這一列最高的那個，於是 max-height:none 反而讓整列撐到 970px
-       且完全不再有捲軸。basis 0 讓它只吃剩餘空間，高度改由旁邊那張決定。 */
-    flex-basis: 0;
-    max-height: none;
-    /* 萬一旁邊那張卡片變短，清單也不要塌掉 */
-    min-height: 18rem;
-  }
 }
 
 /* 捲軸只在滑到區塊上時出現。
@@ -413,6 +368,21 @@
   outline: 2px solid var(--color-text-on-glass);
   outline-offset: 4px;
   border-radius: var(--radius-sm);
+}
+
+/* 第二個主題的標題。與上一組清單之間要有明顯的段落感，
+   不然兩組會黏成一整片。 */
+.topicNext {
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-on-navy-border);
+}
+
+.topicTodo {
+  margin-top: var(--space-2);
+  font-size: var(--text-small);
+  color: var(--color-text-on-glass);
+  opacity: 0.75;
 }
 
 .newsList {

@@ -265,6 +265,13 @@
    這裡轉成水平、對應橫向捲動的位置。
 
    --p 是捲動進度（0～1），由元件在 scroll 時寫進來。 */
+/* 進度軌的顏色走 --rail-* 變數，預設值一律寫在 var() 的第二引數，
+   不在這裡自己宣告一次——在元素上宣告會遮蔽從祖先繼承下來的值，
+   使用端的覆寫就永遠不會生效（Placeholder 那邊踩過同一個坑）。
+
+   預設是「疊在背景影片上」的那一套（透明白）；放到淺底的頁面時
+   由使用端覆寫，元件本身不必知道自己在哪。
+   見 src/pages/Research.module.css 的 .focusRail。 */
 .progress {
   position: relative;
   margin-top: var(--space-3);
@@ -289,7 +296,7 @@
 .track {
   left: 4.5px;
   right: 4.5px;
-  background: rgba(255, 255, 255, 0.45);
+  background: var(--rail-line, rgba(255, 255, 255, 0.45));
 }
 
 .fill {
@@ -338,10 +345,10 @@
   letter-spacing: 0.02em;
   text-align: center;
   /* 這一條疊在背景影片上，跟本區塊其餘反白文字同一個處理 */
-  color: var(--color-on-video-muted);
+  color: var(--rail-label, var(--color-on-video-muted));
   /* 影片最亮的畫面白字會消失。陰影不是無障礙的解法，
-     但能明顯改善，且不影響深色畫面 */
-  text-shadow: 0 1px 3px rgba(0, 24, 56, 0.55);
+     但能明顯改善，且不影響深色畫面。淺底的頁面把它關掉。 */
+  text-shadow: var(--rail-label-shadow, 0 1px 3px rgba(0, 24, 56, 0.55));
   transition:
     color 0.2s ease,
     text-shadow 0.2s ease;
@@ -359,8 +366,8 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.45);
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.7);
+  background: var(--rail-line, rgba(255, 255, 255, 0.45));
+  box-shadow: inset 0 0 0 2px var(--rail-dot-ring, rgba(255, 255, 255, 0.7));
   transition:
     background-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -388,7 +395,7 @@
   color: var(--color-primary);
   font-weight: 600;
   /* 深色字配深色陰影只會更糊，換成淺色描邊 */
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.65);
+  text-shadow: var(--rail-label-shadow-reached, 0 1px 3px rgba(255, 255, 255, 0.65));
 }
 
 /* 最新走到的那一顆再放大一點，跟先前走過的區分開 */

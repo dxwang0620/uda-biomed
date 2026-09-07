@@ -1,4 +1,5 @@
 import { Dna, ScanSearch, Users } from "lucide-react";
+import FocusStack from "../components/FocusStack.tsx";
 import PageHero from "../components/PageHero.tsx";
 import ArrowLink from "../components/ui/ArrowLink.tsx";
 import Card from "../components/ui/Card.tsx";
@@ -79,6 +80,15 @@ export default function Research() {
             </li>
           ))}
         </ul>
+        {/* 現階段研發焦點的三張橫向卡。依指示從首頁搬到這裡，排在
+            Research Focus 的卡片下方。元件自帶樣式與滑軌，這裡只負責位置。
+
+            這一段的 Section 是 tone="tint"（淺底），滑軌下方那排中文圖例是
+            深藍字，在淺底上比原本疊在背景影片上更好讀。 */}
+        <div className={styles.focusRail}>
+          <FocusStack />
+        </div>
+
         <div className={styles.sectionCta}>
           <ArrowLink to="/technology">Explore our technology</ArrowLink>
         </div>

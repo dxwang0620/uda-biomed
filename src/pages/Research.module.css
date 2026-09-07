@@ -53,3 +53,21 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* 研發焦點滑軌的位置與配色。
+
+   元件預設是給首頁用的——整塊疊在背景影片上，所以軌道、圓點、圖例
+   全是透明白。這一頁的 Section 是 tone="tint"（實測底色 #fbfbfc），
+   白色等於看不見（對比 1.06:1），所以覆寫成淺底用的那一套。
+   陰影一併關掉：底色是固定的，不需要靠描邊救對比。 */
+.focusRail {
+  margin-top: var(--space-6);
+  --rail-line: var(--color-border);
+  /* 圓點的環比軌道深一階。深底那邊環是白 0.7、軌道是白 0.45——
+     環要看得出三個位置在哪，軌道只是背景。淺底照同樣的關係換算：
+     環用 --color-text-muted（對 #fbfbfc 是 5.83:1），軌道留 --color-border。 */
+  --rail-dot-ring: var(--color-text-muted);
+  --rail-label: var(--color-text-muted);
+  --rail-label-shadow: none;
+  --rail-label-shadow-reached: none;
+}

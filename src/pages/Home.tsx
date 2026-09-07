@@ -1,6 +1,5 @@
 import { Calendar } from 'lucide-react'
 import ContactSwitch from '../components/ContactSwitch.tsx'
-import FocusStack from '../components/FocusStack.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
 import StatCounters from '../components/StatCounters.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
@@ -170,27 +169,31 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 消息、研發重點卡片、四格數字三塊。
+      {/* 消息與技術平台導言兩塊。
           多個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。
 
-          DOM 順序＝窄螢幕的視覺順序：消息 → 卡片 → 四格數字。
-          1024 以上第一列是「消息｜卡片」兩欄，四格數字滿版排在下方。
-          （董事長談話原本在這裡，依指示移到 ABOUT 頁，首頁不再有。） */}
+          原本右欄是研發重點的三張橫向卡，依指示搬到 RESEARCH 的 Research Focus
+          底下；董事長談話更早之前搬到 ABOUT。兩者都走了，這裡不再需要兩欄格線，
+          回到單純的直向堆疊。 */}
       <Section tone="translucent">
         <div className={styles.newsFocus}>
           <div className={`${styles.newsBlock} ${styles.reveal}`}>
-            <h2 id="news-heading" className={styles.blockTitle}>
-              Latest News
-            </h2>
+            {/* 同一個 block 內兩個主題（指定）：解決方案分析 在上、最新消息 在下。
+                兩個標題都放進捲動區裡，才不會一個固定、一個跟著捲。
 
-            {/* 捲動區必須自己能拿到焦點，否則只用鍵盤的人捲不動它——
-                Firefox 會自動給焦點，Chrome 不會，所以明寫 tabIndex。 */}
+                捲動區必須自己能拿到焦點，否則只用鍵盤的人捲不動它——
+                Firefox 會自動給焦點，Chrome 不會，所以明寫 tabIndex。
+                裡面有兩個對等的 h2，用其中之一當名稱會誤導，改用 aria-label。 */}
             <div
               className={styles.newsScroll}
               tabIndex={0}
               role="group"
-              aria-labelledby="news-heading"
+              aria-label="Solution analysis and latest news"
             >
+              <h2 className={styles.blockTitle} lang="zh-Hant">
+                解決方案分析
+              </h2>
+
               <ol className={styles.newsList}>
                 {NEWS.map(({ category, date, title, excerpt }, i) => (
                   <li key={title} className={styles.newsItem}>
@@ -228,14 +231,18 @@ export default function Home() {
                   </li>
                 ))}
               </ol>
-            </div>
-          </div>
 
-          {/* 原本自成一個 Section，眉標／標題／導言已依指示刪除。
-              併進這一塊是為了讓董事長談話在窄螢幕能排到卡片下面——
-              兩個 Section 之間沒辦法互換順序。 */}
-          <div className={styles.focusGroup}>
-            <FocusStack />
+              {/* 第二個主題。內容還沒有，用明確的 placeholder，不編造消息。 */}
+              <h2
+                className={`${styles.blockTitle} ${styles.topicNext}`}
+                lang="zh-Hant"
+              >
+                最新消息
+              </h2>
+              <p className={styles.topicTodo} lang="zh-Hant">
+                [待補：最新消息項目]
+              </p>
+            </div>
           </div>
 
           {/* 技術平台的標題與導言。依指示搬到四格數字上面；
