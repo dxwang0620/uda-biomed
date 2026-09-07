@@ -281,7 +281,8 @@ viewBox="0 0 1536 293"
 | 原始 | `md` 內距 32px、`nowrap` | 391 | 267 |
 | 收內距 | `--space-3`（24px） | 375 | 251 |
 | 縮文案 | 左改「Explore the technology」 | 255 | 251 |
-| **現況** | **文案還原、折成兩排、鎖 `width: 16rem`** | **256×69** | **256×69** |
+| 折兩排 | 文案還原、鎖 `width: 16rem` | 256×69 | 256×69 |
+| **現況** | **內距再縮一階、`width: 14rem`** | **224×53** | **224×53** |
 
 最後改成兩排（指定「可以變成兩排字嗎」）：`.actions > *` 拿掉 `nowrap`、
 鎖 `width: 16rem` 逼出換行點（不寫死 `<br>`），文案因此還原成完整的
@@ -291,8 +292,14 @@ viewBox="0 0 1536 293"
 
 - Button 的 `md` 只有 `min-height: 56px`，第二排把高度撐開，所以補
   `padding-block` 與 `line-height: 1.35`，字才不會貼著上下緣
-- `.actions` 的 `align-items` 由 `center` 改 `stretch`。左邊兩排、右邊一排，
-  `center` 會讓兩顆一高一矮；`stretch` 讓矮的補到同高（實測兩顆都是 256×69）
+- `.actions` 的 `align-items` 由 `center` 改 `stretch`。左右排數可能不同，
+  `center` 會讓兩顆一高一矮；`stretch` 讓矮的補到同高
+
+最後依指示把周圍內距再縮一階：`padding-block` 8px、`padding-inline` 16px、
+`width: 14rem`。**同時要把 `min-height` 從 Button `md` 的 56px 降到 44px**——
+不降的話高度會卡在 56 的地板上，內距縮了也看不出差別。44px 是 CLAUDE.md 的
+觸控目標下限，不能再低；實際高度 53px，仍在下限之上。
+（14rem 之下右邊的「Business collaboration」也折成兩排，兩顆同為 224×53。）
 
 ## 首頁背景色調（左藍右透明）
 
