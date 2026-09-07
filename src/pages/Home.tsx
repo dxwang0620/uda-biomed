@@ -64,6 +64,31 @@ const NEWS_THUMBS = [
   { file: 'news-5', alt: 'UDA BIOMED 接待櫃檯與品牌牆，後方為玻璃隔間的會議室。' },
 ]
 
+/* 最新消息三則。**全是草稿**，依指示先擬（「幫我加三則最新消息」）。
+   刻意不含任何成果、數據、臨床階段、論文、專利或合作對象——
+   那些是 CLAUDE.md 明訂不能編的。日期同樣是排版用的假值。
+   上線前需要真實內容替換。 */
+const LATEST = [
+  {
+    category: 'Research',
+    date: '02 Sep 2026',
+    title: 'Notes on how a detection question becomes a method',
+    excerpt: 'The steps between framing a question and having something that can be run twice.',
+  },
+  {
+    category: 'Technology',
+    date: '19 Aug 2026',
+    title: 'What reproducibility means for a recognition interface',
+    excerpt: 'Why the same conditions have to hold before a measurement is worth comparing.',
+  },
+  {
+    category: 'Collaboration',
+    date: '05 Aug 2026',
+    title: 'How we prepare for a first technical discussion',
+    excerpt: 'What is useful to bring, and what we can and cannot share at that stage.',
+  },
+]
+
 const NEWS = [
   {
     category: 'Research',
@@ -115,6 +140,62 @@ const POSITIONING_TAGS = [
   'Intellectual Property',
   'Industry Collaboration',
 ]
+
+type NewsItem = {
+  category: string
+  date: string
+  title: string
+  excerpt: string
+}
+
+/* 一則消息。兩個主題共用同一個列樣式，所以抽出來。
+
+   右下的按鈕依指示接到 RESEARCH——單則消息沒有自己的頁面（這是純前端的
+   靜態站，也還沒有內容來源），所以全部指向同一頁，而不是編造一個不存在的網址。 */
+function NewsRow({ item, thumbIndex }: { item: NewsItem; thumbIndex: number }) {
+  const thumb = NEWS_THUMBS[thumbIndex % NEWS_THUMBS.length]
+
+  return (
+    <li className={styles.newsItem}>
+      {/* 縮圖。圖與這則消息的內容無關，見 NEWS_THUMBS 的說明。 */}
+      <picture className={styles.newsThumb}>
+        <source
+          srcSet={`${import.meta.env.BASE_URL}media/${thumb.file}.webp`}
+          type="image/webp"
+        />
+        <img
+          src={`${import.meta.env.BASE_URL}media/${thumb.file}.jpg`}
+          alt={thumb.alt}
+          width={480}
+          height={270}
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+
+      <div className={styles.newsBody}>
+        <p className={styles.newsMeta}>
+          <span className={styles.newsCategory}>{item.category}</span>
+          <span className={styles.newsDate}>
+            <Calendar size={13} strokeWidth={2} aria-hidden="true" />
+            {item.date}
+          </span>
+        </p>
+        <h3 className={styles.newsTitle}>{item.title}</h3>
+        <p className={styles.newsExcerpt}>{item.excerpt}</p>
+
+        <p className={styles.newsCta}>
+          <Button to="/research" variant="outline" size="sm">
+            Read more
+            {/* 六個「Read more」在同一頁，讀屏逐一唸過會分不出差別，
+                補一段只給輔助技術的說明。 */}
+            <span className="visually-hidden">: {item.title}</span>
+          </Button>
+        </p>
+      </div>
+    </li>
+  )
+}
 
 export default function Home() {
   /* 董事長談話預設收合，點藍色區塊下緣的箭頭展開。 */
@@ -195,53 +276,24 @@ export default function Home() {
               </h2>
 
               <ol className={styles.newsList}>
-                {NEWS.map(({ category, date, title, excerpt }, i) => (
-                  <li key={title} className={styles.newsItem}>
-                    {/* 縮圖。圖與這則消息的內容無關，見 NEWS_THUMBS 的說明。 */}
-                    <picture className={styles.newsThumb}>
-                      <source
-                        srcSet={`${import.meta.env.BASE_URL}media/${
-                          NEWS_THUMBS[i % NEWS_THUMBS.length].file
-                        }.webp`}
-                        type="image/webp"
-                      />
-                      <img
-                        src={`${import.meta.env.BASE_URL}media/${
-                          NEWS_THUMBS[i % NEWS_THUMBS.length].file
-                        }.jpg`}
-                        alt={NEWS_THUMBS[i % NEWS_THUMBS.length].alt}
-                        width={480}
-                        height={270}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </picture>
-
-                    <div className={styles.newsBody}>
-                      <p className={styles.newsMeta}>
-                        <span className={styles.newsCategory}>{category}</span>
-                        <span className={styles.newsDate}>
-                          <Calendar size={13} strokeWidth={2} aria-hidden="true" />
-                          {date}
-                        </span>
-                      </p>
-                      <h3 className={styles.newsTitle}>{title}</h3>
-                      <p className={styles.newsExcerpt}>{excerpt}</p>
-                    </div>
-                  </li>
+                {NEWS.map((item, i) => (
+                  <NewsRow key={item.title} item={item} thumbIndex={i} />
                 ))}
               </ol>
 
-              {/* 第二個主題。內容還沒有，用明確的 placeholder，不編造消息。 */}
+              {/* 第二個主題。⚠️ 三則都是草稿，見 LATEST 的說明。 */}
               <h2
                 className={`${styles.blockTitle} ${styles.topicNext}`}
                 lang="zh-Hant"
               >
                 最新消息
               </h2>
-              <p className={styles.topicTodo} lang="zh-Hant">
-                [待補：最新消息項目]
-              </p>
+
+              <ol className={styles.newsList}>
+                {LATEST.map((item, i) => (
+                  <NewsRow key={item.title} item={item} thumbIndex={i + 3} />
+                ))}
+              </ol>
             </div>
           </div>
 

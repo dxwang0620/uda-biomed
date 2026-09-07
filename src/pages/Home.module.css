@@ -291,12 +291,20 @@
   }
 }
 
-/* 消息區塊沿用 .card 的玻璃語彙，兩塊才會是同一組東西 */
+/* 消息區塊沿用 .card 的玻璃語彙。
+
+   研發卡片搬走之後這一塊變成滿版 1440px，一行摘要橫跨整個畫面、
+   右下的按鈕離文字非常遠（回報「太寬了」）。限寬到 64rem——
+   摘要一行約 90 個字元以內，接近一般內文的可讀行寬上限。 */
 .newsBlock {
   composes: card;
+  max-width: 64rem;
 }
 
+/* 主題標題。與底下第一則之間要有明顯的間距（指定），
+   不然標題會像黏在第一則上面。 */
 .blockTitle {
+  margin-bottom: var(--space-3);
   font-size: 1.375rem;
   line-height: 1.25;
   color: var(--color-text-on-glass);
@@ -467,6 +475,13 @@
   display: grid;
   gap: 4px;
   min-width: 0;
+}
+
+/* 每則右下的按鈕（指定）。 */
+.newsCta {
+  margin: var(--space-1) 0 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* 分類靠左、日期靠右，同一列 */
