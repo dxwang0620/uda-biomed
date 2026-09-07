@@ -25,7 +25,10 @@ if (!existsSync(indexHtml)) {
 }
 
 const site = readFileSync(join(root, 'src/config/site.ts'), 'utf8')
-const routes = [...site.matchAll(/to:\s*'(\/[^']*)'/g)]
+/* 單引號與雙引號都要收。site.ts 被 Prettier 用雙引號重排過一次，
+   原本只認單引號的樣式當場抓不到任何路由，整個預渲染就停了——
+   而 build 仍會成功，只有這支腳本會叫。 */
+const routes = [...site.matchAll(/to:\s*['"](\/[^'"]*)['"]/g)]
   .map((m) => m[1])
   .filter((r) => r !== '/')
 
