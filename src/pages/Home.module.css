@@ -468,7 +468,7 @@
 
      scale 是為了蓋掉模糊在邊緣造成的透明羽化：羽化寬度約等於模糊半徑，
      2px 只需要 scale(1.02)，1.05 留了餘裕。 */
-  filter: blur(2px);
+  filter: blur(1px);
   transform: scale(1.05);
 }
 

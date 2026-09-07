@@ -1,9 +1,9 @@
-import { Navigate, useParams } from 'react-router-dom'
-import PageHero from '../components/PageHero.tsx'
-import Section from '../components/ui/Section.tsx'
-import ArrowLink from '../components/ui/ArrowLink.tsx'
-import { RESEARCH_TOPICS } from '../config/site.ts'
-import styles from './Research.module.css'
+import { Navigate, useParams } from "react-router-dom";
+import PageHero from "../components/PageHero.tsx";
+import Section from "../components/ui/Section.tsx";
+import ArrowLink from "../components/ui/ArrowLink.tsx";
+import { RESEARCH_TOPICS } from "../config/site.ts";
+import styles from "./Research.module.css";
 
 /**
  * RESEARCH 的三個子頁（指定）。三頁共用這一個元件，靠網址的 slug 分辨——
@@ -16,12 +16,12 @@ import styles from './Research.module.css'
  */
 
 export default function ResearchTopic() {
-  const { slug } = useParams()
-  const topic = RESEARCH_TOPICS.find((t) => t.slug === slug)
+  const { slug } = useParams();
+  const topic = RESEARCH_TOPICS.find((t) => t.slug === slug);
 
   /* 不存在的 slug 導回 RESEARCH，而不是丟 404：
      這幾個網址是站內導覽產生的，打錯多半是連結手滑或舊網址。 */
-  if (!topic) return <Navigate to="/research" replace />
+  if (!topic) return <Navigate to="/research" replace />;
 
   return (
     <>
@@ -29,7 +29,7 @@ export default function ResearchTopic() {
         eyebrow="RESEARCH"
         title={topic.zh}
         titleId="research-topic-heading"
-        lede={`[待補：${topic.zh} 的一句話說明]`}
+        lede={`[待補：${topic.zh}]`}
       />
 
       <Section labelledBy="topic-body-heading">
@@ -37,7 +37,7 @@ export default function ResearchTopic() {
           {topic.zh}
         </h2>
         <p className={styles.prose} lang="zh-Hant">
-          [待補：{topic.zh}的內容，約 200～300 字]
+          [待補：{topic.zh}的內容]
         </p>
 
         <div className={styles.sectionCta}>
@@ -45,5 +45,5 @@ export default function ResearchTopic() {
         </div>
       </Section>
     </>
-  )
+  );
 }
