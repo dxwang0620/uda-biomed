@@ -38,20 +38,37 @@
   min-height: clamp(9rem, 22vw, 12rem);
   padding: var(--space-4) var(--space-2);
   text-align: center;
-  /* 不要全白。淡藍斜向漸層。
-     用 accent（#0072ea）而不是 primary 調色——primary 偏灰，
-     疊出來的淡色看起來是灰的，不是藍的。
-     深的那一端上限 0.18：0.22 時 13px 中文小標只剩 4.42:1，低於 AA */
+  /* 不要全白。淡藍斜向漸層 ＋ 白色橢圓底。
+
+     **白膜只鋪在文字底下，不是整張卡。** 一開始是整片 78%／70% 的白，
+     兩次回報都說擋掉太多背景，但 70% 已經是平鋪白膜的地板——再降就
+     掉破 AA（見 docs/content-home.md 的表）。
+
+     改成局部橢圓之後兩件事可以同時成立：文字底下仍是 0.70，
+     卡片的四角只剩 0.16，影片透得出來。同樣的手法首頁 hero 標題也用過。
+
+     橢圓的尺寸是量出來的：文字佔卡片的 y 33%～75%、x 約 28%～72%，
+     中心取 50% / 54%，半徑 96% / 92% 之下，文字最外緣的正規化距離是 0.32，
+     還在 0.70 那個色標（38%）之內。
+
+     **橢圓要大到超出卡片、色標要一路拉到 100%。** 第一版用 62%/58% ＋
+     70%→88% 收尾，等於在卡片中間畫了一個邊界清楚的白色橢圓，看起來像污漬
+     而不是卡片。放大之後淡出的終點落在卡片外，卡片內看到的是連續的過渡。
+
+     藍色那層的上限從 0.18 降到 0.12：它是整片鋪的，不跟著橢圓收，
+     留 0.18 會把四角剛讓出來的透明度蓋回去。 */
   background:
     linear-gradient(
       158deg,
-      rgba(var(--color-accent-rgb), 0.05),
-      rgba(var(--color-accent-rgb), 0.18)
+      rgba(var(--color-accent-rgb), 0.04),
+      rgba(var(--color-accent-rgb), 0.12)
     ),
-    /* 白底 70%，背景影片會透出來。依指示再降一階（78% 擋掉太多背景）。
-       **70% 是這組配色的地板**：疊在影片最暗的畫面上，最差的一行是 4.93:1，
-       再降到 65% 就掉到 4.34、低於 AA。算法與整張表見 docs/content-home.md */
-    rgba(255, 255, 255, 0.7);
+    radial-gradient(
+      ellipse 96% 92% at 50% 54%,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(255, 255, 255, 0.7) 38%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
   /* 模糊背後的影片。純粹是質感，對比度不靠它——模糊不會改變平均亮度 */
   -webkit-backdrop-filter: blur(10px) saturate(1.15);
   backdrop-filter: blur(10px) saturate(1.15);
@@ -84,10 +101,15 @@
     background:
       linear-gradient(
         158deg,
-        rgba(var(--color-accent-rgb), 0.05),
-        rgba(var(--color-accent-rgb), 0.18)
+        rgba(var(--color-accent-rgb), 0.04),
+        rgba(var(--color-accent-rgb), 0.12)
       ),
-      rgba(255, 255, 255, 0.8);
+      radial-gradient(
+        ellipse 96% 92% at 50% 54%,
+        rgba(255, 255, 255, 0.82) 0%,
+        rgba(255, 255, 255, 0.8) 38%,
+        rgba(255, 255, 255, 0.14) 100%
+      );
   }
 }
 
