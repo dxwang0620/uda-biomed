@@ -35,10 +35,15 @@ export default function Contact() {
         lede="We welcome enquiries from research groups, clinical partners and organisations working on related questions."
       />
 
+      {/* 標題與導言依指示從首頁搬過來（首頁那一段整段刪除）。
+          原本這裡是「How would you like to reach us?」＋
+          「Two routes in. Pick the one that fits and the panel will open.」，
+          後者只是在說明操作方式，兩個面板本身已經看得懂，一併換掉。 */}
       <Section labelledBy="choose-heading">
-        <h2 id="choose-heading">How would you like to reach us?</h2>
+        <h2 id="choose-heading">Two ways to reach us</h2>
         <p className={styles.lede}>
-          Two routes in. Pick the one that fits and the panel will open.
+          A general enquiry, or a formal KYC registration if your organisation
+          is entering a working relationship with us.
         </p>
         <ContactSwitch />
       </Section>

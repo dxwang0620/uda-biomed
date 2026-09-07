@@ -1,6 +1,5 @@
 import { ArrowRight, Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import ContactSwitch from '../components/ContactSwitch.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
 import StatCounters from '../components/StatCounters.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
@@ -371,23 +370,6 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 首頁結尾的聯絡入口，與 /contact 共用同一個元件。
-          兩個對等的 h2（一般訪客／KYC）在元件內部，用其中之一當
-          section 名稱會誤導，所以這裡自己給一個標題。 */}
-      <Section tone="translucent" labelledBy="home-contact-heading">
-        <div className={styles.intro}>
-          <p className={styles.eyebrow}>GET IN TOUCH</p>
-          <h2 id="home-contact-heading" className={styles.sectionTitle}>
-            Two ways to reach us
-          </h2>
-          <p className={styles.lede}>
-            A general enquiry, or a formal KYC registration if your
-            organisation is entering a working relationship with us.
-          </p>
-        </div>
-
-        <ContactSwitch />
-      </Section>
     </>
   )
 }

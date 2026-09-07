@@ -136,3 +136,17 @@ Email、電話、地址全部未定。一個寫錯的 email 比整頁空白還�
 
 > 量測陷阱：收合側的 `visibility` 切換有 **720ms 延遲**（等動畫結束才切）。
 > 太早量會看到「收合側還有 4 個可聚焦欄位」，等滿再量才是 0。
+
+## 「Two ways to reach us」`[抄錄]`
+
+依指示從首頁搬過來（首頁那一段整段刪除）：
+
+- **標題**：Two ways to reach us
+- **內文**：A general enquiry, or a formal KYC registration if your organisation
+  is entering a working relationship with us.
+
+放在 `ContactSwitch` 上方，取代原本的
+「How would you like to reach us?」＋「Two routes in. Pick the one that fits and
+the panel will open.」——後者只是在說明操作方式，兩個面板本身已經看得懂。
+
+頁面 hero 的眉標本來就是 `GET IN TOUCH`，與搬過來的那段同一個眉標，沒有重複放。
