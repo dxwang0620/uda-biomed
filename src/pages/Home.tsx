@@ -1,4 +1,5 @@
-import { Calendar } from 'lucide-react'
+import { ArrowRight, Calendar } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import ContactSwitch from '../components/ContactSwitch.tsx'
 import HeroCarousel from '../components/HeroCarousel.tsx'
 import StatCounters from '../components/StatCounters.tsx'
@@ -185,12 +186,13 @@ function NewsRow({ item, thumbIndex }: { item: NewsItem; thumbIndex: number }) {
         <p className={styles.newsExcerpt}>{item.excerpt}</p>
 
         <p className={styles.newsCta}>
-          <Button to="/research" variant="outline" size="sm">
-            Read more
-            {/* 六個「Read more」在同一頁，讀屏逐一唸過會分不出差別，
-                補一段只給輔助技術的說明。 */}
-            <span className="visually-hidden">: {item.title}</span>
-          </Button>
+          {/* 只有箭頭（指定）。圖示本身沒有可讀的名稱，所以連結的名稱
+              完全靠這段隱藏文字——九個連結的目的地相同，唸出標題才分得出
+              是哪一則。 */}
+          <Link to="/research" className={styles.newsArrow}>
+            <span className="visually-hidden">Read more: {item.title}</span>
+            <ArrowRight size={18} strokeWidth={2} aria-hidden="true" />
+          </Link>
         </p>
       </div>
     </li>
@@ -271,9 +273,7 @@ export default function Home() {
               role="group"
               aria-label="Solution analysis and latest news"
             >
-              <h2 className={styles.blockTitle} lang="zh-Hant">
-                解決方案分析
-              </h2>
+              <h2 className={styles.blockTitle}>Solution Analysis</h2>
 
               <ol className={styles.newsList}>
                 {NEWS.map((item, i) => (
@@ -282,11 +282,8 @@ export default function Home() {
               </ol>
 
               {/* 第二個主題。⚠️ 三則都是草稿，見 LATEST 的說明。 */}
-              <h2
-                className={`${styles.blockTitle} ${styles.topicNext}`}
-                lang="zh-Hant"
-              >
-                最新消息
+              <h2 className={`${styles.blockTitle} ${styles.topicNext}`}>
+                Latest News
               </h2>
 
               <ol className={styles.newsList}>
