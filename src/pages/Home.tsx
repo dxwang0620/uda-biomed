@@ -126,6 +126,40 @@ export default function Home() {
         <HeroCarousel />
       </HeroVideo>
 
+      {/* 核心定位。依指示排在最新消息之前——hero 之後的第一個內容區塊。 */}
+      <Section tone="translucent" labelledBy="positioning-heading">
+        <div className={styles.intro}>
+        <h2 id="positioning-heading" className={styles.sectionTitle}>
+          UDA BIOMED core positioning
+        </h2>
+        <p className={styles.lede}>
+          UDA BIOMED is a biomedical technology company centered on
+          innovation-driven R&amp;D. Its current public focus is cancer research and
+          detection technology, supported by UDA Biochip Technology as a key
+          platform; Proto-Structural Biology serves as one of UDA&rsquo;s original
+          frameworks for integrating structural biology, molecular biophysics,
+          biochemistry, materials science and life-signal research. UDA emphasizes
+          validation, intellectual property and translational development so that
+          technology can progress from concepts and data toward co-development and
+          licensing partnerships.
+        </p>
+        </div>
+        <ul role="list" className={styles.tagRow}>
+          {POSITIONING_TAGS.map((tag) => (
+            <li key={tag} className={styles.tagLarge}>
+              {tag}
+            </li>
+          ))}
+        </ul>
+
+        {/* 與 hero 主要 CTA 同一個變體（橘底、hover 轉深藍），指定要一致。 */}
+        <p className={styles.moreRow}>
+          <Button to="/research" variant="accent">
+            Learn more
+          </Button>
+        </p>
+      </Section>
+
       {/* 消息、研發重點卡片、四格數字三塊。
           多個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。
 
@@ -237,38 +271,6 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section tone="translucent" labelledBy="positioning-heading">
-        <div className={styles.intro}>
-        <h2 id="positioning-heading" className={styles.sectionTitle}>
-          UDA BIOMED core positioning
-        </h2>
-        <p className={styles.lede}>
-          UDA BIOMED is a biomedical technology company centered on
-          innovation-driven R&amp;D. Its current public focus is cancer research and
-          detection technology, supported by UDA Biochip Technology as a key
-          platform; Proto-Structural Biology serves as one of UDA&rsquo;s original
-          frameworks for integrating structural biology, molecular biophysics,
-          biochemistry, materials science and life-signal research. UDA emphasizes
-          validation, intellectual property and translational development so that
-          technology can progress from concepts and data toward co-development and
-          licensing partnerships.
-        </p>
-        </div>
-        <ul role="list" className={styles.tagRow}>
-          {POSITIONING_TAGS.map((tag) => (
-            <li key={tag} className={styles.tagLarge}>
-              {tag}
-            </li>
-          ))}
-        </ul>
-
-        {/* 與 hero 主要 CTA 同一個變體（橘底、hover 轉深藍），指定要一致。 */}
-        <p className={styles.moreRow}>
-          <Button to="/research" variant="accent">
-            Learn more
-          </Button>
-        </p>
-      </Section>
 
       <Section tone="translucent" labelledBy="responsibility-heading">
         <div className={styles.intro}>
