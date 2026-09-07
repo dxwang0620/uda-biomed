@@ -274,16 +274,25 @@ viewBox="0 0 1536 293"
 改成 `--space-3`（24px），兩顆各短 16px（實測 391→375、267→251）。
 只改 hero 這兩顆，站上其他 `md` 鈕不動。
 
-**寬度的大宗是標籤字數，不是內距。** 內距壓到 24px 後仍嫌長（回報「按鈕還是太長」），
-所以改文案：
+**寬度的大宗是標籤字數，不是內距。** 三次調整的過程：
 
-| | 舊 | 新 | 寬度 |
+| | 做法 | 左 | 右 |
 | - | - | - | - |
-| 左 | Explore cancer detection technology | **Explore the technology** | 391 → 255 |
-| 右 | Business collaboration | 不變 | 267 → 251 |
+| 原始 | `md` 內距 32px、`nowrap` | 391 | 267 |
+| 收內距 | `--space-3`（24px） | 375 | 251 |
+| 縮文案 | 左改「Explore the technology」 | 255 | 251 |
+| **現況** | **文案還原、折成兩排、鎖 `width: 16rem`** | **256×69** | **256×69** |
 
-「cancer detection」拿掉不減損意思——正上方的 h1 就是 Cancer Detection Technology，
-按鈕接的也是 `/technology`。兩顆都是 22 個字，寬度因此幾乎一致（255／251）。
+最後改成兩排（指定「可以變成兩排字嗎」）：`.actions > *` 拿掉 `nowrap`、
+鎖 `width: 16rem` 逼出換行點（不寫死 `<br>`），文案因此還原成完整的
+「Explore cancer detection technology」——不必再為了縮短犧牲字義。
+
+兩個配套：
+
+- Button 的 `md` 只有 `min-height: 56px`，第二排把高度撐開，所以補
+  `padding-block` 與 `line-height: 1.35`，字才不會貼著上下緣
+- `.actions` 的 `align-items` 由 `center` 改 `stretch`。左邊兩排、右邊一排，
+  `center` 會讓兩顆一高一矮；`stretch` 讓矮的補到同高（實測兩顆都是 256×69）
 
 ## 首頁背景色調（左藍右透明）
 

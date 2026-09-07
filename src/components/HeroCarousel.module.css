@@ -101,11 +101,19 @@
   .actions {
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
+    /* 左邊兩排、右邊一排，center 會讓兩顆一高一矮。
+       stretch 讓矮的那顆補到同高，兩顆看起來才是一組。 */
+    align-items: stretch;
   }
 
+  /* 兩排字（指定）：不鎖 nowrap，改用寬度上限逼出換行。
+     兩顆同寬才成對；Button 的 md 只有 min-height: 56px，第二排把高度撐開，
+     所以要補上下內距，字才不會貼著邊。 */
   .actions > * {
-    white-space: nowrap;
+    white-space: normal;
+    width: 16rem;
+    padding-block: var(--space-2);
+    line-height: 1.35;
   }
 }
 
