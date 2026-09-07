@@ -274,8 +274,16 @@ viewBox="0 0 1536 293"
 改成 `--space-3`（24px），兩顆各短 16px（實測 391→375、267→251）。
 只改 hero 這兩顆，站上其他 `md` 鈕不動。
 
-**寬度的大宗是標籤字數，不是內距。**「Explore cancer detection technology」
-大寫加字距之後光文字就 327px；要再明顯變短得改文案，那是內容決定，沒有自行更動。
+**寬度的大宗是標籤字數，不是內距。** 內距壓到 24px 後仍嫌長（回報「按鈕還是太長」），
+所以改文案：
+
+| | 舊 | 新 | 寬度 |
+| - | - | - | - |
+| 左 | Explore cancer detection technology | **Explore the technology** | 391 → 255 |
+| 右 | Business collaboration | 不變 | 267 → 251 |
+
+「cancer detection」拿掉不減損意思——正上方的 h1 就是 Cancer Detection Technology，
+按鈕接的也是 `/technology`。兩顆都是 22 個字，寬度因此幾乎一致（255／251）。
 
 ## 首頁背景色調（左藍右透明）
 

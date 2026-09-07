@@ -160,8 +160,15 @@ export default function HeroCarousel() {
       </div>
 
       <div className={styles.actions}>
+        {/* 標籤收短（指定「按鈕還是太長」）。內距已經壓到 24px，
+            剩下的寬度全在字數上，只能從文案下手。
+
+            「Explore cancer detection technology」→「Explore the technology」：
+            「cancer detection」拿掉不減損意思——正上方的 h1 就是
+            Cancer Detection Technology，按鈕接的也是 /technology。
+            兩顆都收成 22 個字，寬度剛好一致。 */}
         <Button to="/technology" variant="accent">
-          Explore cancer detection technology
+          Explore the technology
         </Button>
         <Button to="/partnerships" variant="onDark">
           Business collaboration
