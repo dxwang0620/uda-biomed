@@ -273,9 +273,10 @@
 }
 
 /* 四格數字現在住在核心定位那一段裡（依指示），不再是 .newsFocus 的成員。
-   間距用一份 Section 內距就夠——同一個 Section 內的兩塊，不必補第二份。 */
+   上緣間距維持搬動前的兩份 Section 內距（指定「維持原間距」）——
+   一度改成一份，因為同一個 Section 內不必補第二份，但視覺上要的是原本那個距離。 */
 .statsBlock {
-  margin-top: var(--space-6);
+  margin-top: calc(var(--space-6) * 2);
 }
 
 .newsFocus > .note {
