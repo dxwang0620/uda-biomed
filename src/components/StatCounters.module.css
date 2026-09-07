@@ -38,40 +38,31 @@
   min-height: clamp(9rem, 22vw, 12rem);
   padding: var(--space-4) var(--space-2);
   text-align: center;
-  /* 不要全白。淡藍斜向漸層 ＋ 白色橢圓底。
+  /* 依指示改成與底下「Solution Analysis」那張玻璃卡同一個濃度
+     （`.card` 的 --glass）。橢圓白膜與 70% 平鋪都拿掉了。
 
-     **白膜只鋪在文字底下，不是整張卡。** 一開始是整片 78%／70% 的白，
-     兩次回報都說擋掉太多背景，但 70% 已經是平鋪白膜的地板——再降就
-     掉破 AA（見 docs/content-home.md 的表）。
+     ⚠️ **這個濃度在最暗的影片畫面上不合格。** 同一個測法之下 0.25 白膜是
+     1.96:1，遠低於 AA 的 4.5:1；那張玻璃卡本來就是這個狀態（當初指定的
+     視覺方向），現在這一排跟著它走。手機沒有模糊、白膜補到 0.55，是 5.69:1，
+     那一段合格。數字與量測方法見 docs/design-node.md。
 
-     改成局部橢圓之後兩件事可以同時成立：文字底下仍是 0.70，
-     卡片的四角只剩 0.16，影片透得出來。同樣的手法首頁 hero 標題也用過。
+     文字色跟著換成 --color-text-on-glass（#05101f）：玻璃卡用的就是這個色，
+     比原本的 #2e3440 深，同樣的白膜下對比高一階，能救回一點是一點。 */
+  --glass: 0.25;
 
-     橢圓的尺寸是量出來的：文字佔卡片的 y 33%～75%、x 約 28%～72%，
-     中心取 50% / 54%，半徑 96% / 92% 之下，文字最外緣的正規化距離是 0.32，
-     還在 0.70 那個色標（38%）之內。
-
-     **橢圓要大到超出卡片、色標要一路拉到 100%。** 第一版用 62%/58% ＋
-     70%→88% 收尾，等於在卡片中間畫了一個邊界清楚的白色橢圓，看起來像污漬
-     而不是卡片。放大之後淡出的終點落在卡片外，卡片內看到的是連續的過渡。
-
-     藍色那層的上限從 0.18 降到 0.12：它是整片鋪的，不跟著橢圓收，
-     留 0.18 會把四角剛讓出來的透明度蓋回去。 */
   background:
+    /* 一開始不要全白（指定），留一層很淡的藍。濃度跟著白膜一起降，
+       不然白膜讓出來的透明度會被藍色蓋回去。 */
     linear-gradient(
       158deg,
-      rgba(var(--color-accent-rgb), 0.04),
-      rgba(var(--color-accent-rgb), 0.12)
+      rgba(var(--color-accent-rgb), 0.03),
+      rgba(var(--color-accent-rgb), 0.08)
     ),
-    radial-gradient(
-      ellipse 96% 92% at 50% 54%,
-      rgba(255, 255, 255, 0.72) 0%,
-      rgba(255, 255, 255, 0.7) 38%,
-      rgba(255, 255, 255, 0.1) 100%
-    );
-  /* 模糊背後的影片。純粹是質感，對比度不靠它——模糊不會改變平均亮度 */
-  -webkit-backdrop-filter: blur(10px) saturate(1.15);
-  backdrop-filter: blur(10px) saturate(1.15);
+    rgba(255, 255, 255, var(--glass));
+  /* 模糊比照玻璃卡的 4px（原本 10px）。實測模糊對對比度幾乎沒貢獻，
+     放輕之後影片的形狀能看清楚——這正是「不要遮那麼多」要的效果。 */
+  -webkit-backdrop-filter: blur(4px) saturate(1.35);
+  backdrop-filter: blur(4px) saturate(1.35);
   border-radius: var(--radius-lg);
   /* Android Chrome 點擊時的預設灰色閃光會蓋掉自己的按壓效果 */
   -webkit-tap-highlight-color: transparent;
@@ -79,8 +70,8 @@
      （inset:0 只到 padding box），hover 填深藍時那一圈會露出底下的白，
      變成一道白邊。inset 陰影畫在背景層，會被 ::before 整片蓋掉 */
   box-shadow:
-    inset 0 0 0 1px rgba(var(--color-accent-rgb), 0.22),
-    var(--shadow-card);
+    inset 0 0 0 1px rgba(255, 255, 255, calc(var(--glass) + 0.1)),
+    0 8px 32px rgba(0, 24, 56, 0.18);
   transition:
     transform 0.38s cubic-bezier(0.2, 0.7, 0.3, 1),
     box-shadow 0.38s ease,
@@ -88,28 +79,16 @@
 }
 
 /* 手機與觸控裝置不做 backdrop-filter，理由同 Home.module.css 的 .card：
-   背景是固定播放的影片，模糊背景要每幀重新取樣，四格加上其他五個元素
+   背景是固定播放的影片，模糊背景要每幀重新取樣，四格加上其他元素
    會把行動裝置的 GPU 吃光，捲動就會頓。
-   白底原本補到 95%，依指示降到 80%（擋掉太多背景）。對比度與模糊無關——
-   模糊不改變背後的平均亮度——80% 之下最差的一行約 6.4:1，仍高於桌機的 4.93。
-   手機留得比桌機厚一點，是因為沒有模糊時影片細節會清晰透出，
-   字壓在雜訊上比壓在同亮度的平面上難讀。 */
+
+   模糊拿掉之後影片會清晰透出，0.25 擋不住，所以白膜補到 0.55——
+   與玻璃卡同一個值。這一段是 5.69:1，過 AA。 */
 @media (max-width: 1023px), (hover: none) {
   .cell {
+    --glass: 0.55;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-    background:
-      linear-gradient(
-        158deg,
-        rgba(var(--color-accent-rgb), 0.04),
-        rgba(var(--color-accent-rgb), 0.12)
-      ),
-      radial-gradient(
-        ellipse 96% 92% at 50% 54%,
-        rgba(255, 255, 255, 0.82) 0%,
-        rgba(255, 255, 255, 0.8) 38%,
-        rgba(255, 255, 255, 0.14) 100%
-      );
   }
 }
 
@@ -257,7 +236,9 @@
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.02em;
-  color: var(--color-primary);
+  /* 白膜降到玻璃卡的濃度之後，能救的只剩文字色。
+     #05101f 比 --color-primary（#0f3661）深，同一片白膜下對比高一階。 */
+  color: var(--color-text-on-glass);
   /* 數字跑動時寬度會變，等寬數字才不會讓整格左右抖 */
   font-variant-numeric: tabular-nums;
   transition: color 0.38s ease;
@@ -283,7 +264,7 @@
   font-size: clamp(0.8125rem, 1.6vw, 1rem);
   font-weight: 700;
   line-height: 1.3;
-  color: var(--color-text);
+  color: var(--color-text-on-glass);
   transition: color 0.38s ease;
 }
 
@@ -295,7 +276,7 @@
   margin-top: 2px;
   font-size: clamp(0.6875rem, 1.2vw, 0.8125rem);
   line-height: 1.35;
-  color: var(--color-text);
+  color: var(--color-text-on-glass);
   transition: color 0.38s ease;
 }
 
