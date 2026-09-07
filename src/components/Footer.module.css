@@ -25,39 +25,87 @@
 @media (min-width: 768px) {
   .inner {
     flex-direction: row;
-    align-items: flex-start;
+    /* 標語兩行、導覽一列、聯絡一行——center 讓三者在視覺上對得起來 */
+    align-items: center;
     justify-content: space-between;
     gap: var(--space-6);
   }
 }
 
-.wordmark {
-  display: block;
-  color: inherit;
-  text-decoration: none;
+/* 左邊的標語。字級比內文大一階，但比標題小——它是頁尾的收尾，不是新的段落標題。
+   限寬讓它在寬螢幕上不會拉成一長條。 */
+.slogan {
+  max-width: 22ch;
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--color-white);
 }
 
-/* 完整鎖定圖含三行標語，需要比 header 的字標高一些才讀得到 */
-.logo {
-  height: 52px;
-  width: auto;
-}
-
-@media (min-width: 768px) {
-  .logo {
-    height: 60px;
+@media (min-width: 1024px) {
+  .slogan {
+    font-size: 1.25rem;
   }
 }
 
-/* 手機不放這一列（指定）。ABOUT～CONTACT 在手機上是漢堡選單的內容，
-   頁尾再列一次只是把頁面拉長；桌機才展開成橫列。 */
+/* 最右邊的聯絡入口。樣式比照 ArrowLink，但顏色要走 on-navy——
+   ArrowLink 是 --color-primary（深藍），在這片深藍底上等於看不見。 */
+.contact {
+  display: inline-flex;
+  align-items: center;
+  /* 手機的 .inner 是直向 flex，預設 stretch 會把這個連結拉滿整行寬 */
+  align-self: flex-start;
+  gap: var(--space-1);
+  /* 觸控目標 */
+  min-height: 44px;
+  font-family: var(--font-latin);
+  font-size: var(--text-nav);
+  font-weight: 700;
+  letter-spacing: var(--tracking-nav);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--color-white);
+}
+
+.contact svg {
+  transition: transform var(--duration) var(--ease);
+}
+
+.contact:hover svg {
+  transform: translateX(3px);
+}
+
+.contact:focus-visible {
+  outline: 2px solid var(--color-white);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact svg {
+    transition: none;
+  }
+  .contact:hover svg {
+    transform: none;
+  }
+}
+
+/* 1024 以下不放這一列。ABOUT～CONTACT 在那個寬度是漢堡選單的內容
+   （header 也是 1024 收成漢堡），頁尾再列一次只是把頁面拉長。
+
+   斷點從 768 提到 1024 的另一個理由：頁尾現在是「標語｜導覽｜聯絡」三段，
+   768px 之下扣掉左右留白只剩 704px，光導覽五個項目就要 521px，
+   三段一定擠不下。1024 之上才排得開。 */
 .nav {
   display: none;
   flex-direction: column;
   gap: var(--space-1);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .nav {
     display: flex;
     flex-direction: row;
