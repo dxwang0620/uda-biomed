@@ -158,6 +158,16 @@ export default function Home() {
             Learn more
           </Button>
         </p>
+
+        {/* 數字統計。刻意不放標題與出處說明（指定），所以沒有可指向的標題，
+            改用 aria-label 說明它是什麼。
+            ⚠️ 後兩個數字是佔位值，見 StatCounters 內的說明。
+
+            依指示排在核心定位底下。放在同一個 Section 裡而不是自成一段，
+            是為了不讓兩段的 Section 內距相加、中間空出兩倍的距離。 */}
+        <div className={styles.statsBlock}>
+          <StatCounters />
+        </div>
       </Section>
 
       {/* 消息、研發重點卡片、四格數字三塊。
@@ -257,16 +267,6 @@ export default function Home() {
                 Global Disease Market Scenario Platform
               </Button>
             </p>
-          </div>
-
-          {/* 數字統計。刻意不放標題與出處說明（指定），所以沒有可指向的標題，
-              改用 aria-label 說明它是什麼。
-              ⚠️ 後兩個數字是佔位值，見 StatCounters 內的說明。
-
-              放在這個容器裡而不是自成一個 Section，是為了在寬螢幕上排到
-              消息／董事長那一列的正下方（指定）——跨 Section 沒辦法指定列。 */}
-          <div className={styles.statsBlock}>
-            <StatCounters />
           </div>
         </div>
       </Section>

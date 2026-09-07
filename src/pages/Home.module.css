@@ -268,9 +268,14 @@
    這幾塊原本分屬不同 Section，相鄰時上下內距會相加，合併成一個容器後
    少了一份，要自己補回來。 */
 .focusGroup,
-.platformIntro,
-.statsBlock {
+.platformIntro {
   margin-top: calc(var(--space-6) * 2);
+}
+
+/* 四格數字現在住在核心定位那一段裡（依指示），不再是 .newsFocus 的成員。
+   間距用一份 Section 內距就夠——同一個 Section 內的兩塊，不必補第二份。 */
+.statsBlock {
+  margin-top: var(--space-6);
 }
 
 .newsFocus > .note {
@@ -317,11 +322,6 @@
     grid-column: 1 / -1;
     grid-row: 2;
     margin-top: calc(var(--space-12) * 2);
-  }
-
-  .statsBlock {
-    grid-column: 1 / -1;
-    grid-row: 3;
   }
 }
 
