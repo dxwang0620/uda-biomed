@@ -1,10 +1,16 @@
 import { useState } from 'react'
 import { Building2, UserRound } from 'lucide-react'
+import ConsentDialog, { type ConsentTopic } from './ConsentDialog.tsx'
 import styles from './ContactSwitch.module.css'
 
 /**
  * 兩個並排的聯絡區塊，點一邊就滑過去蓋住另一邊。
  * 一般訪客走藍色、KYC 走橘色，收合時只留一條可點的直式標籤。
+ *
+ * 展開之前先跳使用者說明書、勾選同意才放行（指定）。同意是一次性的：
+ * 同一個面板在這次瀏覽期間不會再問第二次，但重新整理就重來——
+ * 沒有把它寫進 localStorage，同意紀錄要能查證才有意義，
+ * 而這是純前端的靜態站，存在瀏覽器裡的紀錄對雙方都不算數。
  *
  * ⚠️ 送出目的地尚未接。GitHub Pages 沒有後端，表單要嘛走 mailto:、
  * 要嘛送到 Formspree 這類第三方服務，CLAUDE.md 要求實作前先確認。
@@ -93,10 +99,35 @@ function isValidTaxId(value: string): boolean {
 
 type PanelId = 'visitor' | 'kyc'
 
+const CONSENT: Record<PanelId, ConsentTopic> = {
+  visitor: { title: 'General enquiry', titleZh: '一般訪客' },
+  kyc: { title: 'KYC registration', titleZh: 'KYC 系統' },
+}
+
 export default function ContactSwitch() {
   /** null＝兩邊各半，尚未選擇 */
   const [active, setActive] = useState<PanelId | null>(null)
   const [taxIdError, setTaxIdError] = useState<string | null>(null)
+  /** 已同意說明書的面板 */
+  const [agreed, setAgreed] = useState<Record<PanelId, boolean>>({
+    visitor: false,
+    kyc: false,
+  })
+  /** 正在等同意的面板；null＝沒有彈窗 */
+  const [pending, setPending] = useState<PanelId | null>(null)
+
+  /* 收合是直接收，不必再問一次；展開才需要同意。 */
+  const toggle = (id: PanelId) => {
+    if (active === id) {
+      setActive(null)
+      return
+    }
+    if (!agreed[id]) {
+      setPending(id)
+      return
+    }
+    setActive(id)
+  }
 
   /* 收合側不可 Tab 進去，交給 CSS 的 visibility: hidden ——
      隱藏的元素本來就不可聚焦，比用 JS 逐一改 tabindex 可靠，
@@ -126,7 +157,7 @@ export default function ContactSwitch() {
             type="button"
             className={styles.tab}
             aria-expanded={active === 'visitor'}
-            onClick={() => setActive(active === 'visitor' ? null : 'visitor')}
+            onClick={() => toggle('visitor')}
           >
             <UserRound size={22} strokeWidth={2} aria-hidden="true" />
             <span className={styles.tabText}>
@@ -181,7 +212,7 @@ export default function ContactSwitch() {
             type="button"
             className={styles.tab}
             aria-expanded={active === 'kyc'}
-            onClick={() => setActive(active === 'kyc' ? null : 'kyc')}
+            onClick={() => toggle('kyc')}
           >
             <Building2 size={22} strokeWidth={2} aria-hidden="true" />
             <span className={styles.tabText}>
@@ -234,6 +265,17 @@ export default function ContactSwitch() {
           </div>
         </section>
       </div>
+
+      <ConsentDialog
+        topic={pending ? CONSENT[pending] : null}
+        onAgree={() => {
+          if (!pending) return
+          setAgreed((prev) => ({ ...prev, [pending]: true }))
+          setActive(pending)
+          setPending(null)
+        }}
+        onCancel={() => setPending(null)}
+      />
     </div>
   )
 }

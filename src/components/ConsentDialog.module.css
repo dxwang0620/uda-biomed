@@ -1,0 +1,167 @@
+/* 原生 <dialog>。預設樣式（置中、白底、黑框）要自己清掉。 */
+
+/* margin: auto 要自己寫。UA 的預設值會被 global 的 reset（* { margin: 0 }）
+   蓋掉，dialog 就會貼在左上角而不是置中。 */
+.dialog {
+  margin: auto;
+  width: min(34rem, calc(100vw - var(--space-4) * 2));
+  max-height: min(80vh, 44rem);
+  padding: 0;
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 0;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(0, 24, 56, 0.28);
+}
+
+.dialog::backdrop {
+  background: rgba(10, 37, 64, 0.55);
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.title {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  font-size: var(--text-h2);
+  line-height: 1.25;
+  color: var(--color-navy);
+}
+
+.titleZh {
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+/* 說明書內文。長文要能自己捲，不然彈窗會超出畫面。 */
+.body {
+  max-height: 40vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  font-size: var(--text-small);
+  line-height: 1.75;
+  color: var(--color-text);
+}
+
+.todo,
+.todoList {
+  margin: 0 0 var(--space-1);
+}
+
+.todoList {
+  padding-left: 1.25rem;
+  color: var(--color-text-muted);
+}
+
+/* 勾選列。整塊是 label，點文字也能勾。 */
+.check {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-1);
+  align-items: start;
+  padding: var(--space-2);
+  font-size: var(--text-small);
+  line-height: 1.6;
+  background: var(--color-tint);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.check input {
+  /* 觸控目標偏小，但 label 整塊可點，實際熱區是整列 */
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  accent-color: var(--color-primary);
+}
+
+.checkZh {
+  display: block;
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+.cancel,
+.agree {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 觸控目標 */
+  min-height: 44px;
+  padding-inline: var(--space-3);
+  font-family: var(--font-latin);
+  font-size: var(--text-nav);
+  font-weight: var(--weight-nav);
+  letter-spacing: var(--tracking-nav);
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--duration) var(--ease),
+    color var(--duration) var(--ease);
+}
+
+.cancel {
+  color: var(--color-primary);
+  background: transparent;
+  border: 1px solid var(--color-border);
+}
+
+.cancel:hover {
+  background: var(--color-tint);
+}
+
+.agree {
+  color: var(--color-white);
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.agree:hover:not(:disabled) {
+  background: var(--color-primary-600);
+  border-color: var(--color-primary-600);
+}
+
+/* 停用狀態。灰底深灰字是 4.6:1，仍讀得到——停用不等於看不見，
+   使用者要看得懂「還缺一個動作」才知道去勾。 */
+.agree:disabled {
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  cursor: not-allowed;
+}
+
+.cancel:focus-visible,
+.agree:focus-visible,
+.check input:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cancel,
+  .agree {
+    transition: none;
+  }
+}
