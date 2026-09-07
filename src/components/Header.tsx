@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { ChevronDown, Menu, X } from 'lucide-react'
 import { CTA, NAV_ITEMS, SITE } from '../config/site.ts'
 import Button from './ui/Button.tsx'
 import { useHeroElement } from '../context/heroRegistry.ts'
@@ -17,6 +17,8 @@ export default function Header() {
      白底，等 observer 首次回報後才轉透明。 */
   const [overHero, setOverHero] = useState(isHome)
   const [menuOpen, setMenuOpen] = useState(false)
+  /** 桌機展開中的下拉選單，值是該項目的 to；null＝都收起來 */
+  const [openMenu, setOpenMenu] = useState<string | null>(null)
   const [headerHeight, setHeaderHeight] = useState(0)
 
   const headerRef = useRef<HTMLElement>(null)
@@ -69,7 +71,26 @@ export default function Header() {
   /* 換頁時關掉選單，否則點了項目之後選單會留在畫面上蓋住新頁 */
   useEffect(() => {
     setMenuOpen(false)
+    setOpenMenu(null)
   }, [pathname])
+
+  /* 點到下拉選單以外的地方就收起來。用 pointerdown 而不是 click：
+     click 要等按鍵放開，中間若有捲動會顯得慢半拍。 */
+  useEffect(() => {
+    if (!openMenu) return
+    const onDown = (e: PointerEvent) => {
+      if (!(e.target as Element).closest('[data-nav-dropdown]')) setOpenMenu(null)
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpenMenu(null)
+    }
+    document.addEventListener('pointerdown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [openMenu])
 
   /* Esc 關閉 */
   useEffect(() => {
@@ -123,11 +144,23 @@ export default function Header() {
           </Link>
 
           <nav className={styles.desktopNav} aria-label="Main">
-            {NAV_ITEMS.map((item) => (
-              <NavLink key={item.to} to={item.to} className={styles.navLink}>
-                {item.label}
-              </NavLink>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              'children' in item && item.children ? (
+                <NavDropdown
+                  key={item.to}
+                  item={item}
+                  open={openMenu === item.to}
+                  onToggle={() =>
+                    setOpenMenu((cur) => (cur === item.to ? null : item.to))
+                  }
+                  onClose={() => setOpenMenu(null)}
+                />
+              ) : (
+                <NavLink key={item.to} to={item.to} className={styles.navLink}>
+                  {item.label}
+                </NavLink>
+              ),
+            )}
             <Button
               to={CTA.to}
               size="sm"
@@ -163,9 +196,25 @@ export default function Header() {
         >
           <nav className={styles.panelNav} aria-label="Main">
             {NAV_ITEMS.map((item) => (
-              <NavLink key={item.to} to={item.to} className={styles.panelLink}>
-                {item.label}
-              </NavLink>
+              <div key={item.to} className={styles.panelGroup}>
+                <NavLink to={item.to} className={styles.panelLink}>
+                  {item.label}
+                </NavLink>
+                {/* 子項目只有三個，直接列出來——再加一層展開收合，
+                    在只有三行的清單上是多按一次的成本，沒有收益。 */}
+                {'children' in item && item.children
+                  ? item.children.map((child) => (
+                      <NavLink
+                        key={child.to}
+                        to={child.to}
+                        className={styles.panelSubLink}
+                        lang="zh-Hant"
+                      >
+                        {child.label}
+                      </NavLink>
+                    ))
+                  : null}
+              </div>
             ))}
           </nav>
           {/* 選單永遠是白底，所以固定用 primary，不隨 overHero 變 */}
@@ -175,5 +224,69 @@ export default function Header() {
         </div>
       )}
     </>
+  )
+}
+
+/**
+ * 帶下拉選單的導覽項目（目前只有 RESEARCH）。
+ *
+ * 父項目維持連結：RESEARCH 本身是一個有內容的頁面，把它換成純按鈕會讓
+ * 那一頁在導覽上消失。展開改用旁邊那顆箭頭鈕，它有自己的 aria-expanded／
+ * aria-controls，滑鼠移入整塊時也會展開。
+ *
+ * 選單本身用 role="menu" 之類的 ARIA 是常見的誤用——那組角色是給
+ * 應用程式選單（會執行動作）用的，這裡是一組連結，用一般的 <ul>／<a>
+ * 讀屏才會唸成「連結，共 3 個」。
+ */
+function NavDropdown({
+  item,
+  open,
+  onToggle,
+  onClose,
+}: {
+  item: { label: string; to: string; children: readonly { label: string; to: string }[] }
+  open: boolean
+  onToggle: () => void
+  onClose: () => void
+}) {
+  const menuId = `nav-sub-${item.to.replace(/\W/g, '')}`
+
+  return (
+    <div
+      className={styles.navGroup}
+      data-nav-dropdown=""
+      /* 滑鼠移入即展開；移出整塊才收。焦點離開整塊也收，
+         這樣用鍵盤 Tab 出去時選單不會留著。 */
+      onPointerEnter={onToggle === undefined ? undefined : () => !open && onToggle()}
+      onPointerLeave={onClose}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) onClose()
+      }}
+    >
+      <NavLink to={item.to} className={styles.navLink}>
+        {item.label}
+      </NavLink>
+
+      <button
+        type="button"
+        className={styles.navToggle}
+        aria-expanded={open}
+        aria-controls={menuId}
+        aria-label={`${item.label} submenu`}
+        onClick={onToggle}
+      >
+        <ChevronDown size={14} strokeWidth={2.5} aria-hidden="true" />
+      </button>
+
+      <ul id={menuId} className={styles.subMenu} hidden={!open}>
+        {item.children.map((child) => (
+          <li key={child.to}>
+            <NavLink to={child.to} className={styles.subLink} lang="zh-Hant">
+              {child.label}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }

@@ -254,3 +254,111 @@
   margin-top: var(--space-4);
   font-weight: 700;
 }
+
+/* ---------- 導覽的下拉選單（RESEARCH） ---------- */
+
+.navGroup {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* 展開鈕。父項目維持連結，展開交給這顆——RESEARCH 本身是一個有內容的頁面，
+   把它換成純按鈕會讓那一頁在導覽上消失。 */
+.navToggle {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 44px;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.navToggle svg {
+  transition: transform var(--duration) var(--ease);
+}
+
+.navToggle[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+.navToggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* 下拉面板。header 在 hero 上是透明的，但面板一律白底——
+   面板底下是頁面內容不是影片，透明會直接糊成一片。 */
+.subMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  min-width: 12rem;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(0, 24, 56, 0.16);
+}
+
+.subLink {
+  display: block;
+  /* 觸控目標：44px 高由內距撐出來 */
+  padding: 11px var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+}
+
+.subLink:hover {
+  color: var(--color-primary);
+  background: var(--color-tint);
+}
+
+.subLink[aria-current='page'] {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.subLink:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+/* ---------- 手機選單裡的子項目 ---------- */
+
+.panelGroup {
+  display: contents;
+}
+
+.panelSubLink {
+  display: block;
+  /* 縮排標示層級。左邊那條線讓三個子項目在視覺上收成一組 */
+  margin-left: var(--space-2);
+  padding: 11px var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  border-left: 2px solid var(--color-border);
+}
+
+.panelSubLink[aria-current='page'] {
+  font-weight: 700;
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
+}

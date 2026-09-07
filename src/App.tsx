@@ -11,6 +11,7 @@ import {
 import Home from './pages/Home.tsx'
 import About from './pages/About.tsx'
 import Research from './pages/Research.tsx'
+import ResearchTopic from './pages/ResearchTopic.tsx'
 import Technology from './pages/Technology.tsx'
 import Partnerships from './pages/Partnerships.tsx'
 import Contact from './pages/Contact.tsx'
@@ -46,6 +47,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/research" element={<Research />} />
+            {/* 三個子頁共用一個元件，靠 slug 分辨（指定 RESEARCH 要有分頁） */}
+            <Route path="/research/:slug" element={<ResearchTopic />} />
             <Route path="/technology" element={<Technology />} />
             <Route path="/partnerships" element={<Partnerships />} />
             <Route path="/contact" element={<Contact />} />

@@ -17,10 +17,27 @@ export const SITE = {
     'UDA BIOMED advances cancer detection research by connecting molecular investigation, analytical technology and clinical collaboration.',
 } as const
 
+/** RESEARCH 底下的三個子頁（指定）。標題是原話，沒有改寫也沒有自行翻譯。
+
+    網址用英文 slug：網址會出現在名片、簡報與搜尋結果上，
+    中文路徑會被百分比編碼成一長串亂碼。 */
+export const RESEARCH_TOPICS = [
+  { slug: 'disease-basis', to: '/research/disease-basis', zh: '研究疾病的基礎' },
+  { slug: 'cancer-prevention', to: '/research/cancer-prevention', zh: '研究如何預防癌症' },
+  { slug: 'digital-health', to: '/research/digital-health', zh: '研究數位醫療' },
+] as const
+
 /** 導覽項目。CTA（PARTNER WITH US）不在此列，它不是導覽項目。 */
 export const NAV_ITEMS = [
   { label: 'ABOUT', to: '/about' },
-  { label: 'RESEARCH', to: '/research' },
+  {
+    label: 'RESEARCH',
+    to: '/research',
+    /* to 寫成字面值而不是用 slug 組出來：scripts/prerender-routes.mjs 會用
+       正規式從這個檔案抓路徑，樣板字串抓不到，三個子頁就不會被預渲染。
+       （這段註解本身也不能寫出那個樣式，否則會被抓成一條假路由。） */
+    children: RESEARCH_TOPICS.map((t) => ({ label: t.zh, to: t.to })),
+  },
   { label: 'TECHNOLOGY', to: '/technology' },
   { label: 'PARTNERSHIPS', to: '/partnerships' },
   { label: 'CONTACT', to: '/contact' },
@@ -49,6 +66,18 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     title: `Research — ${SITE.name}`,
     description:
       'Connecting molecular investigation, analytical methods and collaborative research.',
+  },
+  '/research/disease-basis': {
+    title: `研究疾病的基礎 — ${SITE.name}`,
+    description: '[待補：研究疾病的基礎 的頁面說明]',
+  },
+  '/research/cancer-prevention': {
+    title: `研究如何預防癌症 — ${SITE.name}`,
+    description: '[待補：研究如何預防癌症 的頁面說明]',
+  },
+  '/research/digital-health': {
+    title: `研究數位醫療 — ${SITE.name}`,
+    description: '[待補：研究數位醫療 的頁面說明]',
   },
   '/technology': {
     title: `Technology — ${SITE.name}`,
