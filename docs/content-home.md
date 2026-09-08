@@ -1221,3 +1221,11 @@ easeOutCubic，1.6 秒。用 rAF 而不是 `setInterval`：後者的間隔不保
 掃光的 `::after` 要設 `pointer-events: none`，它蓋在整塊上面，
 否則底下九個連結與捲動區都點不到。
 `prefers-reduced-motion: reduce` 時位移與掃光全部關掉。
+
+hover 時**九則的文字轉藍**（`--color-primary` `#0f3661`，依指示）。
+不用 `--color-accent`（`#0072ea`）：那個對純白只有 4.57:1，而實際底是
+半透明玻璃疊影片，只會更低。
+
+> 兩個主題標題（Solution Analysis / Latest News）**刻意不跟著轉藍**——
+> 它們在這片玻璃上是白字，底下直接是背景影片，換成深藍會糊進背景；
+> 第一版一起換了，實測整行明顯變暗。

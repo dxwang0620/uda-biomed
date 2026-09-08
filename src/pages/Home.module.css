@@ -350,6 +350,22 @@
   .newsBlock:hover::after {
     animation: newsShine 0.85s ease-out 0.12s;
   }
+
+  /* hover 時文字轉藍（指定）。用 --color-primary 而不是 --color-accent：
+     accent（#0072ea）在這片玻璃上只有 4.57:1（且那是對純白算的，
+     實際底是半透明疊影片，只會更低）；primary（#0f3661）深得多，
+     看得出是藍色又不犧牲可讀性。
+
+     這幾條要跟 .newsBlock:hover 放在同一個 @media 裡：觸控裝置上
+     :hover 點過會黏著，字會一直停在藍色。 */
+  /* 兩個主題標題（Solution Analysis / Latest News）**不**跟著轉藍：
+     它們在這片玻璃上是白字（底下是背景影片，不是卡片內的淺色區），
+     換成深藍會直接糊進背景——實測 hover 後整行明顯變暗。 */
+  .newsBlock:hover .newsTitle,
+  .newsBlock:hover .newsExcerpt,
+  .newsBlock:hover .newsCategory {
+    color: var(--color-primary);
+  }
 }
 
 @keyframes newsShine {
@@ -382,6 +398,7 @@
   font-size: 1.375rem;
   line-height: 1.25;
   color: var(--color-text-on-glass);
+  transition: color 0.38s ease;
 }
 
 /* 捲動區。固定高度才會出現捲軸，這是刻意的：消息會一直累積，
@@ -673,6 +690,7 @@
   font-weight: 700;
   line-height: 1.35;
   color: var(--color-text-on-glass);
+  transition: color 0.38s ease;
 }
 
 .newsExcerpt {
@@ -680,6 +698,7 @@
   line-height: 1.5;
   color: var(--color-text-on-glass);
   opacity: 0.85;
+  transition: color 0.38s ease;
 }
 
 /* ---------- 捲動進場 ---------- */
