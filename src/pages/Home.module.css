@@ -358,9 +358,16 @@
 
      這幾條要跟 .newsBlock:hover 放在同一個 @media 裡：觸控裝置上
      :hover 點過會黏著，字會一直停在藍色。 */
-  /* 兩個主題標題（Solution Analysis / Latest News）**不**跟著轉藍：
-     它們在這片玻璃上是白字（底下是背景影片，不是卡片內的淺色區），
-     換成深藍會直接糊進背景——實測 hover 後整行明顯變暗。 */
+  /* 兩個主題標題（Solution Analysis / Latest News）也轉藍，但用的是**淺藍**。
+
+     它們在這片玻璃上是白字，底下直接是背景影片，不是卡片內的淺色區——
+     跟著換成 --color-primary 那種深藍會糊進背景（第一版就是這樣，
+     實測 hover 後整行明顯變暗，看起來像消失）。淺藍維持亮度層級，
+     看得出顏色變了，又不會掉進背景裡。 */
+  .newsBlock:hover .blockTitle {
+    color: #a8c8ff;
+  }
+
   .newsBlock:hover .newsTitle,
   .newsBlock:hover .newsExcerpt,
   .newsBlock:hover .newsCategory {
