@@ -302,6 +302,81 @@
 
 /* 主題標題。與底下第一則之間要有明顯的間距（指定），
    不然標題會像黏在第一則上面。 */
+/* 整塊的 hover。做法比照四格數字（指定「跟全球人口那樣」），但拿掉翻轉，
+   也拿掉那邊的深藍填色與白字——這一塊裡有九則深色文字與九張縮圖，
+   底下換成深藍之後字會直接消失，四格只有三行字才做得起來。
+   留下的是浮起、陰影與那道掃光。
+
+   scale 只用 1.005：這一塊在寬螢幕是滿版 1440px，1.02 會左右各長出 14px。 */
+.newsBlock {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    transform 0.38s cubic-bezier(0.2, 0.7, 0.3, 1),
+    box-shadow 0.38s ease;
+}
+
+/* 掃光。與四格用同一組動畫語彙。 */
+.newsBlock::after {
+  content: '';
+  position: absolute;
+  inset: -20% -60%;
+  z-index: 1;
+  /* 純裝飾，不能擋住底下的連結與捲動 */
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.16) 50%,
+    transparent 60%
+  );
+  opacity: 0;
+}
+
+/* hover 效果只給真的有游標的裝置。觸控裝置上 :hover 會黏著不放。 */
+@media (hover: hover) and (pointer: fine) {
+  .newsBlock:hover {
+    /* !important 是必要的，不是偷懶。這一塊同時掛著 .reveal 的捲動進場動畫
+       （animation-fill-mode: both），它的最後一個關鍵影格是 transform: none，
+       而**動畫的宣告會蓋過一般宣告，跟特異性無關**——不加 important 的話
+       hover 的位移永遠不會生效（實測 transform 停在 matrix(1,0,0,1,0,0)）。
+       階層順序是：transition > !important > animation > 一般宣告。
+       陰影不受影響，因為 reveal 沒有動到 box-shadow。 */
+    transform: translateY(-6px) scale(1.005) !important;
+    box-shadow: 0 18px 38px rgba(0, 48, 104, 0.28);
+  }
+
+  .newsBlock:hover::after {
+    animation: newsShine 0.85s ease-out 0.12s;
+  }
+}
+
+@keyframes newsShine {
+  from {
+    opacity: 1;
+    transform: translateX(-70%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(70%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .newsBlock {
+    transition: none;
+  }
+
+  .newsBlock:hover {
+    transform: none !important;
+  }
+
+  .newsBlock:hover::after {
+    animation: none;
+  }
+}
+
 .blockTitle {
   margin-bottom: var(--space-4);
   font-size: 1.375rem;
