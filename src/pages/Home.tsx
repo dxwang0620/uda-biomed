@@ -303,6 +303,36 @@ export default function Home() {
           回到單純的直向堆疊。 */}
       <Section tone="translucent">
         <div className={styles.newsFocus}>
+          {/* 技術平台的標題與導言。依指示搬到四格數字上面；
+              原本那一段底下的三張卡（Scientific Foundation / Validated /
+              Translatable）與三格特性（Interference Control / Recognition
+              Interface / Translation & IP）依指示整組刪除。 */}
+          <div className={styles.platformIntro}>
+            {/* 參考影片只拍到「… verifiable technology platform」，
+                前半段是依上下文擬的草稿，見 docs/content-home.md */}
+            <h2 id="platform-heading" className={styles.sectionTitle}>
+              Building a verifiable technology platform
+            </h2>
+            <p className={styles.lede}>
+              UDA Biochip Technology integrates molecular recognition, material
+              interfaces, biosensing, microscale engineering, signal transduction
+              and data analysis as a key platform for life-signal research and
+              cancer-detection technology. Our focus is not only on acquiring
+              signals, but also on whether they can be recognized, compared,
+              validated and progressively translated into results with application
+              potential. Core designs, material structures, recognition mechanisms
+              and final product form are disclosed progressively in line with
+              R&amp;D and intellectual-property strategy.
+            </p>
+
+            {/* 與核心定位那顆同一個變體（橘底、hover 轉深藍）。
+                指向 TECHNOLOGY——這一段講的就是技術平台。 */}
+            <p className={styles.moreRow}>
+              <Button to="/technology" variant="accent">
+                Global Disease Market Scenario Platform
+              </Button>
+            </p>
+          </div>
           <div className={`${styles.newsBlock} ${styles.reveal}`}>
             {/* 同一個 block 內兩個主題（指定）：解決方案分析 在上、最新消息 在下。
                 兩個標題都放進捲動區裡，才不會一個固定、一個跟著捲。
@@ -337,36 +367,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 技術平台的標題與導言。依指示搬到四格數字上面；
-              原本那一段底下的三張卡（Scientific Foundation / Validated /
-              Translatable）與三格特性（Interference Control / Recognition
-              Interface / Translation & IP）依指示整組刪除。 */}
-          <div className={styles.platformIntro}>
-            {/* 參考影片只拍到「… verifiable technology platform」，
-                前半段是依上下文擬的草稿，見 docs/content-home.md */}
-            <h2 id="platform-heading" className={styles.sectionTitle}>
-              Building a verifiable technology platform
-            </h2>
-            <p className={styles.lede}>
-              UDA Biochip Technology integrates molecular recognition, material
-              interfaces, biosensing, microscale engineering, signal transduction
-              and data analysis as a key platform for life-signal research and
-              cancer-detection technology. Our focus is not only on acquiring
-              signals, but also on whether they can be recognized, compared,
-              validated and progressively translated into results with application
-              potential. Core designs, material structures, recognition mechanisms
-              and final product form are disclosed progressively in line with
-              R&amp;D and intellectual-property strategy.
-            </p>
-
-            {/* 與核心定位那顆同一個變體（橘底、hover 轉深藍）。
-                指向 TECHNOLOGY——這一段講的就是技術平台。 */}
-            <p className={styles.moreRow}>
-              <Button to="/technology" variant="accent">
-                Global Disease Market Scenario Platform
-              </Button>
-            </p>
-          </div>
         </div>
       </Section>
 
