@@ -375,6 +375,31 @@
   }
 }
 
+/* 按壓狀態（觸控裝置）。效果與上面的 hover 相同，但不能合併成一組選擇器——
+   hover 那組必須留在 @media (hover: hover) 裡（觸控裝置上 :hover 點過會黏著），
+   而 .pressed 要在所有裝置都生效。
+
+   transform 同樣要 !important，理由與 hover 那條一樣：.reveal 的動畫
+   會蓋過一般宣告。 */
+.newsBlock.pressed {
+  transform: translateY(-6px) scale(1.005) !important;
+  box-shadow: 0 18px 38px rgba(0, 48, 104, 0.28);
+}
+
+.newsBlock.pressed::after {
+  animation: newsShine 0.85s ease-out 0.12s;
+}
+
+.newsBlock.pressed .blockTitle {
+  color: var(--color-navy);
+}
+
+.newsBlock.pressed .newsTitle,
+.newsBlock.pressed .newsExcerpt,
+.newsBlock.pressed .newsCategory {
+  color: var(--color-primary);
+}
+
 @keyframes newsShine {
   from {
     opacity: 1;
@@ -391,11 +416,13 @@
     transition: none;
   }
 
-  .newsBlock:hover {
+  .newsBlock:hover,
+  .newsBlock.pressed {
     transform: none !important;
   }
 
-  .newsBlock:hover::after {
+  .newsBlock:hover::after,
+  .newsBlock.pressed::after {
     animation: none;
   }
 }

@@ -5,6 +5,7 @@ import StatCounters from '../components/StatCounters.tsx'
 import HeroVideo from '../components/HeroVideo.tsx'
 import Button from '../components/ui/Button.tsx'
 import Section from '../components/ui/Section.tsx'
+import { usePress } from '../hooks/usePress.ts'
 import styles from './Home.module.css'
 
 /* 版面與文案依 index_video 參考影片重建，逐字內容見 docs/content-home.md。
@@ -199,6 +200,10 @@ function NewsRow({ item, thumbIndex }: { item: NewsItem; thumbIndex: number }) {
 }
 
 export default function Home() {
+  /* 觸控裝置沒有 hover，整組效果關在 @media (hover: hover) 裡，
+     手機上點消息區塊完全沒反應。這裡補一個按壓狀態，與四格數字同一個 hook。 */
+  const news = usePress()
+
   /* 董事長談話預設收合，點藍色區塊下緣的箭頭展開。 */
 
   return (
@@ -333,7 +338,12 @@ export default function Home() {
               </Button>
             </p>
           </div>
-          <div className={`${styles.newsBlock} ${styles.reveal}`}>
+          <div
+            className={`${styles.newsBlock} ${styles.reveal} ${
+              news.pressed ? styles.pressed : ''
+            }`}
+            {...news.handlers}
+          >
             {/* 同一個 block 內兩個主題（指定）：解決方案分析 在上、最新消息 在下。
                 兩個標題都放進捲動區裡，才不會一個固定、一個跟著捲。
 
