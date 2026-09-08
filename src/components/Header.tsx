@@ -125,21 +125,25 @@ export default function Header() {
           {/* 用含標語的完整鎖定圖，不裁掉右側的 Unveiling Dynamic Atoms。
               兩個色版同時在 DOM 裡、用 CSS 切換：改用 src 切換的話，
               第一次捲過 hero 會臨時抓圖而閃一下。
-              連結本身有 aria-label，所以兩張圖都 alt=""，避免重複朗讀。 */}
+              連結本身有 aria-label，所以兩張圖都 alt=""，避免重複朗讀。
+
+              兩張圖是從 logo_img/logo2th/ 的 JPG 去背產生的（指定），
+              尺寸 711×231。width／height 要跟著實際檔案走，
+              寫錯的話瀏覽器保留的版位比例不對，載入時整條 header 會跳一下。 */}
           <Link to="/" className={styles.wordmark} aria-label={`${SITE.name} home`}>
             <img
               className={`${styles.logo} ${styles.logoNavy}`}
               src={`${import.meta.env.BASE_URL}brand/logo-full-blue.png`}
               alt=""
-              width={878}
-              height={269}
+              width={711}
+              height={231}
             />
             <img
               className={`${styles.logo} ${styles.logoWhite}`}
               src={`${import.meta.env.BASE_URL}brand/logo-full-white.png`}
               alt=""
-              width={878}
-              height={269}
+              width={711}
+              height={231}
             />
           </Link>
 
