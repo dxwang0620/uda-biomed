@@ -250,6 +250,50 @@ export default function Home() {
           <StatCounters />
         </div>
       </Section>
+      <Section tone="translucent" labelledBy="responsibility-heading">
+        <div className={styles.intro}>
+          <p className={styles.eyebrow}>CORPORATE RESPONSIBILITY</p>
+          <h2 id="responsibility-heading" className={styles.sectionTitle}>
+            Protecting every life through responsibility
+          </h2>
+          <p className={styles.lede}>
+            UDA builds long-term trust through scientific integrity, privacy
+            governance and respect for life, advancing R&amp;D value alongside
+            social responsibility.
+          </p>
+        </div>
+
+        <div className={styles.snapshot}>
+          <p className={styles.eyebrow}>R&amp;D PORTFOLIO SNAPSHOT</p>
+
+          <ul role="list" className={styles.snapCards}>
+            {SNAPSHOT.map(({ n, title, body, file }) => (
+              <li key={title} className={styles.snapCard}>
+                {/* 配圖是辦公環境照，與這一格的內容沒有對應關係，alt="" 當裝飾 */}
+                <picture className={styles.snapMedia}>
+                  <source
+                    srcSet={`${import.meta.env.BASE_URL}media/${file}.webp`}
+                    type="image/webp"
+                  />
+                  <img
+                    src={`${import.meta.env.BASE_URL}media/${file}.jpg`}
+                    alt=""
+                    width={800}
+                    height={450}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                <p className={styles.snapTag}>{n}</p>
+                <h3 className={styles.snapTitle}>{title}</h3>
+                <p className={styles.snapBody}>{body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Section>
+
+
 
       {/* 消息與技術平台導言兩塊。
           多個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。
@@ -323,50 +367,6 @@ export default function Home() {
               </Button>
             </p>
           </div>
-        </div>
-      </Section>
-
-
-      <Section tone="translucent" labelledBy="responsibility-heading">
-        <div className={styles.intro}>
-          <p className={styles.eyebrow}>CORPORATE RESPONSIBILITY</p>
-          <h2 id="responsibility-heading" className={styles.sectionTitle}>
-            Protecting every life through responsibility
-          </h2>
-          <p className={styles.lede}>
-            UDA builds long-term trust through scientific integrity, privacy
-            governance and respect for life, advancing R&amp;D value alongside
-            social responsibility.
-          </p>
-        </div>
-
-        <div className={styles.snapshot}>
-          <p className={styles.eyebrow}>R&amp;D PORTFOLIO SNAPSHOT</p>
-
-          <ul role="list" className={styles.snapCards}>
-            {SNAPSHOT.map(({ n, title, body, file }) => (
-              <li key={title} className={styles.snapCard}>
-                {/* 配圖是辦公環境照，與這一格的內容沒有對應關係，alt="" 當裝飾 */}
-                <picture className={styles.snapMedia}>
-                  <source
-                    srcSet={`${import.meta.env.BASE_URL}media/${file}.webp`}
-                    type="image/webp"
-                  />
-                  <img
-                    src={`${import.meta.env.BASE_URL}media/${file}.jpg`}
-                    alt=""
-                    width={800}
-                    height={450}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </picture>
-                <p className={styles.snapTag}>{n}</p>
-                <h3 className={styles.snapTitle}>{title}</h3>
-                <p className={styles.snapBody}>{body}</p>
-              </li>
-            ))}
-          </ul>
         </div>
       </Section>
 
