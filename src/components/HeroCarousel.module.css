@@ -87,15 +87,6 @@
   padding-inline: var(--space-3);
 }
 
-/* 橘鈕加白外框（指定）。Button 的 accent 變體邊框與底色同為橘，
-   在影片上兩顆按鈕的外框一深一淺，看起來不成對；改成白框之後
-   與右邊那顆（onDark，白框透明底）對齊，也把橘色從影片裡框出來。
-
-   hover 轉深藍時白框保留，不然翻色瞬間邊界會整個消失。 */
-.actions > a:first-child,
-.actions > a:first-child:hover {
-  border-color: var(--color-on-navy);
-}
 
 @media (min-width: 560px) {
   .actions {
