@@ -13,8 +13,13 @@ import react from '@vitejs/plugin-react'
 
    設錯的症狀：部署後畫面全白、CSS 與 JS 全部 404。
    部署前務必跑 `npm run preview` 驗過，`npm run dev` 不會重現這個問題。
+
+   **現況：已綁自訂網域 www.udabiomed.com，所以是 '/'。**
+   代價是 dxwang0620.github.io/uda-biomed/ 那個舊網址會變成白畫面——
+   一次 build 只能對應一個 base。GitHub 在自訂網域生效後會把 github.io
+   的網址轉址到自訂網域，所以正常情況下不會有人踩到。
    ══════════════════════════════════════════════════════════════ */
-const BASE = '/uda-biomed/'
+const BASE = '/'
 
 export default defineConfig({
   base: BASE,

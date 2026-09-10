@@ -617,3 +617,40 @@ alpha = clamp((dist - floor) / (max - floor)) ，dist = 與底色的最大通道
 - **alpha 低於 8% 一律歸零**，去掉 JPEG 壓縮在筆畫周圍留下的淡霧
 
 裁切框用「距離 > 50% 最大值」的像素決定，四邊各留 8px 邊距。
+
+## 自訂網域 www.udabiomed.com
+
+兩個設定要一起對，缺一個就是白畫面：
+
+| 項目 | 值 |
+| --- | --- |
+| `vite.config.ts` 的 `BASE` | `'/'`（自訂網域的站台根目錄就是網域本身） |
+| `public/CNAME` | `www.udabiomed.com`，內容要與 GitHub Settings → Pages 的 Custom domain 完全一致 |
+
+CNAME 檔一定要在 build 產物裡：少了它，每次部署都會把 GitHub 上的自訂網域設定清掉。
+放 `public/` 之下由 Vite 原樣複製到 `dist/`。
+
+改成 `'/'` 之後 `dxwang0620.github.io/uda-biomed/` 會變成白畫面——一次 build 只能
+對應一個 base。GitHub 在自訂網域生效後會把 github.io 轉址過去。
+
+### 綁網域時遇到的白畫面：不是 base 的問題
+
+第一時間會以為是 base 設錯（症狀一模一樣），但那次不是。判斷方法是**看線上的
+HTML 本身**：
+
+```
+curl -s https://www.udabiomed.com/ | md5   # 805842ea…
+md5 -q index.html                          # 805842ea… ← 一樣
+md5 -q dist/index.html                     # 493e4e1e… ← 不一樣
+```
+
+線上服務的是 **repo 裡的原始 `index.html`**，不是 build 產物：
+`%BASE_URL%` 沒有被取代、`<script src="/src/main.tsx">` 還在——那是 dev 用的
+進入點，伺服器上根本沒有這個檔，所以什麼都跑不起來。
+
+原因是 **Settings → Pages → Build and deployment 的 Source 變成
+「Deploy from a branch」**，等於把 repo 當靜態檔直接發佈。這個專案用的是
+Actions workflow（`actions/deploy-pages`），Source 必須是 **GitHub Actions**。
+
+> 分辨方式：base 設錯的話，線上 HTML 會是 build 產物（有 hash 過的 assets 路徑），
+> 只是路徑前綴錯而 404；Source 設錯的話，線上 HTML 直接就是原始碼那一份。
