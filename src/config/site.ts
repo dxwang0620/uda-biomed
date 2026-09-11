@@ -36,7 +36,7 @@ export const RESEARCH_TOPICS = [
   {
     slug: "digital-health",
     to: "/research/digital-health",
-    zh: "研究數位醫療",
+    zh: "數位醫療研發部",
   },
 ] as const;
 
@@ -90,8 +90,8 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
       description: "[待補：研究如何預防癌症]",
     },
     "/research/digital-health": {
-      title: `研究數位醫療 — ${SITE.name}`,
-      description: "[待補：研究數位醫療]",
+      title: `數位醫療研發部 — ${SITE.name}`,
+      description: "[待補：數位醫療研發部]",
     },
     "/technology": {
       title: `Technology — ${SITE.name}`,
