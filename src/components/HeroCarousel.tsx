@@ -141,7 +141,15 @@ export default function HeroCarousel() {
         })}
       </div>
 
-      <div className={styles.dots} role="tablist" aria-label="Choose slide">
+      {/* 圓點列做成滑軌（指定）：一條橫線串起五個點，橘色的標記滑到當前那一顆。
+          --dot-i 是當前索引，標記的位置由它算出來，切換時 CSS 自己補間，
+          不需要在 JS 裡算像素或跑動畫。 */}
+      <div
+        className={styles.dots}
+        role="tablist"
+        aria-label="Choose slide"
+        style={{ '--dot-i': index } as React.CSSProperties}
+      >
         {SLIDES.map((slide, i) => (
           <button
             key={slide.title}

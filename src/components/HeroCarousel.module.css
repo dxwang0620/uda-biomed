@@ -123,10 +123,46 @@
    要回到 44x44 的話，間距就會回到先前那樣寬。 */
 
 .dots {
+  position: relative;
   display: flex;
+  /* 收成內容寬。這是 block 層級的元素，不收的話會撐滿整個 hero 欄寬，
+     而軌道是用 left/right 定位的——會從第一顆點一路畫到畫面右緣。 */
+  width: max-content;
   gap: 0;
   /* 熱區比圓點寬，往左收回讓整排對齊內容左緣 */
   margin: 0 0 var(--space-3) -11px;
+}
+
+/* 軌道。左右各內縮半個熱區（16px），兩端才會剛好停在第一顆與最後一顆的圓心上。
+   與研發焦點滑軌同一套語彙：透明白的細線，疊在影片上不論明暗都看得見。 */
+.dots::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  /* 熱區高 44，圓心在 22 */
+  top: 22px;
+  height: 1px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
+/* 滑過去的標記。位置由 --dot-i 算：第 i 顆的圓心在 i*32+16。
+   用 transform 而不是 left，位移才走合成器、不觸發版面重算。 */
+.dots::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 22px;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border-radius: 50%;
+  background: var(--color-orange);
+  transform: translateX(calc(var(--dot-i, 0) * 32px));
+  transition: transform 0.42s cubic-bezier(0.32, 0.72, 0, 1);
+  pointer-events: none;
 }
 
 .dot {
@@ -157,9 +193,10 @@
 }
 
 /* 當前這一張用橘色標示 */
+/* 當前那一顆自己不上色——橘點由 .dots::after 那個會滑動的標記負責，
+   兩個都畫的話切換時會看到兩顆橘點同時存在。 */
 .dotActive::before {
-  background: var(--color-orange);
-  transform: scale(1.4);
+  background: transparent;
 }
 
 /* 鍵盤焦點也用橘色，與選取狀態一致 */
@@ -167,4 +204,10 @@
   outline: 3px solid var(--color-orange);
   outline-offset: -6px;
   border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dots::after {
+    transition: none;
+  }
 }
