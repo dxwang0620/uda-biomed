@@ -175,7 +175,10 @@
 
 /* ---------- R&D Portfolio Snapshot ---------- */
 
-/* 沿用原本 To add 方塊的外觀（虛線框、圓角、小標籤），只是內容換成正式文案。
+/* 版型沿用原本 To add 方塊（圓角、小標籤、配圖在上），但**虛線框已依指示移除**——
+   那條虛線是 Placeholder 元件用來標示「這裡還沒有內容」的記號，
+   內容換成正式文案之後留著只會讓人以為還沒做完。
+
    顏色走 Section 覆寫的 --placeholder-* 變數，深色區塊上才讀得到。 */
 
 .snapshot {
@@ -191,9 +194,9 @@
 }
 
 .snapCard {
-  padding: var(--space-3);
-  border: 2px dashed var(--placeholder-line, var(--color-border));
-  border-radius: var(--radius);
+  /* 虛線框拿掉之後左右內距也不需要了：卡片沒有框，內距只會讓文字
+     跟隔壁欄的文字對不齊。上下留一點讓配圖與文字不貼著相鄰區塊。 */
+  padding: 0;
   color: var(--placeholder-fg, var(--color-text-muted));
 }
 
