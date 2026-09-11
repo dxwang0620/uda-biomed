@@ -266,6 +266,15 @@
 .scene {
   display: flex;
   flex-direction: column;
+  /* 窄螢幕整格置中（指定）：圖已經縮小並置中，文字靠左會跟圖對不起來。
+     640 以上解除——兩欄以上時圖吃滿欄寬，靠左才對得齊。 */
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .scene {
+    text-align: left;
+  }
 }
 
 .sceneMedia {
@@ -318,10 +327,20 @@
 }
 
 .sceneBody {
-  margin: var(--space-1) 0 0;
+  /* 置中的段落行寬要收窄，不然每一行的起點都不同、讀起來很吃力。
+     auto 的左右 margin 讓限寬後的區塊本身也置中。 */
+  max-width: 34ch;
+  margin: var(--space-1) auto 0;
   font-size: var(--text-small);
   line-height: 1.7;
   color: var(--color-text-muted);
+}
+
+@media (min-width: 640px) {
+  .sceneBody {
+    max-width: none;
+    margin-inline: 0;
+  }
 }
 
 .footerCta {
