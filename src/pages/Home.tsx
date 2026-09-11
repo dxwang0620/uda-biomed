@@ -79,7 +79,7 @@ const LATEST: NewsItem[] = [
     excerpt:
       'How UDA frames detection as a question of telling a real signal apart from ordinary biological variation.',
     to: '/research',
-    thumb: 'focus-1',
+    thumb: 'news-detection',
     thumbAlt: '',
   },
   {
@@ -89,14 +89,8 @@ const LATEST: NewsItem[] = [
     excerpt:
       'An olfactory language sensing chip that reads the volatile chemical signals a substance leaves in the air.',
     to: '/research/digital-health',
-    thumb: 'dh-chip-poster',
+    thumb: 'news-afl',
     thumbAlt: '',
-  },
-  {
-    category: 'Collaboration',
-    date: '05 Aug 2026',
-    title: 'How we prepare for a first technical discussion',
-    excerpt: 'What is useful to bring, and what we can and cannot share at that stage.',
   },
 ]
 
