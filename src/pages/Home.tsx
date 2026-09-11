@@ -69,18 +69,28 @@ const NEWS_THUMBS = [
    刻意不含任何成果、數據、臨床階段、論文、專利或合作對象——
    那些是 CLAUDE.md 明訂不能編的。日期同樣是排版用的假值。
    上線前需要真實內容替換。 */
-const LATEST = [
+const LATEST: NewsItem[] = [
+  /* 前兩則依指示指向實際的內頁，並用各自主題的圖。
+     ⚠️ 標題與摘要仍是草稿，寫的時候不含任何成果、數據、期別或時程。 */
   {
     category: 'Research',
     date: '02 Sep 2026',
-    title: 'Notes on how a detection question becomes a method',
-    excerpt: 'The steps between framing a question and having something that can be run twice.',
+    title: 'Cancer detection research: where the work currently stands',
+    excerpt:
+      'How UDA frames detection as a question of telling a real signal apart from ordinary biological variation.',
+    to: '/research',
+    thumb: 'focus-1',
+    thumbAlt: '',
   },
   {
     category: 'Technology',
     date: '19 Aug 2026',
-    title: 'What reproducibility means for a recognition interface',
-    excerpt: 'Why the same conditions have to hold before a measurement is worth comparing.',
+    title: 'AFL System: turning scent into data that can be understood',
+    excerpt:
+      'An olfactory language sensing chip that reads the volatile chemical signals a substance leaves in the air.',
+    to: '/research/digital-health',
+    thumb: 'dh-chip-poster',
+    thumbAlt: '',
   },
   {
     category: 'Collaboration',
@@ -147,6 +157,12 @@ type NewsItem = {
   date: string
   title: string
   excerpt: string
+  /** 覆寫去向。沒給的話指向 /research——多數消息還沒有自己的頁面。 */
+  to?: string
+  /** 覆寫縮圖（public/media 下的檔名）。沒給的話輪用 NEWS_THUMBS 的辦公環境照。 */
+  thumb?: string
+  /** 覆寫縮圖的替代文字 */
+  thumbAlt?: string
 }
 
 /* 一則消息。兩個主題共用同一個列樣式，所以抽出來。
@@ -154,7 +170,11 @@ type NewsItem = {
    右下的按鈕依指示接到 RESEARCH——單則消息沒有自己的頁面（這是純前端的
    靜態站，也還沒有內容來源），所以全部指向同一頁，而不是編造一個不存在的網址。 */
 function NewsRow({ item, thumbIndex }: { item: NewsItem; thumbIndex: number }) {
-  const thumb = NEWS_THUMBS[thumbIndex % NEWS_THUMBS.length]
+  const fallback = NEWS_THUMBS[thumbIndex % NEWS_THUMBS.length]
+  const thumb = item.thumb
+    ? { file: item.thumb, alt: item.thumbAlt ?? '' }
+    : fallback
+  const to = item.to ?? '/research'
 
   return (
     <li className={styles.newsItem}>
@@ -189,7 +209,7 @@ function NewsRow({ item, thumbIndex }: { item: NewsItem; thumbIndex: number }) {
           {/* 只有箭頭（指定）。圖示本身沒有可讀的名稱，所以連結的名稱
               完全靠這段隱藏文字——九個連結的目的地相同，唸出標題才分得出
               是哪一則。 */}
-          <Link to="/research" className={styles.newsArrow}>
+          <Link to={to} className={styles.newsArrow}>
             <span className="visually-hidden">Read more: {item.title}</span>
             <ArrowRight size={18} strokeWidth={2} aria-hidden="true" />
           </Link>
