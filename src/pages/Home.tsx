@@ -238,9 +238,10 @@ export default function Home() {
           ))}
         </ul>
 
-        {/* 與 hero 主要 CTA 同一個變體（橘底、hover 轉深藍），指定要一致。 */}
+        {/* 依指示改成藍鈕。hero 那顆維持橘色，只有頁面中段這兩顆換色。
+            順帶把文字對比從 2.60:1（白字疊橘，不合格）拉到 12.21:1。 */}
         <p className={styles.moreRow}>
-          <Button to="/research" variant="accent">
+          <Button to="/research" variant="primary">
             Learn more
           </Button>
         </p>
@@ -330,10 +331,10 @@ export default function Home() {
               R&amp;D and intellectual-property strategy.
             </p>
 
-            {/* 與核心定位那顆同一個變體（橘底、hover 轉深藍）。
+            {/* 與核心定位那顆同一個變體（依指示改成藍鈕）。
                 指向 TECHNOLOGY——這一段講的就是技術平台。 */}
             <p className={styles.moreRow}>
-              <Button to="/technology" variant="accent">
+              <Button to="/technology" variant="primary">
                 Global Disease Market Scenario Platform
               </Button>
             </p>
