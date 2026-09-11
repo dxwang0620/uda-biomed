@@ -218,16 +218,17 @@ export default function Home() {
         <h2 id="positioning-heading" className={styles.sectionTitle}>
           UDA BIOMED core positioning
         </h2>
+        {/* 依指示縮短。原文（抄錄自參考影片）共 76 字，三個長句；
+            這一版 40 字，保留三件事：公司定位、目前的公開重點、
+            驗證與 IP 的立場。被拿掉的是 Proto-Structural Biology 那一串
+            學科列舉——底下的標籤列已經列出同樣的詞。
+            全文留在 docs/content-home.md。 */}
         <p className={styles.lede}>
           UDA BIOMED is a biomedical technology company centered on
-          innovation-driven R&amp;D. Its current public focus is cancer research and
-          detection technology, supported by UDA Biochip Technology as a key
-          platform; Proto-Structural Biology serves as one of UDA&rsquo;s original
-          frameworks for integrating structural biology, molecular biophysics,
-          biochemistry, materials science and life-signal research. UDA emphasizes
-          validation, intellectual property and translational development so that
-          technology can progress from concepts and data toward co-development and
-          licensing partnerships.
+          innovation-driven R&amp;D, with its current public focus on cancer
+          research and detection technology. UDA emphasizes validation,
+          intellectual property and translational development, so that technology
+          can progress from data toward co-development and licensing.
         </p>
         </div>
         <ul role="list" className={styles.tagRow}>
@@ -319,16 +320,16 @@ export default function Home() {
             <h2 id="platform-heading" className={styles.sectionTitle}>
               Building a verifiable technology platform
             </h2>
+            {/* 依指示縮短。原文 73 字；這一版 41 字，保留平台整合了什麼、
+                以及「訊號要能比對與驗證」這個重點。被拿掉的是逐項列舉
+                （microscale engineering、signal transduction）與揭露策略那一句。
+                全文留在 docs/content-home.md。 */}
             <p className={styles.lede}>
-              UDA Biochip Technology integrates molecular recognition, material
-              interfaces, biosensing, microscale engineering, signal transduction
-              and data analysis as a key platform for life-signal research and
-              cancer-detection technology. Our focus is not only on acquiring
-              signals, but also on whether they can be recognized, compared,
-              validated and progressively translated into results with application
-              potential. Core designs, material structures, recognition mechanisms
-              and final product form are disclosed progressively in line with
-              R&amp;D and intellectual-property strategy.
+              UDA Biochip Technology brings molecular recognition, material
+              interfaces, biosensing and data analysis together as a key platform
+              for life-signal research. The focus is not only on acquiring signals,
+              but on whether they can be compared, validated and translated into
+              results with application potential.
             </p>
 
             {/* 與核心定位那顆同一個變體（依指示改成藍鈕）。

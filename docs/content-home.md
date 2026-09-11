@@ -1299,3 +1299,59 @@ hover 時**九則的文字轉藍**（`--color-primary` `#0f3661`，依指示）�
 > ⚠️ **`.dots` 必須 `width: max-content`。** 它是 block 層級的元素，不收成內容寬
 > 就會撐滿整個 hero 欄寬，而軌道是用 `left`/`right` 定位的——第一版就是這樣，
 > 線從第一顆點一路畫到畫面右緣（實測 1074px 長，應該是 128px）。
+
+## 核心定位／技術平台：內文縮短（2026-09-11）
+
+依指示把這兩段的內文減量。**原文全文保留在下面**，要復原直接取用。
+
+| 區塊 | 原本 | 現在 |
+| --- | --- | --- |
+| UDA BIOMED core positioning | 76 字 | **41 字** |
+| Building a verifiable technology platform | 73 字 | **43 字** |
+
+### 核心定位
+
+**原文 `[抄錄]`**：
+
+> UDA BIOMED is a biomedical technology company centered on innovation-driven R&D.
+> Its current public focus is cancer research and detection technology, supported by
+> UDA Biochip Technology as a key platform; Proto-Structural Biology serves as one of
+> UDA's original frameworks for integrating structural biology, molecular biophysics,
+> biochemistry, materials science and life-signal research. UDA emphasizes validation,
+> intellectual property and translational development so that technology can progress
+> from concepts and data toward co-development and licensing partnerships.
+
+**現行**：
+
+> UDA BIOMED is a biomedical technology company centered on innovation-driven R&D,
+> with its current public focus on cancer research and detection technology.
+> UDA emphasizes validation, intellectual property and translational development,
+> so that technology can progress from data toward co-development and licensing.
+
+保留：公司定位、目前的公開重點、驗證與 IP 的立場。
+拿掉：Proto-Structural Biology 那一串學科列舉——**底下的標籤列已經列出同樣的詞**。
+
+> ⚠️ 這一段是 `[抄錄]`，原文是從參考影片逐字讀出的客戶自述。
+> 刪減等於改動客戶自己的話，上線前請他們確認這個縮短版。
+
+### 技術平台
+
+**原文**（前半 `[草稿]`、後半 `[抄錄]`）：
+
+> UDA Biochip Technology integrates molecular recognition, material interfaces,
+> biosensing, microscale engineering, signal transduction and data analysis as a key
+> platform for life-signal research and cancer-detection technology. Our focus is not
+> only on acquiring signals, but also on whether they can be recognized, compared,
+> validated and progressively translated into results with application potential.
+> Core designs, material structures, recognition mechanisms and final product form are
+> disclosed progressively in line with R&D and intellectual-property strategy.
+
+**現行**：
+
+> UDA Biochip Technology brings molecular recognition, material interfaces,
+> biosensing and data analysis together as a key platform for life-signal research.
+> The focus is not only on acquiring signals, but on whether they can be compared,
+> validated and translated into results with application potential.
+
+保留：平台整合了什麼、以及「訊號要能比對與驗證」這個重點。
+拿掉：逐項列舉（microscale engineering、signal transduction）與最後的揭露策略那一句。
