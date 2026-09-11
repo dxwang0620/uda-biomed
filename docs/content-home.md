@@ -501,9 +501,9 @@ Cross-Disciplinary R&D／Intellectual Property／Industry Collaboration
 
 | 格 | 標題 | 配圖 | 來源 |
 | --- | --- | --- | --- |
-| 01 | Research organization | `resp-1` | `web_img/research/S__213983245.jpg`（研發部入口） |
-| 02 | Technical planning | `resp-2` | `web_img/technology/pic.jpg`（品質部／實驗區走廊） |
-| 03 | Collaboration structure | `resp-3` | `web_img/about/pic.jpg`（廠區外觀） |
+| 01 | Research organization | `snap-1` | `index_img/snapshot/snap1.jpg`（實驗室工作台） |
+| 02 | Technical planning | `snap-2` | `index_img/snapshot/snap2.jpg`（團隊規劃流程） |
+| 03 | Collaboration structure | `snap-3` | `index_img/snapshot/snap3.jpg`（跨領域會談） |
 
 > ⚠️ **三段內文都是草稿，依指示先擬（「第三格直接先幫我掰」）。**
 >

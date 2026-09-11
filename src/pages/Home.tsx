@@ -41,19 +41,19 @@ const SNAPSHOT = [
     n: '01',
     title: 'Research organization',
     body: 'Research is organized around cancer detection, with molecular recognition, material interfaces and signal analysis run as parallel workstreams rather than a single linear pipeline.',
-    file: 'resp-1',
+    file: 'snap-1',
   },
   {
     n: '02',
     title: 'Technical planning',
     body: 'Each workstream is planned in stages, from question definition through reproducibility and interference assessment, so that a method advances only when the previous stage holds.',
-    file: 'resp-2',
+    file: 'snap-2',
   },
   {
     n: '03',
     title: 'Collaboration structure',
     body: 'Discussions with clinical, academic and industry groups are held at defined maturity points, keeping intellectual property and co-development terms aligned with what has been validated.',
-    file: 'resp-3',
+    file: 'snap-3',
   },
 ]
 
