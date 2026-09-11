@@ -12,27 +12,33 @@ import styles from './VideoBlock.module.css'
  *   2. 自架影片時，一支 mp4 動輒數 MB，而這個站部署在 GitHub Pages，
  *      每月頻寬有 100GB 的軟上限。沒人點就不該下載。
  *
- * ⚠️ 目前沒有影片來源，所以 src 是 undefined，元件顯示的是待補狀態。
- * 來源確定後（檔案或 YouTube 連結）只要把 src 傳進來即可，見
- * docs/content-digital-health.md。
+ * 來源可以是 YouTube/Vimeo 的 embed 網址，也可以是站內的檔名
+ * （不含副檔名，會自動組出 webm + mp4 兩個 source）。
+ * 兩者都沒給時顯示待補狀態，不放一顆按了沒反應的播放鈕。
  */
 
 export default function VideoBlock({
-  /** YouTube/Vimeo 的 embed 網址，或站內 mp4 的路徑。未提供時顯示待補狀態。 */
+  /** YouTube/Vimeo 的 embed 網址，或 public/media 下的檔名（不含副檔名）。 */
   src,
   /** 封面圖檔名（public/media 下，不含副檔名） */
   poster,
   title,
+  /** 播放框的比例。預設 16/9；方形的素材傳 '1 / 1'。 */
+  aspect = '16 / 9',
 }: {
   src?: string
   poster: string
   title: string
+  aspect?: string
 }) {
   const [playing, setPlaying] = useState(false)
   const isEmbed = src?.startsWith('http')
 
   return (
-    <div className={styles.frame}>
+    <div
+      className={styles.frame}
+      style={{ '--aspect': aspect } as React.CSSProperties}
+    >
       {playing && src ? (
         isEmbed ? (
           <iframe
@@ -43,9 +49,18 @@ export default function VideoBlock({
             allowFullScreen
           />
         ) : (
-          /* 自架影片。字幕軌要等實際影片到位才知道有沒有，
-             有的話在這裡加 <track kind="captions">。 */
-          <video className={styles.player} src={src} controls autoPlay playsInline />
+          /* 自架影片。webm 排前面、mp4 墊底，瀏覽器取第一個支援的。
+             這支是純視覺的產品動畫、沒有語音，所以沒有字幕軌。 */
+          <video className={styles.player} controls autoPlay playsInline>
+            <source
+              src={`${import.meta.env.BASE_URL}media/${src}.webm`}
+              type="video/webm"
+            />
+            <source
+              src={`${import.meta.env.BASE_URL}media/${src}.mp4`}
+              type="video/mp4"
+            />
+          </video>
         )
       ) : (
         <>
@@ -57,8 +72,8 @@ export default function VideoBlock({
             <img
               src={`${import.meta.env.BASE_URL}media/${poster}.jpg`}
               alt=""
-              width={1600}
-              height={1600}
+              width={720}
+              height={720}
               loading="lazy"
               decoding="async"
             />

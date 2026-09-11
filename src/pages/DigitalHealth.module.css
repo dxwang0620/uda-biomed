@@ -376,6 +376,12 @@
   }
 }
 
+/* 方形影片的限寬。不限的話在寬螢幕上會變成一個 900px 見方的大區塊。 */
+.videoWrap {
+  max-width: 32rem;
+  margin-top: var(--space-3);
+}
+
 .footerCta {
   margin-top: var(--space-8);
   padding-top: var(--space-4);

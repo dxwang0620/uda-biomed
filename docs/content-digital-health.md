@@ -12,7 +12,7 @@
 | 1 | `what` | AFL System | **文案由你提供，已翻成英文** |
 | 2 | `how` | 運作流程（四步） | 步驟名有依據，說明待補 |
 | 3 | `applications` | One Technology. Multiple Possibilities.（五大類） | **文案由你提供，已翻成英文** |
-| 4 | `video` | 影片介紹 | **影片來源待補** |
+| 4 | `video` | Video | 完成 |
 
 ## 圖片
 
@@ -65,9 +65,8 @@
 
 ### 仍然待補
 
-1. 影片區塊的影片來源
-
-（圖庫區塊依指示刪除；hero 的動態背景已完成，2026-09-11。）
+hero 的動態背景需要**更高解析度的原始檔**（見底下〈影片在大螢幕上的模糊〉）。
+其餘素材與文案都已到位。
 
 ## 技術決定
 
@@ -342,3 +341,37 @@ filter: brightness(1.45) saturate(0.95) contrast(1.05);
 當時評估過的另外兩個選項也沒有採用：影片改放在較窄的容器（放大倍率降到 1.2×，
 但 hero 會從滿版動態變成有框的影片）、或退回 `dh-main.jpg` 靜態圖
 （1254×1254、放大 1.5×，但沒有動態）。
+
+## Video 區塊的影片
+
+來源 `about_img/digital_healthcare/chip.mp4`（720×720、8.0s、1.8MB、無音軌），
+內容是晶片本體的旋轉產品動畫。
+
+```
+ffmpeg -i chip.mp4 -an -c:v libx264 -profile:v high -crf 25 -preset slow \
+  -pix_fmt yuv420p -movflags +faststart public/media/dh-chip.mp4
+ffmpeg -i chip.mp4 -an -c:v libvpx-vp9 -crf 40 -b:v 0 -row-mt 1 \
+  -deadline good -cpu-used 1 public/media/dh-chip.webm
+ffmpeg -ss 4 -i chip.mp4 -frames:v 1 -q:v 3 public/media/dh-chip-poster.jpg
+ffmpeg -ss 4 -i chip.mp4 -frames:v 1 -c:v libwebp -quality 82 public/media/dh-chip-poster.webp
+```
+
+| 檔案 | 大小 |
+| --- | --- |
+| `dh-chip.webm` | 817 KB |
+| `dh-chip.mp4` | 971 KB |
+| 封面（webp／jpg） | 17 KB／32 KB |
+
+### 方形素材的處理
+
+這支是 1:1，不是影片常見的 16:9。`VideoBlock` 因此多了一個 `aspect` 屬性
+（預設 `16 / 9`），這裡傳 `1 / 1`；外面再用 `.videoWrap` 限寬 32rem——
+**不限的話方形影片在寬螢幕上會變成一個 900px 見方的大區塊**。
+實測播放框 512×512，720 的素材放在 512 的框裡是縮小顯示，很銳利
+（與 hero 那支放大 2.14 倍的情況相反）。
+
+`VideoBlock` 的 `src` 現在收的是 `public/media` 下的檔名（不含副檔名），
+元件自己組出 webm + mp4 兩個 `<source>`；傳 `http` 開頭的網址時仍走 iframe 嵌入。
+
+實測：點播放鈕後插入 `<video>`、取到 `dh-chip.webm`、720×720、
+`readyState 4`，並播到 8 秒結束。

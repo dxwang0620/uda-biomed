@@ -283,9 +283,18 @@ export default function DigitalHealth() {
             <section id="video" className={styles.block}>
               <h2>Video</h2>
               <p className={styles.prose}>
-                A short introduction to the chip and where it is being used.
+                The chip itself, up close.
               </p>
-              <VideoBlock poster="dh-main" title="Digital Health R&D" />
+              {/* 素材是 720×720 的方形產品動畫，所以框也走 1:1；
+                  外面再限寬，不然方形影片在寬螢幕上會高得離譜。 */}
+              <div className={styles.videoWrap}>
+                <VideoBlock
+                  src="dh-chip"
+                  poster="dh-chip-poster"
+                  title="AFL System chip"
+                  aspect="1 / 1"
+                />
+              </div>
             </section>
 
             <div className={styles.footerCta}>
