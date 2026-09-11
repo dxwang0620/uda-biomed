@@ -100,8 +100,16 @@
 
 /* ---------- 版面：側邊目錄 + 內容 ---------- */
 
+/* minmax(0, 1fr) 不能省，寫 `display: grid` 就要連這一行一起寫。
+
+   格線欄預設是 auto，會被項目的 min-content 撐開；而側邊目錄那一列在
+   窄螢幕是橫向排列的五個連結，自然寬度約 558px。實測 375px 視窗下整個
+   欄位變成 558、內容整片往右溢出（回報「小尺寸爆版」）。
+   夾成 minmax(0, 1fr) 之後欄寬由容器決定，超出的部分交給
+   .list 自己的 overflow-x 捲動。 */
 .layout {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
 }
 
@@ -115,7 +123,9 @@
   }
 }
 
-.body {
+/* 兩個格線項目都要能縮到內容以下，否則又會反過來撐開欄位 */
+.body,
+.layout > nav {
   min-width: 0;
 }
 

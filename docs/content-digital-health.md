@@ -13,7 +13,6 @@
 | 2 | `how` | 運作流程（四步） | 步驟名有依據，說明待補 |
 | 3 | `applications` | 應用場景（九格） | 圖到位，**九段說明待補** |
 | 4 | `video` | 影片介紹 | **影片來源待補** |
-| 5 | `gallery` | 圖庫 | 等後續圖片 |
 
 ## 圖片
 
@@ -68,7 +67,8 @@
 
 1. 影片來源
 2. hero 的動態背景（影片／動圖）
-3. 圖庫的其餘圖片
+
+（圖庫區塊依指示刪除，2026-09-11。）
 
 ## 技術決定
 
@@ -107,3 +107,38 @@ hero 同規格的 `<video muted loop playsInline poster>`，poster 沿用現在�
 > ⚠️ **標題的顏色必須明寫。** `global.css` 給所有 `h1`～`h4` 上了 `--color-navy`，
 > 從 `.heroText` 繼承下來的白色打不過它——實測標題在淺色的晶片照片上是深藍的，
 > 幾乎看不見。
+
+## 窄螢幕溢出：`.layout` 的格線欄要夾成 minmax(0, 1fr)
+
+回報「小尺寸爆版」。**實測 375px 視窗下整個內容欄是 558px**，整片往右溢出。
+
+原因是 `.layout` 只寫了 `display: grid` 沒寫 `grid-template-columns`——
+格線欄預設是 `auto`，會被項目的 min-content 撐開。撐開它的是側邊目錄：
+那一列在窄螢幕是橫向排列的五個連結，自然寬度約 558px。`.list` 雖然有
+`overflow-x: auto`，但它是格線項目 `.nav` 的**子孫**，撐開欄位的是 `.nav`。
+
+修法兩條一起：
+
+```css
+.layout {
+  grid-template-columns: minmax(0, 1fr);  /* 欄寬由容器決定 */
+}
+.body,
+.layout > nav {
+  min-width: 0;                            /* 兩個項目都要能縮 */
+}
+```
+
+修完實測：欄寬 339（= 371 視窗扣掉左右留白）、`.body` 339、頁面沒有橫向捲軸。
+目錄那一列仍然可以橫向捲（clientWidth 339 / scrollWidth 558），那是刻意的。
+
+> 這個坑在 `Home.module.css` 已經寫過一次（「minmax(0, …) 不能省」），
+> 但那邊是兩欄、這邊是單欄，單欄時更容易以為不必指定 `grid-template-columns`。
+> **寫 `display: grid` 就把 `grid-template-columns` 一起寫掉。**
+
+### 怎麼驗的
+
+這個環境的瀏覽器視窗調不動（`resize_window` 有回應但 `innerWidth` 不變），
+所以改用**在頁面裡塞一個 375px 寬的 iframe 指向同一個路徑**——iframe 內的
+media query 依 iframe 寬度判定，是真實的窄螢幕排版，不必動視窗。
+之後要驗 RWD 都可以用這招。

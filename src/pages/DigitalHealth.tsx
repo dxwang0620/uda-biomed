@@ -31,7 +31,6 @@ const NAV: SectionLink[] = [
   { id: 'how', label: 'How it works' },
   { id: 'applications', label: 'Applications' },
   { id: 'video', label: 'Video' },
-  { id: 'gallery', label: 'Gallery' },
 ]
 
 /* 流程四步。取自 about_img/digital_healthcare 圖面上既有的中文標籤
@@ -266,15 +265,6 @@ export default function DigitalHealth() {
                 A short introduction to the chip and where it is being used.
               </p>
               <VideoBlock poster="dh-main" title="Digital Health R&D" />
-            </section>
-
-            <section id="gallery" className={styles.block}>
-              <h2>Gallery</h2>
-              {/* 版位先留著。圖片丟進 about_img/digital_healthcare/ 之後
-                  轉檔排進這個網格即可。 */}
-              <p className={styles.prose} lang="zh-Hant">
-                [待補：其餘圖片]
-              </p>
             </section>
 
             <div className={styles.footerCta}>
