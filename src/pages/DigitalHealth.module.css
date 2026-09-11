@@ -1,0 +1,274 @@
+/* ---------- Hero ---------- */
+
+/* 滿版圖，文字壓在上面。高度用 vh 但夾上下限：
+   純 vh 在桌機會過高、在橫放的手機會被壓扁。 */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(22rem, 62vh, 34rem);
+  overflow: hidden;
+  background: var(--color-navy);
+}
+
+.heroMedia {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroMedia img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 原圖的主體（晶片）偏右下，往那邊取景才不會只看到桌面 */
+  object-position: 62% 58%;
+}
+
+/* 由左而下的深藍遮罩。文字在左下角，所以濃度集中在那一側；
+   右上的晶片本體保持清楚。
+   最不利情況（照片該處純白）下，白字對合成後的底是 8.1:1。 */
+.heroMedia::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 24, 56, 0.95) 0%,
+      rgba(0, 24, 56, 0.86) 34%,
+      rgba(0, 24, 56, 0.4) 64%,
+      rgba(0, 24, 56, 0.12) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(0, 24, 56, 0.55) 0%,
+      rgba(0, 24, 56, 0.18) 52%,
+      rgba(0, 24, 56, 0) 78%
+    );
+}
+
+.heroText {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding: var(--space-6) var(--edge-inline);
+  color: var(--color-white);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-1);
+  font-family: var(--font-latin);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* 色值必須明寫。global.css 給所有 h1～h4 上了 --color-navy，
+   繼承自 .heroText 的白色打不過它——實測標題在淺色的晶片照片上
+   是深藍的，幾乎看不見。 */
+.title {
+  margin: 0;
+  color: var(--color-white);
+  font-size: var(--text-hero);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+}
+
+.lede {
+  max-width: 46ch;
+  margin: var(--space-2) 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ---------- 版面：側邊目錄 + 內容 ---------- */
+
+.layout {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    /* 目錄固定寬，內容吃剩下的。minmax(0,…) 不能省，
+       不然底下的圖片網格會把這一欄撐開。 */
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+}
+
+.body {
+  min-width: 0;
+}
+
+/* 章節之間的距離要明顯——這是一頁長文，段落感靠留白建立 */
+.block + .block {
+  margin-top: var(--space-12);
+}
+
+/* 錨點跳轉時把標題停在 header 底下，而不是被蓋住 */
+.block {
+  scroll-margin-top: calc(var(--header-h) + var(--space-4));
+}
+
+.prose {
+  max-width: 68ch;
+  line-height: 1.85;
+  color: var(--color-text);
+}
+
+/* ---------- 圖文並排 ---------- */
+
+.split {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .split {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--space-4);
+    align-items: center;
+  }
+}
+
+.splitMedia {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.splitMedia img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- 運作流程 ---------- */
+
+.flow {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+@media (min-width: 768px) {
+  .flow {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.flowStep {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-3);
+  background: var(--color-tint);
+  border-radius: var(--radius);
+  /* 左側色條當序列感，不用箭頭——箭頭在窄螢幕轉成直列時方向會反過來 */
+  border-left: 3px solid var(--color-primary);
+}
+
+.flowNum {
+  font-family: var(--font-latin);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+}
+
+.flowZh {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+.flowEn {
+  font-family: var(--font-latin);
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
+}
+
+/* ---------- 應用場景網格 ---------- */
+
+.scenes {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .scenes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .scenes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.scene {
+  display: flex;
+  flex-direction: column;
+}
+
+.sceneMedia {
+  display: block;
+  overflow: hidden;
+  /* 原圖多半是 1312×1199，接近 1:1；用 4:3 只裁掉一點上下 */
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.sceneMedia img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sceneTitle {
+  display: grid;
+  gap: 1px;
+  margin: var(--space-2) 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  color: var(--color-navy);
+}
+
+.sceneEn {
+  font-family: var(--font-latin);
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.sceneBody {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-small);
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.footerCta {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}

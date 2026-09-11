@@ -11,6 +11,7 @@ import {
 import Home from './pages/Home.tsx'
 import About from './pages/About.tsx'
 import Research from './pages/Research.tsx'
+import DigitalHealth from './pages/DigitalHealth.tsx'
 import ResearchTopic from './pages/ResearchTopic.tsx'
 import Technology from './pages/Technology.tsx'
 import Partnerships from './pages/Partnerships.tsx'
@@ -47,7 +48,10 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/research" element={<Research />} />
-            {/* 三個子頁共用一個元件，靠 slug 分辨（指定 RESEARCH 要有分頁） */}
+            {/* 數位醫療有自己的版面，必須排在 :slug 之前——
+                react-router 取第一個相符的路由，:slug 會先吃掉它。 */}
+            <Route path="/research/digital-health" element={<DigitalHealth />} />
+            {/* 其餘子頁共用一個元件，靠 slug 分辨（指定 RESEARCH 要有分頁） */}
             <Route path="/research/:slug" element={<ResearchTopic />} />
             <Route path="/technology" element={<Technology />} />
             <Route path="/partnerships" element={<Partnerships />} />
