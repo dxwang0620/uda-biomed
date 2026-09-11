@@ -94,12 +94,15 @@ const LATEST: NewsItem[] = [
   },
 ]
 
-const NEWS = [
+const NEWS: NewsItem[] = [
   {
     category: 'Research',
     date: '21 Aug 2026',
     title: 'Research direction update for cancer-detection technology',
     excerpt: 'How UDA frames the questions it is currently pursuing, and what it is deliberately leaving open.',
+    /* 指定用這張。與其餘幾則輪用的辦公環境照不同，這張有品牌牆與展示中的晶片。 */
+    thumb: 'news-lobby',
+    thumbAlt: '',
   },
   {
     category: 'Technology',
