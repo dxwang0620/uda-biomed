@@ -262,6 +262,19 @@
   aspect-ratio: 4 / 3;
   border-radius: var(--radius);
   background: var(--color-surface);
+  /* 窄螢幕縮小（指定）。一欄時圖會吃滿 339px 寬、254 高，九張疊起來
+     要捲很久。限寬到 15rem（240×180）之後整段短了將近一半。
+
+     這幾張是多格拼貼的密集圖，再小就看不出畫面內容了，所以是限寬
+     而不是改成更扁的比例——改比例會把上下的小圖裁掉。 */
+  max-width: 15rem;
+}
+
+@media (min-width: 640px) {
+  /* 兩欄以上時欄寬本來就不大，不必再限 */
+  .sceneMedia {
+    max-width: none;
+  }
 }
 
 .sceneMedia img {
