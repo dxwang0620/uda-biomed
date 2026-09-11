@@ -27,7 +27,7 @@ import styles from './DigitalHealth.module.css'
  */
 
 const NAV: SectionLink[] = [
-  { id: 'what', label: 'The liquid chip' },
+  { id: 'what', label: 'AFL System' },
   { id: 'how', label: 'How it works' },
   { id: 'applications', label: 'Applications' },
   { id: 'video', label: 'Video' },
@@ -159,8 +159,7 @@ export default function DigitalHealth() {
             </span>
           </h1>
           <p className={styles.lede}>
-            Reading chemical signals in air and breath, and turning them into
-            something a system can act on.
+            Turning scent into data that can be understood.
           </p>
         </div>
       </header>
@@ -170,16 +169,30 @@ export default function DigitalHealth() {
           <SectionNav items={NAV} />
 
           <div className={styles.body}>
+            {/* 這一段是你提供的文案，翻成英文（2026-09-11）。
+                中文原文與對照見 docs/content-digital-health.md。 */}
             <section id="what" className={styles.block}>
-              <h2>The liquid chip</h2>
+              <h2>
+                AFL System
+                <span className={styles.h2Sub}>
+                  AI Flair Language
+                  <span lang="zh-Hant"> ／ 嗅覺語言感測晶片</span>
+                </span>
+              </h2>
+
+              <p className={styles.leadIn}>
+                Humans cannot see scent.
+              </p>
               <p className={styles.prose}>
-                Much of what happens in a body, a room or a package shows up first
-                in the air around it. The difficulty is that those signals arrive
-                mixed together, at very low concentrations, and change from moment
-                to moment. The liquid chip is the part of our work that deals with
-                that problem: a small sensing element that a sample passes over,
-                built so the same device can be placed in a home, a vehicle or a
-                piece of equipment.
+                But many substances, once they enter the air, leave behind a
+                distinctive volatile chemical signal. AFL System turns the sense of
+                smell into data.
+              </p>
+              <p className={styles.prose}>
+                Through a new sensing architecture, signal analysis and artificial
+                intelligence models, AFL sets out to build an intelligent olfactory
+                system — one that can sense, identify and analyse the scent
+                characteristics of an environment.
               </p>
 
               {/* 圖文並排。左圖右文，窄螢幕自動堆疊。 */}
@@ -199,13 +212,10 @@ export default function DigitalHealth() {
                   />
                 </picture>
                 <div>
-                  <h3>Built as a stack</h3>
+                  <h3>Sensing what cannot be seen</h3>
                   <p className={styles.prose}>
-                    The chip is assembled in layers — the sensing layer that meets
-                    the sample, the path that carries it, and the contacts that
-                    hand the reading to the electronics. Keeping them in one
-                    package is what makes the sensor small enough to put inside
-                    something else.
+                    Much of the important information in an environment exists
+                    neither as an image nor as a sound.
                   </p>
                 </div>
               </div>

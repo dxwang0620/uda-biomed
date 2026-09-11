@@ -152,10 +152,38 @@
   scroll-margin-top: calc(var(--header-h) + var(--space-4));
 }
 
+/* h2 底下的副標：英文全名 ＋ 中文品名。與站上其他雙語標題同一個處理。 */
+.h2Sub {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-latin);
+  font-size: var(--text-small);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+/* 單句的引言。這一段文案是一句一段的節奏，第一句放大當作進入點。 */
+.leadIn {
+  max-width: 68ch;
+  margin: var(--space-2) 0;
+  font-size: clamp(1.125rem, 2.2vw, 1.375rem);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-navy);
+}
+
 .prose {
   max-width: 68ch;
+  margin: 0;
   line-height: 1.85;
   color: var(--color-text);
+}
+
+/* global.css 把 p 的 margin 清成 0，段落之間要自己補，
+   不然兩段會黏成一大塊（實測就是這樣）。 */
+.prose + .prose {
+  margin-top: var(--space-2);
 }
 
 /* ---------- 圖文並排 ---------- */

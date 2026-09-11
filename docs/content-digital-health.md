@@ -9,7 +9,7 @@
 | # | id | 標題 | 狀態 |
 | - | -- | --- | --- |
 | — | — | Hero（動態背景 ＋ 標題） | 完成 |
-| 1 | `what` | 什麼是液態晶片 | **文案待補** |
+| 1 | `what` | AFL System | **文案由你提供，已翻成英文** |
 | 2 | `how` | 運作流程（四步） | 步驟名有依據，說明待補 |
 | 3 | `applications` | 應用場景（九格） | 圖到位，**九段說明待補** |
 | 4 | `video` | 影片介紹 | **影片來源待補** |
@@ -218,3 +218,52 @@ filter: brightness(1.45) saturate(0.95) contrast(1.05);
 即使影片在那裡是純白（調亮後的最差情況），白字仍有 **13.05:1**。
 
 `prefers-reduced-motion: reduce` 時影片 `display: none`，改用 poster 當背景圖。
+
+## AFL System 那一段：你提供的文案
+
+2026-09-11 收到正式文案，取代我原先擬的「液態晶片」草稿。
+`[抄錄＋翻譯]`——**英文是我翻的，需要校對**。
+
+### 中文原文
+
+> AFL SYSTEM「嗅覺語言感測晶片」
+> AI Flair Language：AFL 系統
+> 讓氣味，成為可被理解的數據。
+>
+> 人類無法看見氣味。
+> 但許多物質在進入空氣後，都會留下獨特的揮發性化學訊號。
+> AFL System 將「嗅覺」轉化為數據。
+>
+> 透過新型感測架構、訊號分析與人工智慧模型，AFL 嘗試建立一套能夠感知、
+> 辨識與分析環境氣味特徵的智慧嗅覺系統。
+>
+> 感知看不見的變化，許多環境中的重要資訊，並不以影像或聲音存在。
+
+### 英文對照（頁面上用的）
+
+| 中文 | 英文 | 放在哪 |
+| --- | --- | --- |
+| 讓氣味，成為可被理解的數據。 | Turning scent into data that can be understood. | hero 的一句話 |
+| AFL SYSTEM「嗅覺語言感測晶片」／ AI Flair Language | AFL System ／ AI Flair Language ／ 嗅覺語言感測晶片 | 區塊標題與副標 |
+| 人類無法看見氣味。 | Humans cannot see scent. | 放大的引言 |
+| 但許多物質…／AFL System 將「嗅覺」轉化為數據。 | But many substances, once they enter the air, leave behind a distinctive volatile chemical signal. AFL System turns the sense of smell into data. | 第一段 |
+| 透過新型感測架構…智慧嗅覺系統。 | Through a new sensing architecture, signal analysis and artificial intelligence models, AFL sets out to build an intelligent olfactory system — one that can sense, identify and analyse the scent characteristics of an environment. | 第二段 |
+| 感知看不見的變化／許多環境中的重要資訊，並不以影像或聲音存在。 | Sensing what cannot be seen ／ Much of the important information in an environment exists neither as an image nor as a sound. | 圖文並排的右欄 |
+
+翻譯上的兩個選擇，請一併確認：
+
+- **「嘗試建立」翻成 `sets out to build`**，不是 `attempts to`——後者在英文裡帶
+  「試過但不一定成功」的味道。若原意就是要保留不確定性，改用 `is working toward`。
+- **「智慧嗅覺系統」翻成 `intelligent olfactory system`**。`olfactory` 是醫學用詞，
+  若對象偏一般大眾，`sense of smell` 會更好讀。
+
+### 名稱的分歧
+
+正式名稱是 **AFL System ／ 嗅覺語言感測晶片**，但圖面上（`S__216956957` 等）
+寫的是「**液態晶片**分析」。頁面現在一律用 AFL System，圖面的字沒有改。
+兩者若是同一個東西的不同說法，請確認對外要統一用哪一個。
+
+### 仍是我擬的部分
+
+`How it works` 的導言、四步的說明、`Applications` 的導言與九段場景說明
+**仍然是我寫的草稿**，校對清單見上面的〈文案狀態〉。
