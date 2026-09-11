@@ -13,8 +13,18 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  /* 子元素 hover 會做 rotateX，透視點放在整排上，四格才是同一個視角 */
+  /* 子元素 hover 會做 rotateX，透視點放在整排上，每一格才是同一個視角 */
   perspective: 1200px;
+}
+
+/* 奇數個時，最後一格跨滿整列。
+
+   「所有寬度都橫排兩格」是指定的排法，但項目數變成 3 之後，
+   最後一格會單獨佔半排、右邊空一塊，看起來像少了一格。
+   跨滿之後那一列是完整的，也不必為了湊數去補一個佔位格。
+   用 :last-child:nth-child(odd) 而不是寫死第 3 格——之後增減項目自動適應。 */
+.cell:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
 }
 
 /* 900 以上維持兩格（指定），只把間距放大。

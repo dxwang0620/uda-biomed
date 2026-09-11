@@ -48,12 +48,6 @@ const STATS: Stat[] = [
     en: 'Programmes in development',
     zh: '研發中項目數',
   },
-  {
-    /* ⚠️ 佔位值，非實際數據 */
-    value: 8,
-    en: 'Patent applications',
-    zh: '專利申請',
-  },
 ]
 
 const DURATION = 1600
