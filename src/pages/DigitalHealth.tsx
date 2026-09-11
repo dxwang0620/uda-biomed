@@ -58,61 +58,46 @@ const FLOW = [
   },
 ]
 
-/* 九個應用場景。名稱依圖面內容命名，敘述待補。 */
-const SCENES = [
+/* 五大應用方向。**文案由你提供**（2026-09-11），英文是翻譯，見
+   docs/content-digital-health.md 的對照表。
+
+   九張場景圖分配到各自的類別底下——原本每張圖配一句我自己寫的敘述，
+   那些已經全部移除，現在的說明文字都是你的原文。 */
+const CATEGORIES = [
   {
-    file: 'dh-1',
-    zh: '居家健康檢測',
-    en: 'Home health screening',
-    body: 'A home device reads exhaled breath and presents the result on a screen the household can understand.',
+    key: 'medical',
+    en: 'Medical',
+    zh: '醫療與健康',
+    body: 'Analysing human breath and volatile biomarkers, exploring what non-invasive scent analysis might make possible.',
+    images: ['dh-1', 'dh-8'],
   },
   {
-    file: 'dh-2',
-    zh: '食品新鮮度',
-    en: 'Food freshness',
-    body: 'A sensor inside a refrigerator watches how stored food changes, and flags what is no longer fresh.',
+    key: 'food',
+    en: 'Food safety',
+    zh: '食品安全',
+    body: 'From freshness and changes in quality through to abnormal odours and signs of contamination, opening up non-destructive scent monitoring.',
+    images: ['dh-2'],
   },
   {
-    file: 'dh-3',
-    zh: '隨身安全配戴',
-    en: 'Wearable safety',
-    body: 'A wearable unit samples the air around the person carrying it and warns them of hazardous substances nearby.',
+    key: 'environment',
+    en: 'Environment',
+    zh: '環境監測',
+    body: 'Continuously sensing abnormal odours and chemical signals in the air, for indoor, industrial and environmental monitoring.',
+    images: ['dh-6'],
   },
   {
-    file: 'dh-4',
-    zh: '住宅安全防護',
-    en: 'Home safety',
-    body: 'Wall units watch for gas, smoke and overheating wiring, and can cut power or close a gas valve on their own.',
+    key: 'safety',
+    en: 'Safety',
+    zh: '安全防護',
+    body: 'Building detection models for hazardous gases, abnormal chemicals and particular scent patterns, so that a system can notice a problem early.',
+    images: ['dh-4', 'dh-5'],
   },
   {
-    file: 'dh-5',
-    zh: '消防救援',
-    en: 'Fire and rescue',
-    body: 'A mobile robot enters where people should not, reports what it finds in the air, and calls it in automatically.',
-  },
-  {
-    file: 'dh-6',
-    zh: '太空艙環境',
-    en: 'Spacecraft environment',
-    body: 'Cabin air is monitored continuously in an environment where the crew cannot simply open a window.',
-  },
-  {
-    file: 'dh-7',
-    zh: '零售場域',
-    en: 'Retail environments',
-    body: 'In-store units watch for conditions that differ from an ordinary day and alert staff quietly.',
-  },
-  {
-    file: 'dh-8',
-    zh: '居家陪伴照護',
-    en: 'Companion care',
-    body: 'A companion robot keeps track of how someone is doing day to day and can connect them to a clinician.',
-  },
-  {
-    file: 'dh-9',
-    zh: '安檢與海關',
-    en: 'Security screening',
-    body: 'A screening robot checks baggage without opening it, and shows inspectors what it found.',
+    key: 'security',
+    en: 'Security',
+    zh: '智慧安全',
+    body: 'Combining scent sensing with AI analysis to explore the identification of narcotics, dangerous substances and other distinctive scents.',
+    images: ['dh-3', 'dh-7', 'dh-9'],
   },
 ]
 
@@ -245,36 +230,51 @@ export default function DigitalHealth() {
             </section>
 
             <section id="applications" className={styles.block}>
-              <h2>Applications</h2>
+              <h2>
+                One Technology. Multiple Possibilities.
+                <span className={styles.h2Sub} lang="zh-Hant">
+                  一套嗅覺系統，多種應用場景
+                </span>
+              </h2>
               <p className={styles.prose}>
-                A sensor small enough to sit inside other equipment ends up in
-                places that have little to do with each other — a kitchen, a
-                rescue robot, a cabin in orbit. The nine scenes below are the ones
-                we are currently exploring.
+                AFL&rsquo;s technology can extend into a range of industries.
               </p>
 
-              <ul role="list" className={styles.scenes}>
-                {SCENES.map((s) => (
-                  <li key={s.file} className={styles.scene}>
-                    <picture className={styles.sceneMedia}>
-                      <source
-                        srcSet={`${import.meta.env.BASE_URL}media/${s.file}.webp`}
-                        type="image/webp"
-                      />
-                      <img
-                        src={`${import.meta.env.BASE_URL}media/${s.file}.jpg`}
-                        alt=""
-                        width={1100}
-                        height={1005}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </picture>
-                    <h3 className={styles.sceneTitle} lang="zh-Hant">
-                      {s.zh}
-                      <span className={styles.sceneEn}>{s.en}</span>
-                    </h3>
-                    <p className={styles.sceneBody}>{s.body}</p>
+              <ul role="list" className={styles.cats}>
+                {CATEGORIES.map((c) => (
+                  <li key={c.key} className={styles.cat}>
+                    <div className={styles.catText}>
+                      <h3 className={styles.catTitle}>
+                        <span className={styles.catEn}>{c.en}</span>
+                        <span className={styles.catZh} lang="zh-Hant">
+                          {c.zh}
+                        </span>
+                      </h3>
+                      <p className={styles.catBody}>{c.body}</p>
+                    </div>
+
+                    {/* 一到三張圖，依類別而定。圖是情境示意，說明已由左欄
+                        的文字承載，所以 alt=""。 */}
+                    <ul role="list" className={styles.catShots}>
+                      {c.images.map((file) => (
+                        <li key={file}>
+                          <picture className={styles.catMedia}>
+                            <source
+                              srcSet={`${import.meta.env.BASE_URL}media/${file}.webp`}
+                              type="image/webp"
+                            />
+                            <img
+                              src={`${import.meta.env.BASE_URL}media/${file}.jpg`}
+                              alt=""
+                              width={1100}
+                              height={1005}
+                              loading="lazy"
+                              decoding="async"
+                            />
+                          </picture>
+                        </li>
+                      ))}
+                    </ul>
                   </li>
                 ))}
               </ul>

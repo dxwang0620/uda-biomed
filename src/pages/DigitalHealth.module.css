@@ -269,105 +269,105 @@
   color: var(--color-text);
 }
 
-/* ---------- 應用場景網格 ---------- */
+/* ---------- 應用方向（五大類） ---------- */
 
-.scenes {
+.cats {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-6);
   margin: var(--space-4) 0 0;
   padding: 0;
   list-style: none;
 }
 
-@media (min-width: 640px) {
-  .scenes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+.cat {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+@media (min-width: 768px) {
+  .cat {
+    /* 左欄文字、右欄圖。文字欄固定較窄，五類的標題才會對齊成一直線。 */
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: var(--space-4);
+    align-items: start;
   }
 }
 
-@media (min-width: 1280px) {
-  .scenes {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+.catTitle {
+  display: grid;
+  gap: 2px;
+  margin: 0;
 }
 
-.scene {
-  display: flex;
-  flex-direction: column;
-  /* 窄螢幕整格置中（指定）：圖已經縮小並置中，文字靠左會跟圖對不起來。
-     640 以上解除——兩欄以上時圖吃滿欄寬，靠左才對得齊。 */
-  text-align: center;
+.catEn {
+  font-family: var(--font-latin);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-primary);
 }
 
-@media (min-width: 640px) {
-  .scene {
-    text-align: left;
-  }
+.catZh {
+  font-size: 1.25rem;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  color: var(--color-navy);
 }
 
-.sceneMedia {
+.catBody {
+  max-width: 42ch;
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-small);
+  line-height: 1.8;
+  color: var(--color-text-muted);
+}
+
+/* 一到三張圖。用 auto-fill 而不是 auto-fit：
+   auto-fit 會把空軌道收掉，只有一張圖的類別（食品／環境）就會吃滿整個右欄，
+   跟旁邊兩張圖的類別大小差一倍。auto-fill 保留軌道，每張圖都是同一個尺寸
+   （實測 266×200），五類看起來才是同一組東西。 */
+.catShots {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.catMedia {
   display: block;
   overflow: hidden;
-  /* 原圖多半是 1312×1199，接近 1:1；用 4:3 只裁掉一點上下 */
   aspect-ratio: 4 / 3;
   border-radius: var(--radius);
   background: var(--color-surface);
-  /* 窄螢幕縮小（指定）。一欄時圖會吃滿 339px 寬、254 高，九張疊起來
-     要捲很久。限寬到 15rem（240×180）之後整段短了將近一半。
-
-     這幾張是多格拼貼的密集圖，再小就看不出畫面內容了，所以是限寬
-     而不是改成更扁的比例——改比例會把上下的小圖裁掉。
-
-     縮小之後靠左會在右邊留一條空白，看起來像沒排好，所以置中（指定）。 */
-  max-width: 15rem;
-  margin-inline: auto;
 }
 
-@media (min-width: 640px) {
-  /* 兩欄以上時欄寬本來就不大，不必再限，也就不需要置中 */
-  .sceneMedia {
-    max-width: none;
-    margin-inline: 0;
-  }
-}
-
-.sceneMedia img {
+.catMedia img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.sceneTitle {
-  display: grid;
-  gap: 1px;
-  margin: var(--space-2) 0 0;
-  font-size: 1.0625rem;
-  line-height: 1.35;
-  color: var(--color-navy);
-}
+/* 窄螢幕：圖縮小並置中，與文字同一個中軸（指定）。
+   多張時仍並排，但每張都會等比縮小。 */
+@media (max-width: 767px) {
+  .catText {
+    text-align: center;
+  }
 
-.sceneEn {
-  font-family: var(--font-latin);
-  font-size: var(--text-small);
-  font-weight: 500;
-  color: var(--color-text-muted);
-}
+  .catBody {
+    max-width: 34ch;
+    margin-inline: auto;
+  }
 
-.sceneBody {
-  /* 置中的段落行寬要收窄，不然每一行的起點都不同、讀起來很吃力。
-     auto 的左右 margin 讓限寬後的區塊本身也置中。 */
-  max-width: 34ch;
-  margin: var(--space-1) auto 0;
-  font-size: var(--text-small);
-  line-height: 1.7;
-  color: var(--color-text-muted);
-}
-
-@media (min-width: 640px) {
-  .sceneBody {
-    max-width: none;
-    margin-inline: 0;
+  .catShots {
+    max-width: 15rem;
+    margin-inline: auto;
   }
 }
 
