@@ -15,39 +15,106 @@ import styles from './DigitalHealth.module.css'
  * 液態晶片的應用情境，圖上本來就帶著中文標籤（氣味偵測／AI 分析／
  * 即時警示…），所以場景名稱直接取自圖面，不是我擬的。
  *
- * ⚠️ **所有敘述性文字都是 `[待補]`。** 晶片的原理、規格、開發階段、
- * 偵測項目一律不編——這正是 CLAUDE.md 第 3 條點名的範圍。
- * 需要補的清單見 docs/content-digital-health.md。
+ * ⚠️ **全頁文案是依指示擬的草稿，需要你逐句校對。**
+ *
+ * 撰寫時守的界線：只描述圖面上看得到的情境與流程，**不寫任何規格、
+ * 偵測極限、準確率、開發階段、臨床用途或合作對象**——那些是 CLAUDE.md
+ * 第 3 條明訂不能編的。即使如此，「晶片如何運作」這類敘述仍然是推論，
+ * 需要研發部確認。要校對的項目逐條列在 docs/content-digital-health.md。
+ *
+ * 語言：頁面走英文（與全站一致），中文以副標形式保留——這是站上既有的
+ * 作法（聯絡表單、組織圖、四格數字都是英文主標＋中文副標）。
  */
 
 const NAV: SectionLink[] = [
-  { id: 'what', label: '什麼是液態晶片' },
-  { id: 'how', label: '運作流程' },
-  { id: 'applications', label: '應用場景' },
-  { id: 'video', label: '影片介紹' },
-  { id: 'gallery', label: '圖庫' },
+  { id: 'what', label: 'The liquid chip' },
+  { id: 'how', label: 'How it works' },
+  { id: 'applications', label: 'Applications' },
+  { id: 'video', label: 'Video' },
+  { id: 'gallery', label: 'Gallery' },
 ]
 
 /* 流程四步。取自 about_img/digital_healthcare 圖面上既有的中文標籤
    （S__216956956／959 的底排），不是我擬的詞。 */
 const FLOW = [
-  { zh: '氣味偵測', en: 'Odour sensing' },
-  { zh: 'AI 分析', en: 'AI analysis' },
-  { zh: '即時警示', en: 'Real-time alert' },
-  { zh: '自動應變', en: 'Automated response' },
+  {
+    zh: '氣味偵測',
+    en: 'Odour sensing',
+    body: 'Air or breath passes over the chip, where the sample meets the sensing layer.',
+  },
+  {
+    zh: 'AI 分析',
+    en: 'AI analysis',
+    body: 'The resulting pattern is compared against known patterns rather than read as a single value.',
+  },
+  {
+    zh: '即時警示',
+    en: 'Real-time alert',
+    body: 'When a pattern falls outside the expected range, the device reports it immediately.',
+  },
+  {
+    zh: '自動應變',
+    en: 'Automated response',
+    body: 'Connected systems can act on that report — cutting power, closing a valve, or notifying someone.',
+  },
 ]
 
 /* 九個應用場景。名稱依圖面內容命名，敘述待補。 */
 const SCENES = [
-  { file: 'dh-1', zh: '居家健康檢測', en: 'Home health screening' },
-  { file: 'dh-2', zh: '食品新鮮度', en: 'Food freshness' },
-  { file: 'dh-3', zh: '隨身安全配戴', en: 'Wearable safety' },
-  { file: 'dh-4', zh: '住宅安全防護', en: 'Home safety' },
-  { file: 'dh-5', zh: '消防救援', en: 'Fire and rescue' },
-  { file: 'dh-6', zh: '太空艙環境', en: 'Spacecraft environment' },
-  { file: 'dh-7', zh: '零售場域', en: 'Retail environments' },
-  { file: 'dh-8', zh: '居家陪伴照護', en: 'Companion care' },
-  { file: 'dh-9', zh: '安檢與海關', en: 'Security screening' },
+  {
+    file: 'dh-1',
+    zh: '居家健康檢測',
+    en: 'Home health screening',
+    body: 'A home device reads exhaled breath and presents the result on a screen the household can understand.',
+  },
+  {
+    file: 'dh-2',
+    zh: '食品新鮮度',
+    en: 'Food freshness',
+    body: 'A sensor inside a refrigerator watches how stored food changes, and flags what is no longer fresh.',
+  },
+  {
+    file: 'dh-3',
+    zh: '隨身安全配戴',
+    en: 'Wearable safety',
+    body: 'A wearable unit samples the air around the person carrying it and warns them of hazardous substances nearby.',
+  },
+  {
+    file: 'dh-4',
+    zh: '住宅安全防護',
+    en: 'Home safety',
+    body: 'Wall units watch for gas, smoke and overheating wiring, and can cut power or close a gas valve on their own.',
+  },
+  {
+    file: 'dh-5',
+    zh: '消防救援',
+    en: 'Fire and rescue',
+    body: 'A mobile robot enters where people should not, reports what it finds in the air, and calls it in automatically.',
+  },
+  {
+    file: 'dh-6',
+    zh: '太空艙環境',
+    en: 'Spacecraft environment',
+    body: 'Cabin air is monitored continuously in an environment where the crew cannot simply open a window.',
+  },
+  {
+    file: 'dh-7',
+    zh: '零售場域',
+    en: 'Retail environments',
+    body: 'In-store units watch for conditions that differ from an ordinary day and alert staff quietly.',
+  },
+  {
+    file: 'dh-8',
+    zh: '居家陪伴照護',
+    en: 'Companion care',
+    body: 'A companion robot keeps track of how someone is doing day to day and can connect them to a clinician.',
+  },
+  {
+    file: 'dh-9',
+    zh: '安檢與海關',
+    en: 'Security screening',
+    body: 'A screening robot checks baggage without opening it, and shows inspectors what it found.',
+  },
 ]
 
 export default function DigitalHealth() {
@@ -74,11 +141,16 @@ export default function DigitalHealth() {
 
         <div className={styles.heroText}>
           <p className={styles.eyebrow}>RESEARCH</p>
-          <h1 className={styles.title} lang="zh-Hant">
-            數位醫療研發部
+          {/* 英文主標＋中文副標，與站上其他雙語標題同一個處理 */}
+          <h1 className={styles.title}>
+            Digital Health R&amp;D
+            <span className={styles.titleZh} lang="zh-Hant">
+              數位醫療研發部
+            </span>
           </h1>
-          <p className={styles.lede} lang="zh-Hant">
-            [待補：一句話說明這個部門在做什麼]
+          <p className={styles.lede}>
+            Reading chemical signals in air and breath, and turning them into
+            something a system can act on.
           </p>
         </div>
       </header>
@@ -89,9 +161,15 @@ export default function DigitalHealth() {
 
           <div className={styles.body}>
             <section id="what" className={styles.block}>
-              <h2 lang="zh-Hant">什麼是液態晶片</h2>
-              <p className={styles.prose} lang="zh-Hant">
-                [待補：液態晶片的定義與原理，約 200～300 字]
+              <h2>The liquid chip</h2>
+              <p className={styles.prose}>
+                Much of what happens in a body, a room or a package shows up first
+                in the air around it. The difficulty is that those signals arrive
+                mixed together, at very low concentrations, and change from moment
+                to moment. The liquid chip is the part of our work that deals with
+                that problem: a small sensing element that a sample passes over,
+                built so the same device can be placed in a home, a vehicle or a
+                piece of equipment.
               </p>
 
               {/* 圖文並排。左圖右文，窄螢幕自動堆疊。 */}
@@ -111,18 +189,23 @@ export default function DigitalHealth() {
                   />
                 </picture>
                 <div>
-                  <h3 lang="zh-Hant">晶片結構</h3>
-                  <p className={styles.prose} lang="zh-Hant">
-                    [待補：各層的功能說明]
+                  <h3>Built as a stack</h3>
+                  <p className={styles.prose}>
+                    The chip is assembled in layers — the sensing layer that meets
+                    the sample, the path that carries it, and the contacts that
+                    hand the reading to the electronics. Keeping them in one
+                    package is what makes the sensor small enough to put inside
+                    something else.
                   </p>
                 </div>
               </div>
             </section>
 
             <section id="how" className={styles.block}>
-              <h2 lang="zh-Hant">運作流程</h2>
-              <p className={styles.prose} lang="zh-Hant">
-                [待補：四個步驟各自的說明]
+              <h2>How it works</h2>
+              <p className={styles.prose}>
+                The same four steps run in every application below. What changes is
+                where the device sits and who receives the alert.
               </p>
 
               <ol className={styles.flow}>
@@ -135,15 +218,19 @@ export default function DigitalHealth() {
                       {step.zh}
                     </span>
                     <span className={styles.flowEn}>{step.en}</span>
+                    <span className={styles.flowBody}>{step.body}</span>
                   </li>
                 ))}
               </ol>
             </section>
 
             <section id="applications" className={styles.block}>
-              <h2 lang="zh-Hant">應用場景</h2>
-              <p className={styles.prose} lang="zh-Hant">
-                [待補：導言，說明這顆晶片為何能橫跨這些場域]
+              <h2>Applications</h2>
+              <p className={styles.prose}>
+                A sensor small enough to sit inside other equipment ends up in
+                places that have little to do with each other — a kitchen, a
+                rescue robot, a cabin in orbit. The nine scenes below are the ones
+                we are currently exploring.
               </p>
 
               <ul role="list" className={styles.scenes}>
@@ -167,24 +254,26 @@ export default function DigitalHealth() {
                       {s.zh}
                       <span className={styles.sceneEn}>{s.en}</span>
                     </h3>
-                    <p className={styles.sceneBody} lang="zh-Hant">
-                      [待補：{s.zh}的說明]
-                    </p>
+                    <p className={styles.sceneBody}>{s.body}</p>
                   </li>
                 ))}
               </ul>
             </section>
 
             <section id="video" className={styles.block}>
-              <h2 lang="zh-Hant">影片介紹</h2>
-              <VideoBlock poster="dh-main" title="數位醫療研發部" />
+              <h2>Video</h2>
+              <p className={styles.prose}>
+                A short introduction to the chip and where it is being used.
+              </p>
+              <VideoBlock poster="dh-main" title="Digital Health R&D" />
             </section>
 
             <section id="gallery" className={styles.block}>
-              <h2 lang="zh-Hant">圖庫</h2>
+              <h2>Gallery</h2>
+              {/* 版位先留著。圖片丟進 about_img/digital_healthcare/ 之後
+                  轉檔排進這個網格即可。 */}
               <p className={styles.prose} lang="zh-Hant">
-                [待補：其餘圖片。丟進 about_img/digital_healthcare/ 之後告訴我，
-                我轉檔並排進這個網格]
+                [待補：其餘圖片]
               </p>
             </section>
 

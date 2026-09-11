@@ -80,6 +80,16 @@
   letter-spacing: 0.02em;
 }
 
+/* 中文副標。字級降一階、透明度降一階，與主標同一個視覺單位。 */
+.titleZh {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.82);
+}
+
 .lede {
   max-width: 46ch;
   margin: var(--space-2) 0 0;
@@ -199,6 +209,13 @@
   font-family: var(--font-latin);
   font-size: var(--text-small);
   color: var(--color-text-muted);
+}
+
+.flowBody {
+  margin-top: var(--space-1);
+  font-size: var(--text-small);
+  line-height: 1.65;
+  color: var(--color-text);
 }
 
 /* ---------- 應用場景網格 ---------- */
