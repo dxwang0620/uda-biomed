@@ -167,15 +167,17 @@ export default function HeroCarousel() {
         ))}
       </div>
 
+      {/* 兩顆標籤與去向依指示改成「聯絡我們」與「最新研發」。
+          用英文是照全站慣例（消息區塊的標題也做過同樣的取捨）。
+
+          右邊那顆從 onDark（白框透明底）改成藍底實心鈕。
+          寬度上限仍由 .actions 控制，標籤短了之後兩顆都收成一排。 */}
       <div className={styles.actions}>
-        {/* 標籤改成兩排（指定）。文案還原成原本的完整句子——之前為了縮短
-            才刪掉「cancer detection」，換行之後不必再犧牲字義。
-            換行點交給 .actions 的寬度上限決定，不寫死 <br>。 */}
-        <Button to="/technology" variant="accent">
-          Explore cancer detection technology
+        <Button to="/contact" variant="accent">
+          Contact us
         </Button>
-        <Button to="/partnerships" variant="onDark">
-          Business collaboration
+        <Button to="/research" variant="primary">
+          Latest R&amp;D
         </Button>
       </div>
 
