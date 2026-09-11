@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
-import { dutiesFor } from '../data/duties.ts'
-import styles from './OrgChart.module.css'
+import { useEffect, useRef, useState } from "react";
+import { dutiesFor } from "../data/duties.ts";
+import styles from "./OrgChart.module.css";
 
 /**
  * 組織架構圖。結構與名稱取自 web_img/about/UDA_BIOMED_組織架構.pdf 第 1 頁。
@@ -17,149 +17,170 @@ import styles from './OrgChart.module.css'
  * 讀屏會直接報出層數與項目數。
  */
 
-type Unit = { en: string; zh: string }
+type Unit = { en: string; zh: string };
 
 /** 治理層。由上而下一條主軸，側邊掛委員會或幕僚室。 */
 const GOVERNANCE: {
-  en: string
-  zh: string
+  en: string;
+  zh: string;
   /** 側邊分支。kind 決定樣式：委員會是灰底方塊、幕僚室是白底外框。 */
-  aside?: { kind: 'committee' | 'office' | 'origin'; items: Unit[] }
+  aside?: { kind: "committee" | "office" | "origin"; items: Unit[] };
 }[] = [
   {
     en: "Shareholders' Meeting",
-    zh: '股東會',
-    aside: { kind: 'origin', items: [{ en: 'Founder', zh: '創辦人' }] },
+    zh: "股東會",
+    aside: { kind: "origin", items: [{ en: "Founder", zh: "創辦人" }] },
   },
   {
-    en: 'Board of Directors',
-    zh: '董事會',
+    en: "Board of Directors",
+    zh: "董事會",
     aside: {
-      kind: 'committee',
+      kind: "committee",
       items: [
-        { en: 'Compensation Committee', zh: '薪資報酬委員會' },
-        { en: 'Personnel Evaluation Committee', zh: '人事評鑑委員會' },
-        { en: 'Internal Audit Office', zh: '內部稽核處' },
+        { en: "Compensation Committee", zh: "薪資報酬委員會" },
+        { en: "Personnel Evaluation Committee", zh: "人事評鑑委員會" },
+        { en: "Internal Audit Office", zh: "內部稽核處" },
       ],
     },
   },
   {
-    en: 'Chairman',
-    zh: '董事長',
-    aside: { kind: 'office', items: [{ en: "Chairman's Office", zh: '董事長室' }] },
+    en: "Chairman",
+    zh: "董事長",
+    aside: {
+      kind: "office",
+      items: [{ en: "Chairman's Office", zh: "董事長室" }],
+    },
   },
   {
-    en: 'General Manager',
-    zh: '總經理',
-    aside: { kind: 'office', items: [{ en: "General Manager's Office", zh: '總經理室' }] },
+    en: "General Manager",
+    zh: "總經理",
+    aside: {
+      kind: "office",
+      items: [{ en: "General Manager's Office", zh: "總經理室" }],
+    },
   },
   {
-    en: 'Vice General Manager',
-    zh: '副總經理',
-    aside: { kind: 'office', items: [{ en: "Vice General Manager's Office", zh: '副總室' }] },
+    en: "Vice General Manager",
+    zh: "副總經理",
+    aside: {
+      kind: "office",
+      items: [{ en: "Vice General Manager's Office", zh: "副總室" }],
+    },
   },
-]
+];
+
+/**
+ * 依指示只顯示治理層：**總經理直轄五室 ～ 財務部整段停用**。
+ *
+ * 用旗標而不是註解掉。註解掉的做法在這裡會壞：要停用的 JSX 裡面本來就有
+ * `{/* … *\/}` 註解，外層再包一層 JSX 註解時，內層的結尾會把外層提早關掉
+ * （實測是一串 TS17002 / TS1005 語法錯誤）。旗標則讓這段程式碼仍然被
+ * 型別檢查與 lint 看到，不會在停用期間悄悄爛掉。
+ *
+ * **要恢復把這裡改成 true 就好**，下面的資料與 JSX 都原封不動。
+ */
+const SHOW_UNITS = false;
 
 /** 總經理直轄五室，架構圖上與副總經理同層、位於左側。 */
 const OFFICES: Unit[] = [
-  { en: 'Secretariat', zh: '秘書室' },
-  { en: 'Legal Affairs Office', zh: '法務室' },
-  { en: 'Information Technology Office', zh: '資訊室' },
-  { en: 'Records Office', zh: '檔案室' },
-  { en: 'Advisory Office', zh: '顧問室' },
-]
+  { en: "Secretariat", zh: "秘書室" },
+  { en: "Legal Affairs Office", zh: "法務室" },
+  { en: "Information Technology Office", zh: "資訊室" },
+  { en: "Records Office", zh: "檔案室" },
+  { en: "Advisory Office", zh: "顧問室" },
+];
 
 /* 色值自架構圖 PDF 實際取樣，非目測。 */
 const DEPARTMENTS: {
-  en: string
-  zh: string
-  color: string
+  en: string;
+  zh: string;
+  color: string;
   /** 財務部在原圖是從總經理拉線下來，其餘六部歸副總經理。 */
-  reportsTo: 'president' | 'vp'
-  units: Unit[]
+  reportsTo: "president" | "vp";
+  units: Unit[];
 }[] = [
   {
-    en: 'R&D Department',
-    zh: '研發部',
-    color: '#d71920',
-    reportsTo: 'vp',
+    en: "R&D Department",
+    zh: "研發部",
+    color: "#d71920",
+    reportsTo: "vp",
     units: [
-      { en: 'Medical Device Development', zh: '醫材開發' },
-      { en: 'Drug Discovery', zh: '藥物研發' },
-      { en: 'Software Development', zh: '軟體開發' },
-      { en: 'Biotech Products', zh: '生技產品' },
+      { en: "Medical Device Development", zh: "醫材開發" },
+      { en: "Drug Discovery", zh: "藥物研發" },
+      { en: "Software Development", zh: "軟體開發" },
+      { en: "Biotech Products", zh: "生技產品" },
     ],
   },
   {
-    en: 'Quality Assurance',
-    zh: '品管部',
-    color: '#e87722',
-    reportsTo: 'vp',
+    en: "Quality Assurance",
+    zh: "品管部",
+    color: "#e87722",
+    reportsTo: "vp",
     units: [
-      { en: 'Quality Management', zh: '品質管理' },
-      { en: 'Regulatory Affairs', zh: '法規管制' },
+      { en: "Quality Management", zh: "品質管理" },
+      { en: "Regulatory Affairs", zh: "法規管制" },
     ],
   },
   {
-    en: 'Business Department',
-    zh: '商務部',
-    color: '#d6a000',
-    reportsTo: 'vp',
+    en: "Business Department",
+    zh: "商務部",
+    color: "#d6a000",
+    reportsTo: "vp",
     units: [
-      { en: 'International Affairs', zh: '國際事務' },
-      { en: 'Business Development', zh: '商務發展' },
-      { en: 'Project Investment', zh: '專案投資' },
-      { en: 'Customer Service', zh: '客戶服務' },
+      { en: "International Affairs", zh: "國際事務" },
+      { en: "Business Development", zh: "商務發展" },
+      { en: "Project Investment", zh: "專案投資" },
+      { en: "Customer Service", zh: "客戶服務" },
     ],
   },
   {
-    en: 'Public Relations',
-    zh: '公關部',
-    color: '#176b2c',
-    reportsTo: 'vp',
+    en: "Public Relations",
+    zh: "公關部",
+    color: "#176b2c",
+    reportsTo: "vp",
     units: [
-      { en: 'Media Relations', zh: '媒體公關' },
-      { en: 'Reception', zh: '櫃台接待' },
-      { en: 'Community Service', zh: '公益服務' },
+      { en: "Media Relations", zh: "媒體公關" },
+      { en: "Reception", zh: "櫃台接待" },
+      { en: "Community Service", zh: "公益服務" },
     ],
   },
   {
-    en: 'Administration',
-    zh: '行政部',
-    color: '#147db3',
-    reportsTo: 'vp',
+    en: "Administration",
+    zh: "行政部",
+    color: "#147db3",
+    reportsTo: "vp",
     units: [
-      { en: 'Corporate Governance', zh: '公司治理' },
-      { en: 'Administrative Affairs', zh: '行政事務' },
-      { en: 'Human Resources', zh: '人力資源' },
-      { en: 'Environment, Health & Safety', zh: '環安衛' },
+      { en: "Corporate Governance", zh: "公司治理" },
+      { en: "Administrative Affairs", zh: "行政事務" },
+      { en: "Human Resources", zh: "人力資源" },
+      { en: "Environment, Health & Safety", zh: "環安衛" },
     ],
   },
   {
-    en: 'General Affairs',
-    zh: '總務部',
-    color: '#2f3b8f',
-    reportsTo: 'vp',
+    en: "General Affairs",
+    zh: "總務部",
+    color: "#2f3b8f",
+    reportsTo: "vp",
     units: [
-      { en: 'Security', zh: '保全' },
-      { en: 'Cleaning', zh: '清潔' },
-      { en: 'Catering', zh: '炊事' },
-      { en: 'Transportation', zh: '運輸' },
-      { en: 'Facility Management', zh: '設施管理' },
+      { en: "Security", zh: "保全" },
+      { en: "Cleaning", zh: "清潔" },
+      { en: "Catering", zh: "炊事" },
+      { en: "Transportation", zh: "運輸" },
+      { en: "Facility Management", zh: "設施管理" },
     ],
   },
   {
-    en: 'Finance Department',
-    zh: '財務部',
-    color: '#5a278a',
-    reportsTo: 'president',
+    en: "Finance Department",
+    zh: "財務部",
+    color: "#5a278a",
+    reportsTo: "president",
     units: [
-      { en: 'Accounting', zh: '會計管理' },
-      { en: 'Treasury', zh: '資金出納' },
-      { en: 'Procurement', zh: '採購管理' },
+      { en: "Accounting", zh: "會計管理" },
+      { en: "Treasury", zh: "資金出納" },
+      { en: "Procurement", zh: "採購管理" },
     ],
   },
-]
+];
 
 function Label({ en, zh }: Unit) {
   return (
@@ -170,7 +191,7 @@ function Label({ en, zh }: Unit) {
         {zh}
       </span>
     </>
-  )
+  );
 }
 
 /**
@@ -189,59 +210,55 @@ function Label({ en, zh }: Unit) {
  * 浮層預設向右展開；若會超出架構圖容器就翻向左邊。這個判斷必須
  * 量測後才知道，所以放在 state 裡，不能只靠 CSS。
  */
-function DutyNode({
-  en,
-  zh,
-  className,
-}: Unit & { className?: string }) {
-  const entries = dutiesFor(zh)
-  const [open, setOpen] = useState(false)
-  const [flip, setFlip] = useState(false)
-  const ref = useRef<HTMLButtonElement>(null)
+function DutyNode({ en, zh, className }: Unit & { className?: string }) {
+  const entries = dutiesFor(zh);
+  const [open, setOpen] = useState(false);
+  const [flip, setFlip] = useState(false);
+  const ref = useRef<HTMLButtonElement>(null);
 
   /* 彈窗開著時 Esc 關閉。窄螢幕上它會蓋住整個畫面，
      沒有鍵盤退路的話只能靠點背景。 */
   useEffect(() => {
-    if (!open) return
+    if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setOpen(false)
-        ref.current?.focus()
+      if (e.key === "Escape") {
+        setOpen(false);
+        ref.current?.focus();
       }
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [open])
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   if (entries.length === 0) {
     return (
       <div className={className}>
         <Label en={en} zh={zh} />
       </div>
-    )
+    );
   }
 
   const measure = () => {
-    const btn = ref.current
-    const chart = btn?.closest(`.${styles.chart}`)
-    if (!btn || !chart) return
+    const btn = ref.current;
+    const chart = btn?.closest(`.${styles.chart}`);
+    if (!btn || !chart) return;
     // 浮層寬度與 CSS 的 --pop-w 一致
-    const POP = 440
-    const right = chart.getBoundingClientRect().right
-    setFlip(btn.getBoundingClientRect().left + POP > right)
-  }
+    const POP = 440;
+    const right = chart.getBoundingClientRect().right;
+    setFlip(btn.getBoundingClientRect().left + POP > right);
+  };
 
   return (
     <button
       type="button"
       ref={ref}
-      className={`${className ?? ''} ${styles.hasDuty} ${open ? styles.dutyOpen : ''}`}
+      className={`${className ?? ""} ${styles.hasDuty} ${open ? styles.dutyOpen : ""}`}
       aria-expanded={open}
       onMouseEnter={measure}
       onFocus={measure}
       onClick={() => {
-        measure()
-        setOpen((v) => !v)
+        measure();
+        setOpen((v) => !v);
       }}
     >
       <Label en={en} zh={zh} />
@@ -252,7 +269,7 @@ function DutyNode({
       <span className={styles.popBackdrop} aria-hidden="true" />
 
       <span
-        className={`${styles.pop} ${flip ? styles.popFlip : ''}`}
+        className={`${styles.pop} ${flip ? styles.popFlip : ""}`}
         role="note"
         /* 在彈窗內容上點擊不該關窗，否則捲動時容易誤觸 */
         onClick={(e) => e.stopPropagation()}
@@ -266,14 +283,17 @@ function DutyNode({
               </span>
             </span>
             <span className={styles.popDetail}>{detail.en}</span>
-            <span className={`${styles.zh} ${styles.popDetailZh}`} lang="zh-Hant">
+            <span
+              className={`${styles.zh} ${styles.popDetailZh}`}
+              lang="zh-Hant"
+            >
               {detail.zh}
             </span>
           </span>
         ))}
       </span>
     </button>
-  )
+  );
 }
 
 export default function OrgChart() {
@@ -297,53 +317,57 @@ export default function OrgChart() {
         ))}
       </ol>
 
-      <div className={styles.officesBlock}>
-        <p className={styles.branchLabel}>
-          <Label en="Reporting to the General Manager" zh="總經理直轄" />
-        </p>
-        <ul className={styles.offices}>
-          {OFFICES.map((o) => (
-            <li key={o.en}>
-              <DutyNode {...o} className={styles.officeItem} />
+      {SHOW_UNITS && (
+        <div className={styles.officesBlock}>
+          <p className={styles.branchLabel}>
+            <Label en="Reporting to the General Manager" zh="總經理直轄" />
+          </p>
+          <ul className={styles.offices}>
+            {OFFICES.map((o) => (
+              <li key={o.en}>
+                <DutyNode {...o} className={styles.officeItem} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {SHOW_UNITS && (
+        <ul className={styles.departments}>
+          {DEPARTMENTS.map(({ en, zh, color, reportsTo, units }) => (
+            <li key={en}>
+              {/* 色條靠 --dept 傳入，樣式表不必為七個部各寫一條規則 */}
+              <div
+                className={styles.dept}
+                style={{ "--dept": color } as React.CSSProperties}
+              >
+                {/* 部門名稱不掛 hover：職掌在下面每個轄下單位上，
+                  兩層都做會把同一份內容講兩次。 */}
+                <h3 className={styles.deptName}>
+                  <Label en={en} zh={zh} />
+                </h3>
+                <p className={styles.deptReports}>
+                  {reportsTo === "president"
+                    ? "Reports to the General Manager"
+                    : "Reports to the Vice General Manager"}
+                </p>
+                <ul className={styles.units}>
+                  {units.map((u) => (
+                    <li key={u.en}>
+                      <DutyNode {...u} className={styles.unit} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </li>
           ))}
         </ul>
-      </div>
-
-      <ul className={styles.departments}>
-        {DEPARTMENTS.map(({ en, zh, color, reportsTo, units }) => (
-          <li key={en}>
-            {/* 色條靠 --dept 傳入，樣式表不必為七個部各寫一條規則 */}
-            <div
-              className={styles.dept}
-              style={{ '--dept': color } as React.CSSProperties}
-            >
-              {/* 部門名稱不掛 hover：職掌在下面每個轄下單位上，
-                  兩層都做會把同一份內容講兩次。 */}
-              <h3 className={styles.deptName}>
-                <Label en={en} zh={zh} />
-              </h3>
-              <p className={styles.deptReports}>
-                {reportsTo === 'president'
-                  ? 'Reports to the General Manager'
-                  : 'Reports to the Vice General Manager'}
-              </p>
-              <ul className={styles.units}>
-                {units.map((u) => (
-                  <li key={u.en}>
-                    <DutyNode {...u} className={styles.unit} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </li>
-        ))}
-      </ul>
+      )}
 
       <p className={styles.note}>
         The structure is adjusted in line with the company&rsquo;s development,
         legal requirements and operational needs.
       </p>
     </div>
-  )
+  );
 }
