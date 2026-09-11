@@ -15,38 +15,51 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-}
-
-.heroMedia img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* 原圖的主體（晶片）偏右下，往那邊取景才不會只看到桌面 */
-  object-position: 62% 58%;
+  /* 原片很暗（深藍底），依指示調淺。亮度與對比一起動：
+     只拉亮度會讓暗部整片浮灰，對比補回來才看得出人形的線條。 */
+  filter: brightness(1.45) saturate(0.95) contrast(1.05);
 }
 
-/* 由左而下的深藍遮罩。文字在左下角，所以濃度集中在那一側；
-   右上的晶片本體保持清楚。
-   最不利情況（照片該處純白）下，白字對合成後的底是 8.1:1。 */
-.heroMedia::after {
-  content: '';
+/* 遮罩獨立成一層，不掛在影片上——filter 會連同 ::after 一起作用，
+   把遮罩也調亮，等於自己抵銷掉。 */
+.heroScrim {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  /* 文字在左下角，濃度集中在那一側；右上的人形保持清楚。
+     白字落在底部 34% 以內，該處濃度 0.86 起跳。 */
   background:
     linear-gradient(
       to top,
-      rgba(0, 24, 56, 0.95) 0%,
-      rgba(0, 24, 56, 0.86) 34%,
-      rgba(0, 24, 56, 0.4) 64%,
-      rgba(0, 24, 56, 0.12) 100%
+      rgba(0, 24, 56, 0.9) 0%,
+      rgba(0, 24, 56, 0.78) 34%,
+      rgba(0, 24, 56, 0.26) 66%,
+      rgba(0, 24, 56, 0.06) 100%
     ),
     linear-gradient(
       to right,
-      rgba(0, 24, 56, 0.55) 0%,
-      rgba(0, 24, 56, 0.18) 52%,
-      rgba(0, 24, 56, 0) 78%
+      rgba(0, 24, 56, 0.5) 0%,
+      rgba(0, 24, 56, 0.14) 54%,
+      rgba(0, 24, 56, 0) 80%
     );
+}
+
+/* reduced-motion：不播影片，只顯示靜態的 poster。
+   影片本身仍在 DOM 裡（poster 是它的屬性），所以不會留下空白。 */
+@media (prefers-reduced-motion: reduce) {
+  .heroMedia {
+    display: none;
+  }
+
+  .hero {
+    background-image: url('/media/dh-hero-poster.jpg');
+    background-size: cover;
+    background-position: center;
+  }
 }
 
 .heroText {

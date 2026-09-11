@@ -8,7 +8,7 @@
 
 | # | id | 標題 | 狀態 |
 | - | -- | --- | --- |
-| — | — | Hero（滿版圖 ＋ 標題） | 圖到位，**動態背景待補** |
+| — | — | Hero（動態背景 ＋ 標題） | 完成 |
 | 1 | `what` | 什麼是液態晶片 | **文案待補** |
 | 2 | `how` | 運作流程（四步） | 步驟名有依據，說明待補 |
 | 3 | `applications` | 應用場景（九格） | 圖到位，**九段說明待補** |
@@ -65,10 +65,9 @@
 
 ### 仍然待補
 
-1. 影片來源
-2. hero 的動態背景（影片／動圖）
+1. 影片區塊的影片來源
 
-（圖庫區塊依指示刪除，2026-09-11。）
+（圖庫區塊依指示刪除；hero 的動態背景已完成，2026-09-11。）
 
 ## 技術決定
 
@@ -151,3 +150,62 @@ media query 依 iframe 寬度判定，是真實的窄螢幕排版，不必動視
 
 **用限寬而不是改成更扁的比例**：這幾張是多格拼貼的密集圖，改比例會把上下的
 小圖裁掉；限寬則是整張等比縮小，畫面內容還看得出來。
+
+## Hero 的動態背景
+
+來源 `about_img/digital_healthcare/810822800.495871.mp4`（960×720、12.6s、3.0MB、含音軌），
+內容是人體透視動畫，由全身推近到心臟。
+
+### 轉檔
+
+```
+CROP="crop=896:658:64:62"
+
+# 去背景音、裁掉左上角浮水印、mp4（H.264）
+ffmpeg -i <src> -an -vf "$CROP" -c:v libx264 -profile:v high -crf 26 \
+  -preset slow -pix_fmt yuv420p -movflags +faststart public/media/dh-hero.mp4
+
+# webm（VP9）
+ffmpeg -i <src> -an -vf "$CROP" -c:v libvpx-vp9 -crf 44 -b:v 0 \
+  -row-mt 1 -deadline good -cpu-used 1 public/media/dh-hero.webm
+
+# 封面圖（第 6 秒）
+ffmpeg -ss 6 -i <src> -vf "$CROP" -frames:v 1 -q:v 4 public/media/dh-hero-poster.jpg
+```
+
+| 檔案 | 大小 |
+| --- | --- |
+| `dh-hero.webm` | 1.04 MB |
+| `dh-hero.mp4` | 1.67 MB |
+| `dh-hero-poster.jpg` | 64 KB |
+
+瀏覽器只會取其中一支（`<source>` 依序，Chrome／Firefox 取 webm、Safari 取 mp4）。
+
+> **VP9 的 CRF 要調過。** 第一次用 crf 36 出來是 1.8MB，**比 mp4 還大**，
+> 而 webm 排在前面、Chrome 會優先取它——等於讓多數訪客下載比較大的那一支。
+> 改成 crf 44 之後是 1.04MB，抽格比對畫質沒有可見差異（心臟的血管細節仍清楚）。
+
+### 裁切浮水印
+
+原片左上角有一個浮水印，位置實測在 x 33～60、y 32～57。
+`crop=896:658:64:62` 從 (64, 62) 起裁，完整切掉且留有餘裕。
+主體置中，裁掉左上角不影響構圖——這支是滿版背景，本來就會被 `object-fit: cover` 再裁一次。
+
+### 調淺
+
+依指示調淺。原片很暗（深藍底），用 CSS filter 而不是在轉檔時燒進去，
+之後要調不必重新轉檔：
+
+```css
+filter: brightness(1.45) saturate(0.95) contrast(1.05);
+```
+
+**亮度與對比要一起動**：只拉亮度會讓暗部整片浮灰，對比補回來才看得出人形的線條。
+
+> ⚠️ **遮罩必須是獨立的一層（`.heroScrim`），不能用影片的 `::after`。**
+> `filter` 會連同偽元素一起作用，把遮罩也調亮，等於自己抵銷掉。
+
+文字對比：標題落在 hero 底部 29% 處，該處遮罩合成濃度 0.889。
+即使影片在那裡是純白（調亮後的最差情況），白字仍有 **13.05:1**。
+
+`prefers-reduced-motion: reduce` 時影片 `display: none`，改用 poster 當背景圖。

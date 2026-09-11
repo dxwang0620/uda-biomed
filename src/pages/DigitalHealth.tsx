@@ -119,24 +119,35 @@ const SCENES = [
 export default function DigitalHealth() {
   return (
     <>
-      {/* Hero。背景目前是 main.jpg 的靜態圖。
-          動態背景的檔案到位後，在這裡加一支與首頁 hero 同規格的
-          <video muted loop playsInline poster="…dh-main.jpg">，
-          poster 就沿用現在這張，換過去不會有中間的空白狀態。 */}
+      {/* Hero 的動態背景。來源 about_img/digital_healthcare/ 的影片（指定）。
+
+          與首頁 hero 同一套規格：muted + playsInline 缺一不可，否則 iOS Safari
+          不會自動播；poster 必備，載入前、載入失敗、reduced-motion 都靠它撐場。
+          純裝飾，aria-hidden。
+
+          影片已在轉檔時裁掉左上角的浮水印（指定），轉檔參數見
+          docs/content-digital-health.md。 */}
       <header className={styles.hero}>
-        <picture className={styles.heroMedia}>
+        <video
+          className={styles.heroMedia}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={`${import.meta.env.BASE_URL}media/dh-hero-poster.jpg`}
+          aria-hidden="true"
+        >
           <source
-            srcSet={`${import.meta.env.BASE_URL}media/dh-main.webp`}
-            type="image/webp"
+            src={`${import.meta.env.BASE_URL}media/dh-hero.webm`}
+            type="video/webm"
           />
-          <img
-            src={`${import.meta.env.BASE_URL}media/dh-main.jpg`}
-            alt=""
-            width={1600}
-            height={1600}
-            fetchPriority="high"
+          <source
+            src={`${import.meta.env.BASE_URL}media/dh-hero.mp4`}
+            type="video/mp4"
           />
-        </picture>
+        </video>
+        <div className={styles.heroScrim} aria-hidden="true" />
 
         <div className={styles.heroText}>
           <p className={styles.eyebrow}>RESEARCH</p>
