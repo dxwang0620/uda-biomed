@@ -22,14 +22,11 @@
   /* 原片很暗（深藍底），依指示調淺。亮度與對比一起動：
      只拉亮度會讓暗部整片浮灰，對比補回來才看得出人形的線條。
 
-     blur 是刻意的（指定）。原片裁切後只有 896×658，滿版時 object-fit: cover
-     要放大 2.14 倍，在 dpr 2 的螢幕上等於 4.3 倍——細節在原始檔裡就不存在，
-     重轉或提高 bitrate 都救不回來。與其讓放大的插值痕跡讀成「畫質很差」，
-     不如柔到底，讀成「刻意的柔焦背景」。
-     **拿到 1920 以上的原始檔之後，把 blur 與底下的 .heroGrain 一起移除。** */
-  filter: brightness(1.45) saturate(0.95) contrast(1.05) blur(2.5px);
-  /* 放大蓋掉模糊在四邊造成的透明羽化，同縮圖那邊的處理 */
-  transform: scale(1.04);
+     ⚠️ 大螢幕上會糊：原片裁切後只有 896×658，滿版時 object-fit: cover 要放大
+     2.14 倍，dpr 2 的螢幕等於 4.3 倍。細節在原始檔裡就不存在，重轉或提高
+     bitrate 都救不回來——**唯一的解法是拿到 1920 寬以上的原始檔**。
+     曾加過 blur + 顆粒讓它讀成刻意的柔焦，依指示移除。 */
+  filter: brightness(1.45) saturate(0.95) contrast(1.05);
 }
 
 /* 遮罩獨立成一層，不掛在影片上——filter 會連同 ::after 一起作用，
@@ -54,22 +51,6 @@
       rgba(0, 24, 56, 0.14) 54%,
       rgba(0, 24, 56, 0) 80%
     );
-}
-
-/* 顆粒。純柔焦會像失焦的照片；疊一層極淡的雜訊之後，質感會從
-   「沒對到焦」變成「有顆粒的影像」，柔就變得像是選擇。
-
-   用 SVG 的 feTurbulence 產生，是一張靜態貼圖，不像 filter 要逐幀計算。
-   掛在 .heroScrim 的 ::after 而不是影片上——影片有 filter，
-   偽元素會跟著被 blur 掉。 */
-.heroScrim::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.14;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* reduced-motion：不播影片，只顯示靜態的 poster。
