@@ -1,3 +1,4 @@
+import FlowRail, { type FlowStep } from '../components/FlowRail.tsx'
 import SectionNav, { type SectionLink } from '../components/SectionNav.tsx'
 import VideoBlock from '../components/VideoBlock.tsx'
 import Section from '../components/ui/Section.tsx'
@@ -35,7 +36,7 @@ const NAV: SectionLink[] = [
 
 /* 流程四步。取自 about_img/digital_healthcare 圖面上既有的中文標籤
    （S__216956956／959 的底排），不是我擬的詞。 */
-const FLOW = [
+const FLOW: FlowStep[] = [
   {
     zh: '氣味偵測',
     en: 'Odour sensing',
@@ -213,20 +214,8 @@ export default function DigitalHealth() {
                 where the device sits and who receives the alert.
               </p>
 
-              <ol className={styles.flow}>
-                {FLOW.map((step, i) => (
-                  <li key={step.zh} className={styles.flowStep}>
-                    <span className={styles.flowNum}>
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span className={styles.flowZh} lang="zh-Hant">
-                      {step.zh}
-                    </span>
-                    <span className={styles.flowEn}>{step.en}</span>
-                    <span className={styles.flowBody}>{step.body}</span>
-                  </li>
-                ))}
-              </ol>
+              {/* 窄螢幕做成橫向滑軌（指定），768 以上回到四欄並排。 */}
+              <FlowRail steps={FLOW} label="How it works" />
             </section>
 
             <section id="applications" className={styles.block}>

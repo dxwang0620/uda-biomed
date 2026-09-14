@@ -220,60 +220,6 @@
   height: auto;
 }
 
-/* ---------- 運作流程 ---------- */
-
-.flow {
-  display: grid;
-  gap: var(--space-2);
-  margin: var(--space-4) 0 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: none;
-}
-
-@media (min-width: 768px) {
-  .flow {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.flowStep {
-  display: grid;
-  gap: 2px;
-  padding: var(--space-3);
-  background: var(--color-tint);
-  border-radius: var(--radius);
-  /* 左側色條當序列感，不用箭頭——箭頭在窄螢幕轉成直列時方向會反過來 */
-  border-left: 3px solid var(--color-primary);
-}
-
-.flowNum {
-  font-family: var(--font-latin);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--color-primary);
-}
-
-.flowZh {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: var(--color-navy);
-}
-
-.flowEn {
-  font-family: var(--font-latin);
-  font-size: var(--text-small);
-  color: var(--color-text-muted);
-}
-
-.flowBody {
-  margin-top: var(--space-1);
-  font-size: var(--text-small);
-  line-height: 1.65;
-  color: var(--color-text);
-}
-
 /* ---------- 應用方向（五大類） ---------- */
 
 .cats {

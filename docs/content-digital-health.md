@@ -375,3 +375,26 @@ ffmpeg -ss 4 -i chip.mp4 -frames:v 1 -c:v libwebp -quality 82 public/media/dh-ch
 
 實測：點播放鈕後插入 `<video>`、取到 `dh-chip.webm`、720×720、
 `readyState 4`，並播到 8 秒結束。
+
+## How it works：窄螢幕改成滑軌
+
+依指示「參考 research 的三個」，四步在窄螢幕改成橫向滑軌（`FlowRail`），
+768 以上回到四欄並排。
+
+同一份 DOM、靠 CSS 切換：`.viewport` 在窄螢幕是 `overflow-x: auto`、
+`.rail` 是 flex 且每格 `flex: 0 0 100%`；768 以上 `.viewport` 改 `overflow: visible`、
+`.rail` 改成四欄 grid，進度軌 `display: none`（四格全在畫面上時進度提示沒有意義）。
+
+進度的算法照抄 `FocusStack`，兩個坑一樣要避開：
+
+- **`onScroll` 不做 rAF 節流。** 用旗標節流時只要掉一幀，旗標就不會再被清掉，
+  之後所有 scroll 事件都被吃掉，進度條會卡住不動
+- **捲到底直接視為 1。** `scrollLeft` 幾乎不會剛好等於 `max`（裝置像素比與慣性
+  收尾差零點幾 px），不夾的話線永遠停在 99.x%
+
+進度軌整條 `aria-hidden`：它只是「現在滑到哪」的視覺提示，捲動位置在捲動容器
+上已經有了，再做成可聚焦的控制項只會多出四個 tab 停留點。
+
+實測 375px：`scrollWidth` 1404 / `clientWidth` 339，捲動 0 → 1/3 → 2/3 → 1 時
+`--p` 為 0 / 0.333 / 0.666 / 1，`data-reached` 為 0 / 2 / 3 / 4；
+1178px 下四欄各 191px、進度軌隱藏。
