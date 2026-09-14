@@ -104,31 +104,38 @@
 
 .dots {
   display: flex;
-  justify-content: space-between;
   margin: 0;
   padding: 4px 0 0;
   list-style: none;
 }
 
+/* 每一格佔四分之一，標籤才會平均分佈。
+   圓點不靠這個定位——見下面 .dot 的說明。 */
 .dotItem {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  /* 四顆平分，標籤才不會把間距推歪 */
   flex: 1 1 0;
   min-width: 0;
+  /* 圓點是絕對定位，這裡只是把標籤往下推出圓點的高度 */
+  padding-top: 15px;
 }
 
-.dotItem:first-child {
-  align-items: flex-start;
-}
+/* **圓點的位置要自己算，不能交給 flex 對齊。**
 
-.dotItem:last-child {
-  align-items: flex-end;
-}
+   原本第一顆靠左、最後一顆靠右、中間兩顆各自置中，四格等寬之下圓心會落在
+   0 / 37.5% / 62.5% / 100%——中間兩顆太靠近彼此，而藍線是線性推進到
+   0 / 33.3% / 66.7% / 100%，兩者對不起來（實測圓心 5 / 127 / 212 / 335，
+   間距 122 / 85 / 123）。
 
+   改成用與藍線同一條公式定位：第 i 顆在 4.5px + (i/3) × (寬 − 9px)。
+   四顆因此等距，線走到圓心的那一刻剛好變色。 */
 .dot {
+  position: absolute;
+  top: 4px;
+  left: calc(4.5px + var(--f) * (100% - 9px));
+  transform: translateX(-50%);
   width: 9px;
   height: 9px;
   border-radius: 50%;
@@ -138,6 +145,20 @@
     background-color 0.2s ease,
     box-shadow 0.2s ease,
     transform 0.2s ease;
+}
+
+/* 四顆的位置。步數固定，直接列出來比傳 inline style 乾淨。 */
+.dotItem:nth-child(1) .dot {
+  --f: 0;
+}
+.dotItem:nth-child(2) .dot {
+  --f: 0.33333;
+}
+.dotItem:nth-child(3) .dot {
+  --f: 0.66667;
+}
+.dotItem:nth-child(4) .dot {
+  --f: 1;
 }
 
 .dotLabel {
@@ -173,12 +194,14 @@
   font-weight: 600;
 }
 
-/* 最新走到的那一顆再放大一點 */
+/* 最新走到的那一顆再放大一點。
+   **translateX(-50%) 必須一起寫**——transform 是整個換掉的，
+   只寫 scale 會把定位用的位移弄丟，圓點會往右跳半顆。 */
 .progress[data-reached='1'] .dotItem:nth-child(1) .dot,
 .progress[data-reached='2'] .dotItem:nth-child(2) .dot,
 .progress[data-reached='3'] .dotItem:nth-child(3) .dot,
 .progress[data-reached='4'] .dotItem:nth-child(4) .dot {
-  transform: scale(1.3);
+  transform: translateX(-50%) scale(1.3);
 }
 
 @media (prefers-reduced-motion: reduce) {
