@@ -61,7 +61,7 @@
   }
 
   .hero {
-    background-image: url('/media/dh-hero-poster.jpg');
+    background-image: url("/media/dh-hero-poster.jpg");
     background-size: cover;
     background-position: center;
   }
@@ -239,15 +239,15 @@
   overflow: hidden;
   border-radius: var(--radius-lg);
   background: var(--color-navy);
-  /* 窄螢幕：文字排在下半，所以卡片要高一點，上半才留得住照片 */
-  align-items: flex-end;
-  aspect-ratio: 3 / 4;
+  /* 窄螢幕不綁比例，改成下限＋內容撐高：文字在左半、欄寬只有 200 出頭，
+     行數會隨文案長短差一兩行，綁死比例不是留一塊空白就是把字擠出卡片外。 */
+  min-height: 11rem;
 }
 
 @media (min-width: 768px) {
   .cat {
-    align-items: center;
     aspect-ratio: 21 / 9;
+    min-height: 0;
   }
 }
 
@@ -266,21 +266,26 @@
   object-position: 68% 50%;
 }
 
-/* 單一色相的漸層。起頭就是實色（不是 0.9 之類），交界處不會出現一條深淺線。
+/* 單一色相的漸層，由左而右淡出，兩個斷點同一個方向（指定）。
+   起頭就是實色（不是 0.9 之類），交界處不會出現一條深淺線。
 
-   **方向依斷點換。** 窄螢幕若沿用「由左而右」，339px 寬的卡片上文字就佔掉
-   左邊 58%，而漸層在那個範圍還是接近實色——整張卡幾乎全暗，照片等於沒放
-   （第一版就是這樣）。改成由下而上、文字壓在下半，上半就留給照片。 */
+   兩組的差別只在淡出的位置：窄螢幕的卡片才 339px 寬，文字欄佔掉 62%，
+   若照抄桌機的停點（56% 還有 0.72），右邊剩不到 100px 是亮的，照片等於沒放。
+   所以窄螢幕整條往左壓，68% 就降到 0.62、86% 剩 0.22。
+
+   ⚠️ 第一版是「由下而上、文字壓在下半」，那是為了讓照片有完整的上半可看，
+   但不是要的樣式（回報「不要這麼長的圖片，我要漸層左邊是文字」）。 */
 .catMedia::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    to top,
+    to right,
     rgb(0, 24, 56) 0%,
-    rgba(0, 24, 56, 0.94) 38%,
-    rgba(0, 24, 56, 0.66) 58%,
-    rgba(0, 24, 56, 0.22) 82%,
+    rgb(0, 24, 56) 30%,
+    rgba(0, 24, 56, 0.9) 50%,
+    rgba(0, 24, 56, 0.62) 68%,
+    rgba(0, 24, 56, 0.22) 86%,
     rgba(0, 24, 56, 0.04) 100%
   );
 }
@@ -298,18 +303,18 @@
   }
 }
 
-/* 文字靠左（指定）。窄螢幕吃滿寬、排在下半；768 以上收成左半。 */
+/* 文字靠左（指定），兩個斷點都在左半。窄螢幕 62%、桌機 46%。 */
 .catText {
   position: relative;
   z-index: 1;
-  width: 100%;
-  padding: var(--space-3);
+  /* 文字最後一行不會落到漸層已經變淡的地方 */
+  width: 62%;
+  padding: var(--space-2);
   color: var(--color-white);
 }
 
 @media (min-width: 768px) {
   .catText {
-    /* 文字最後一行不會落到漸層已經變淡的地方 */
     width: 46%;
     padding: var(--space-4);
   }
