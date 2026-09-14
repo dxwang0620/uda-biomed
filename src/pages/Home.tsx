@@ -1,12 +1,12 @@
-import { ArrowRight, Calendar } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import HeroCarousel from '../components/HeroCarousel.tsx'
-import StatCounters from '../components/StatCounters.tsx'
-import HeroVideo from '../components/HeroVideo.tsx'
-import Button from '../components/ui/Button.tsx'
-import Section from '../components/ui/Section.tsx'
-import { usePress } from '../hooks/usePress.ts'
-import styles from './Home.module.css'
+import { ArrowRight, Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
+import HeroCarousel from "../components/HeroCarousel.tsx";
+import StatCounters from "../components/StatCounters.tsx";
+import HeroVideo from "../components/HeroVideo.tsx";
+import Button from "../components/ui/Button.tsx";
+import Section from "../components/ui/Section.tsx";
+import { usePress } from "../hooks/usePress.ts";
+import styles from "./Home.module.css";
 
 /* 版面與文案依 index_video 參考影片重建，逐字內容見 docs/content-home.md。
    標 [抄錄] 的是從錄影讀出、待你校對；日期與數字一律不抄，走 <Placeholder>。 */
@@ -38,32 +38,47 @@ import styles from './Home.module.css'
  * 一樣沒有採用。上線前需要你或客戶改寫確認。 */
 const SNAPSHOT = [
   {
-    n: '01',
-    title: 'Research organization',
-    body: 'Research is organized around cancer detection, with molecular recognition, material interfaces and signal analysis run as parallel workstreams rather than a single linear pipeline.',
-    file: 'snap-1',
+    n: "01",
+    title: "Research organization",
+    body: "Research is organized around cancer detection, with molecular recognition, material interfaces and signal analysis run as parallel workstreams rather than a single linear pipeline.",
+    file: "snap-1",
   },
   {
-    n: '02',
-    title: 'Technical planning',
-    body: 'Each workstream is planned in stages, from question definition through reproducibility and interference assessment, so that a method advances only when the previous stage holds.',
-    file: 'snap-2',
+    n: "02",
+    title: "Technical planning",
+    body: "Each workstream is planned in stages, from question definition through reproducibility and interference assessment, so that a method advances only when the previous stage holds.",
+    file: "snap-2",
   },
   {
-    n: '03',
-    title: 'Collaboration structure',
-    body: 'Discussions with clinical, academic and industry groups are held at defined maturity points, keeping intellectual property and co-development terms aligned with what has been validated.',
-    file: 'snap-3',
+    n: "03",
+    title: "Collaboration structure",
+    body: "Discussions with clinical, academic and industry groups are held at defined maturity points, keeping intellectual property and co-development terms aligned with what has been validated.",
+    file: "snap-3",
   },
-]
+];
 
 const NEWS_THUMBS = [
-  { file: 'news-1', alt: 'UDA BIOMED 辦公室入口通道，左側為會客區，前方指標牌標示各部門方向。' },
-  { file: 'news-2', alt: 'UDA BIOMED 走廊，指標牌標示研發部、品質部與實驗區，右側為會議室。' },
-  { file: 'news-3', alt: 'UDA BIOMED 主管樓層走廊，指標牌標示總經理室、副總室與辦公室主任。' },
-  { file: 'news-4', alt: 'UDA BIOMED 研發部入口，牆面標示醫材開發、藥物研發、軟體開發與生技產品。' },
-  { file: 'news-5', alt: 'UDA BIOMED 接待櫃檯與品牌牆，後方為玻璃隔間的會議室。' },
-]
+  {
+    file: "news-1",
+    alt: "UDA BIOMED 辦公室入口通道，左側為會客區，前方指標牌標示各部門方向。",
+  },
+  {
+    file: "news-2",
+    alt: "UDA BIOMED 走廊，指標牌標示研發部、品質部與實驗區，右側為會議室。",
+  },
+  {
+    file: "news-3",
+    alt: "UDA BIOMED 主管樓層走廊，指標牌標示總經理室、副總室與辦公室主任。",
+  },
+  {
+    file: "news-4",
+    alt: "UDA BIOMED 研發部入口，牆面標示醫材開發、藥物研發、軟體開發與生技產品。",
+  },
+  {
+    file: "news-5",
+    alt: "UDA BIOMED 接待櫃檯與品牌牆，後方為玻璃隔間的會議室。",
+  },
+];
 
 /* 最新消息三則。**全是草稿**，依指示先擬（「幫我加三則最新消息」）。
    刻意不含任何成果、數據、臨床階段、論文、專利或合作對象——
@@ -73,105 +88,107 @@ const LATEST: NewsItem[] = [
   /* 前兩則依指示指向實際的內頁，並用各自主題的圖。
      ⚠️ 標題與摘要仍是草稿，寫的時候不含任何成果、數據、期別或時程。 */
   {
-    category: 'Research',
-    date: '02 Sep 2026',
-    title: 'Cancer detection research: where the work currently stands',
+    category: "Research",
+    date: "02 Sep 2026",
+    title: "Cancer detection research: where the work currently stands",
     excerpt:
-      'How UDA frames detection as a question of telling a real signal apart from ordinary biological variation.',
-    to: '/research',
-    thumb: 'news-detection',
-    thumbAlt: '',
+      "How UDA frames detection as a question of telling a real signal apart from ordinary biological variation.",
+    to: "/research",
+    thumb: "news-detection",
+    thumbAlt: "",
   },
   {
-    category: 'Technology',
-    date: '19 Aug 2026',
-    title: 'AFL System: turning scent into data that can be understood',
+    category: "Technology",
+    date: "19 Aug 2026",
+    title: "AFL System: turning scent into data that can be understood",
     excerpt:
-      'An olfactory language sensing chip that reads the volatile chemical signals a substance leaves in the air.',
-    to: '/research/digital-health',
-    thumb: 'news-afl',
-    thumbAlt: '',
+      "An olfactory language sensing chip that reads the volatile chemical signals a substance leaves in the air.",
+    to: "/research/digital-health",
+    thumb: "news-afl",
+    thumbAlt: "",
   },
-]
+];
 
 const NEWS: NewsItem[] = [
   {
-    category: 'Research',
-    date: '21 Aug 2026',
-    title: 'Research direction update for cancer-detection technology',
-    excerpt: 'How UDA frames the questions it is currently pursuing, and what it is deliberately leaving open.',
+    category: "Research",
+    date: "21 Aug 2026",
+    title: "Research direction update for cancer-detection technology",
+    excerpt:
+      "How UDA frames the questions it is currently pursuing, and what it is deliberately leaving open.",
     /* 指定用這張。與其餘幾則輪用的辦公環境照不同，這張有品牌牆與展示中的晶片。 */
-    thumb: 'news-lobby',
-    thumbAlt: '',
+    thumb: "news-lobby",
+    thumbAlt: "",
   },
   {
-    category: 'Technology',
-    date: '04 Aug 2026',
-    title: 'UDA Biochip platform development progress',
-    excerpt: 'Where the platform stands across recognition, sensing and data analysis.',
+    category: "Technology",
+    date: "04 Aug 2026",
+    title: "UDA Biochip platform development progress",
+    excerpt:
+      "Where the platform stands across recognition, sensing and data analysis.",
   },
   {
-    category: 'Collaboration',
-    date: '17 Jul 2026',
-    title: 'Academic and industry collaboration announcement',
-    excerpt: 'The kinds of partners we are looking for, and what a first conversation usually covers.',
+    category: "Collaboration",
+    date: "17 Jul 2026",
+    title: "Academic and industry collaboration announcement",
+    excerpt:
+      "The kinds of partners we are looking for, and what a first conversation usually covers.",
   },
   {
-    category: 'Framework',
-    date: '29 Jun 2026',
-    title: 'Proto-Structural Biology research framework update',
-    excerpt: 'Reading change from atomic and molecular structure through to cellular state.',
+    category: "Framework",
+    date: "29 Jun 2026",
+    title: "Proto-Structural Biology research framework update",
+    excerpt:
+      "Reading change from atomic and molecular structure through to cellular state.",
   },
   {
-    category: 'Intellectual Property',
-    date: '12 Jun 2026',
-    title: 'Intellectual property and translational development notice',
-    excerpt: 'What gets disclosed at each stage of R&D maturity, and why the rest waits.',
+    category: "Intellectual Property",
+    date: "12 Jun 2026",
+    title: "Intellectual property and translational development notice",
+    excerpt:
+      "What gets disclosed at each stage of R&D maturity, and why the rest waits.",
   },
   {
-    category: 'Responsibility',
-    date: '26 May 2026',
-    title: 'Corporate responsibility and data governance statement',
-    excerpt: 'Scientific integrity, privacy governance and respect for life as working constraints.',
+    category: "Responsibility",
+    date: "26 May 2026",
+    title: "Corporate responsibility and data governance statement",
+    excerpt:
+      "Scientific integrity, privacy governance and respect for life as working constraints.",
   },
-]
-
-
-
-
+];
 
 const POSITIONING_TAGS = [
-  'Cancer Detection Technology',
-  'Cancer Research',
-  'Proto-Structural Biology',
-  'Cross-Disciplinary R&D',
-  'Intellectual Property',
-  'Industry Collaboration',
-]
+  "Cancer Detection Technology",
+  "Cancer Research",
+  "Proto-Structural Biology",
+  "Cross-Disciplinary R&D",
+  "Intellectual Property",
+  "Industry Collaboration",
+];
 
 type NewsItem = {
-  category: string
-  date: string
-  title: string
-  excerpt: string
+  category: string;
+  date: string;
+  title: string;
+  excerpt: string;
   /** 覆寫去向。沒給的話指向 /research——多數消息還沒有自己的頁面。 */
-  to?: string
+  to?: string;
   /** 覆寫縮圖（public/media 下的檔名）。沒給的話輪用 NEWS_THUMBS 的辦公環境照。 */
-  thumb?: string
+  thumb?: string;
   /** 覆寫縮圖的替代文字 */
-  thumbAlt?: string
-}
+  thumbAlt?: string;
+};
 
 /* 一則消息。兩個主題共用同一個列樣式，所以抽出來。
 
    右下的按鈕依指示接到 RESEARCH——單則消息沒有自己的頁面（這是純前端的
    靜態站，也還沒有內容來源），所以全部指向同一頁，而不是編造一個不存在的網址。 */
 function NewsRow({ item, thumbIndex }: { item: NewsItem; thumbIndex: number }) {
-  const fallback = NEWS_THUMBS[thumbIndex % NEWS_THUMBS.length]
+  const fallback = NEWS_THUMBS[thumbIndex % NEWS_THUMBS.length];
   const thumb = item.thumb
-    ? { file: item.thumb, alt: item.thumbAlt ?? '' }
-    : fallback
-  const to = item.to ?? '/research'
+    ? { file: item.thumb, alt: item.thumbAlt ?? "" }
+    : fallback;
+  const to = item.to ?? "/research";
 
   return (
     <li className={styles.newsItem}>
@@ -213,13 +230,13 @@ function NewsRow({ item, thumbIndex }: { item: NewsItem; thumbIndex: number }) {
         </p>
       </div>
     </li>
-  )
+  );
 }
 
 export default function Home() {
   /* 觸控裝置沒有 hover，整組效果關在 @media (hover: hover) 裡，
      手機上點消息區塊完全沒反應。這裡補一個按壓狀態，與四格數字同一個 hook。 */
-  const news = usePress()
+  const news = usePress();
 
   /* 董事長談話預設收合，點藍色區塊下緣的箭頭展開。 */
 
@@ -232,21 +249,22 @@ export default function Home() {
       {/* 核心定位。依指示排在最新消息之前——hero 之後的第一個內容區塊。 */}
       <Section tone="translucent" labelledBy="positioning-heading">
         <div className={styles.intro}>
-        <h2 id="positioning-heading" className={styles.sectionTitle}>
-          UDA BIOMED core positioning
-        </h2>
-        {/* 依指示縮短。原文（抄錄自參考影片）共 76 字，三個長句；
+          <h2 id="positioning-heading" className={styles.sectionTitle}>
+            UDA BIOMED core positioning
+          </h2>
+          {/* 依指示縮短。原文（抄錄自參考影片）共 76 字，三個長句；
             這一版 40 字，保留三件事：公司定位、目前的公開重點、
             驗證與 IP 的立場。被拿掉的是 Proto-Structural Biology 那一串
             學科列舉——底下的標籤列已經列出同樣的詞。
             全文留在 docs/content-home.md。 */}
-        <p className={styles.lede}>
-          UDA BIOMED is a biomedical technology company centered on
-          innovation-driven R&amp;D, with its current public focus on cancer
-          research and detection technology. UDA emphasizes validation,
-          intellectual property and translational development, so that technology
-          can progress from data toward co-development and licensing.
-        </p>
+          <p className={styles.lede}>
+            UDA BIOMED is a biomedical technology company centered on
+            innovation-driven R&amp;D, with its current public focus on cancer
+            research and detection technology. UDA emphasizes validation,
+            intellectual property and translational development, so that
+            technology can progress from data toward co-development and
+            licensing.
+          </p>
         </div>
         <ul role="list" className={styles.tagRow}>
           {POSITIONING_TAGS.map((tag) => (
@@ -317,8 +335,6 @@ export default function Home() {
         </div>
       </Section>
 
-
-
       {/* 消息與技術平台導言兩塊。
           多個對等的 h2，用其中之一當 section 名稱會誤導，故不設 labelledBy。
 
@@ -343,10 +359,10 @@ export default function Home() {
                 全文留在 docs/content-home.md。 */}
             <p className={styles.lede}>
               UDA Biochip Technology brings molecular recognition, material
-              interfaces, biosensing and data analysis together as a key platform
-              for life-signal research. The focus is not only on acquiring signals,
-              but on whether they can be compared, validated and translated into
-              results with application potential.
+              interfaces, biosensing and data analysis together as a key
+              platform for life-signal research. The focus is not only on
+              acquiring signals, but on whether they can be compared, validated
+              and translated into results with application potential.
             </p>
 
             {/* 與核心定位那顆同一個變體（依指示改成藍鈕）。
@@ -359,7 +375,7 @@ export default function Home() {
           </div>
           <div
             className={`${styles.newsBlock} ${styles.reveal} ${
-              news.pressed ? styles.pressed : ''
+              news.pressed ? styles.pressed : ""
             }`}
             {...news.handlers}
           >
@@ -377,7 +393,10 @@ export default function Home() {
             >
               <h2 className={styles.blockTitle}>Solution Analysis</h2>
 
-              <ol className={styles.newsList}>
+              {/* 窄螢幕只列前三則（指定）。用 CSS 的 nth-child 收掉後面三則，
+                  不在這裡依視窗寬度切資料——那要多一個 matchMedia 的狀態，
+                  而且伺服器端預抓的 HTML 沒有視窗寬度，會先畫六則再閃成三則。 */}
+              <ol className={`${styles.newsList} ${styles.newsListTrim}`}>
                 {NEWS.map((item, i) => (
                   <NewsRow key={item.title} item={item} thumbIndex={i} />
                 ))}
@@ -395,10 +414,8 @@ export default function Home() {
               </ol>
             </div>
           </div>
-
         </div>
       </Section>
-
     </>
-  )
+  );
 }

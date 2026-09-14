@@ -44,6 +44,23 @@
 
 ---
 
+### 手機版的消息區塊（2026-09-15）
+
+指定「solution analysis 變三格、整體 block 變窄，手機版的改就好」。
+
+- **只列三則**：`.newsListTrim > li:nth-child(n + 4) { display: none }`。
+  資料仍是六則，桌機（≥768）維持六則全列。不在 React 端依視窗寬度切資料——
+  那要多一個 matchMedia 狀態，而且預抓的 HTML 沒有視窗寬度，會先畫六則再閃成三則。
+- **整塊收窄**：`width: 88%; max-width: 30rem; margin-inline: auto`。
+  375px 下實測 298px 寬、左右各留 36/41px；滿版時卡片邊緣貼著容器內距、
+  看起來與頁面等寬，收窄之後這一塊才從背景裡浮起來。
+
+> ⚠️ 這兩條刻意用 `max-width: 767px`，與檔案其他地方的 mobile-first 相反。
+> 寫成基準值就得在 768 再寫一組還原，而還原 `display` 要把 `.newsItem` 的
+> `grid` 值抄第二份——抄錯就壞。位置也必須留在 `Home.module.css` 最後：
+> 與前面的 `.newsBlock` 同權重，CSS Modules 依原始順序輸出，後面的才蓋得掉。
+
+
 ## 區塊一：研發重點三張卡 `[抄錄]`
 
 版型改為**橫向推進的三張卡** `FocusStack`，取代原本的三欄圖示卡。

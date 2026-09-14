@@ -322,7 +322,7 @@
 
 /* 掃光。與四格用同一組動畫語彙。 */
 .newsBlock::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: -20% -60%;
   z-index: 1;
@@ -814,6 +814,30 @@
   }
 
   .newsThumb::after {
+    display: none;
+  }
+}
+
+/* ---------- 手機版的消息區塊（指定） ---------- */
+
+/* 這一段刻意用 max-width，與檔案其他地方的 mobile-first 相反。
+   理由：這兩條只在手機成立，寫成基準值就得在 768 再寫一組還原，
+   而還原 display 要把 .newsItem 的 grid 值抄第二份——抄錯就壞。
+   位置必須留在檔案最後：與前面的 .newsBlock／.newsItem 同權重，
+   CSS Modules 依原始順序輸出，後面的才蓋得掉。 */
+@media (max-width: 767px) {
+  /* 整塊收窄（指定）。滿版時卡片邊緣貼著容器內距，看起來與頁面等寬；
+     留出左右各約 6%，這一塊才從背景裡浮起來。
+     30rem 的上限是給 430–767px 的機型用的，不然收窄比例會讓它太寬。 */
+  .newsBlock {
+    width: 88%;
+    max-width: 30rem;
+    margin-inline: auto;
+  }
+
+  /* 解決方案分析只列三則。第四則之後仍在 DOM 裡但不算進無障礙樹，
+     桌機（≥768）維持六則。 */
+  .newsListTrim > li:nth-child(n + 4) {
     display: none;
   }
 }
