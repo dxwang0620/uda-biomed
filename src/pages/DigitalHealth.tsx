@@ -62,43 +62,44 @@ const FLOW: FlowStep[] = [
 /* 五大應用方向。**文案由你提供**（2026-09-11），英文是翻譯，見
    docs/content-digital-health.md 的對照表。
 
-   九張場景圖分配到各自的類別底下——原本每張圖配一句我自己寫的敘述，
-   那些已經全部移除，現在的說明文字都是你的原文。 */
+   **每類一張圖**（指定）。圖鋪滿卡片、單一色相的漸層由左而右淡出，
+   文字壓在左半（與研發焦點那三張卡同一套語彙）。
+   dh-3／dh-5／dh-7／dh-8 目前沒有用到，留著隨時可換。 */
 const CATEGORIES = [
   {
     key: 'medical',
     en: 'Medical',
     zh: '醫療與健康',
     body: 'Analysing human breath and volatile biomarkers, exploring what non-invasive scent analysis might make possible.',
-    images: ['dh-1', 'dh-8'],
+    image: 'dh-1',
   },
   {
     key: 'food',
     en: 'Food safety',
     zh: '食品安全',
     body: 'From freshness and changes in quality through to abnormal odours and signs of contamination, opening up non-destructive scent monitoring.',
-    images: ['dh-2'],
+    image: 'dh-2',
   },
   {
     key: 'environment',
     en: 'Environment',
     zh: '環境監測',
     body: 'Continuously sensing abnormal odours and chemical signals in the air, for indoor, industrial and environmental monitoring.',
-    images: ['dh-6'],
+    image: 'dh-6',
   },
   {
     key: 'safety',
     en: 'Safety',
     zh: '安全防護',
     body: 'Building detection models for hazardous gases, abnormal chemicals and particular scent patterns, so that a system can notice a problem early.',
-    images: ['dh-4', 'dh-5'],
+    image: 'dh-4',
   },
   {
     key: 'security',
     en: 'Security',
     zh: '智慧安全',
     body: 'Combining scent sensing with AI analysis to explore the identification of narcotics, dangerous substances and other distinctive scents.',
-    images: ['dh-3', 'dh-7', 'dh-9'],
+    image: 'dh-9',
   },
 ]
 
@@ -232,6 +233,22 @@ export default function DigitalHealth() {
               <ul role="list" className={styles.cats}>
                 {CATEGORIES.map((c) => (
                   <li key={c.key} className={styles.cat}>
+                    {/* 圖是情境示意，意思由壓在上面的文字承載，所以 alt=""。 */}
+                    <picture className={styles.catMedia}>
+                      <source
+                        srcSet={`${import.meta.env.BASE_URL}media/${c.image}.webp`}
+                        type="image/webp"
+                      />
+                      <img
+                        src={`${import.meta.env.BASE_URL}media/${c.image}.jpg`}
+                        alt=""
+                        width={1100}
+                        height={1005}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
+
                     <div className={styles.catText}>
                       <h3 className={styles.catTitle}>
                         <span className={styles.catEn}>{c.en}</span>
@@ -241,29 +258,6 @@ export default function DigitalHealth() {
                       </h3>
                       <p className={styles.catBody}>{c.body}</p>
                     </div>
-
-                    {/* 一到三張圖，依類別而定。圖是情境示意，說明已由左欄
-                        的文字承載，所以 alt=""。 */}
-                    <ul role="list" className={styles.catShots}>
-                      {c.images.map((file) => (
-                        <li key={file}>
-                          <picture className={styles.catMedia}>
-                            <source
-                              srcSet={`${import.meta.env.BASE_URL}media/${file}.webp`}
-                              type="image/webp"
-                            />
-                            <img
-                              src={`${import.meta.env.BASE_URL}media/${file}.jpg`}
-                              alt=""
-                              width={1100}
-                              height={1005}
-                              loading="lazy"
-                              decoding="async"
-                            />
-                          </picture>
-                        </li>
-                      ))}
-                    </ul>
                   </li>
                 ))}
               </ul>

@@ -224,25 +224,94 @@
 
 .cats {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-3);
   margin: var(--space-4) 0 0;
   padding: 0;
   list-style: none;
 }
 
+/* 每一類是一張整圖卡：照片鋪滿、單一色相的漸層由左而右淡出、
+   文字壓在左半（與研發焦點那三張卡同一套語彙）。 */
 .cat {
-  display: grid;
-  gap: var(--space-3);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border);
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-navy);
+  /* 窄螢幕：文字排在下半，所以卡片要高一點，上半才留得住照片 */
+  align-items: flex-end;
+  aspect-ratio: 3 / 4;
 }
 
 @media (min-width: 768px) {
   .cat {
-    /* 左欄文字、右欄圖。文字欄固定較窄，五類的標題才會對齊成一直線。 */
-    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-    gap: var(--space-4);
-    align-items: start;
+    align-items: center;
+    aspect-ratio: 21 / 9;
+  }
+}
+
+.catMedia {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.catMedia img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 這幾張的主體多半偏右，往那邊取景才不會只剩背景 */
+  object-position: 68% 50%;
+}
+
+/* 單一色相的漸層。起頭就是實色（不是 0.9 之類），交界處不會出現一條深淺線。
+
+   **方向依斷點換。** 窄螢幕若沿用「由左而右」，339px 寬的卡片上文字就佔掉
+   左邊 58%，而漸層在那個範圍還是接近實色——整張卡幾乎全暗，照片等於沒放
+   （第一版就是這樣）。改成由下而上、文字壓在下半，上半就留給照片。 */
+.catMedia::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgb(0, 24, 56) 0%,
+    rgba(0, 24, 56, 0.94) 38%,
+    rgba(0, 24, 56, 0.66) 58%,
+    rgba(0, 24, 56, 0.22) 82%,
+    rgba(0, 24, 56, 0.04) 100%
+  );
+}
+
+@media (min-width: 768px) {
+  .catMedia::after {
+    background: linear-gradient(
+      to right,
+      rgb(0, 24, 56) 0%,
+      rgba(0, 24, 56, 0.94) 34%,
+      rgba(0, 24, 56, 0.72) 56%,
+      rgba(0, 24, 56, 0.28) 80%,
+      rgba(0, 24, 56, 0.06) 100%
+    );
+  }
+}
+
+/* 文字靠左（指定）。窄螢幕吃滿寬、排在下半；768 以上收成左半。 */
+.catText {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: var(--space-3);
+  color: var(--color-white);
+}
+
+@media (min-width: 768px) {
+  .catText {
+    /* 文字最後一行不會落到漸層已經變淡的地方 */
+    width: 46%;
+    padding: var(--space-4);
   }
 }
 
@@ -258,68 +327,21 @@
   font-weight: 700;
   letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
-  color: var(--color-primary);
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .catZh {
   font-size: 1.25rem;
   line-height: 1.35;
   letter-spacing: 0.02em;
-  color: var(--color-navy);
+  color: var(--color-white);
 }
 
 .catBody {
-  max-width: 42ch;
   margin: var(--space-2) 0 0;
   font-size: var(--text-small);
-  line-height: 1.8;
-  color: var(--color-text-muted);
-}
-
-/* 一到三張圖。用 auto-fill 而不是 auto-fit：
-   auto-fit 會把空軌道收掉，只有一張圖的類別（食品／環境）就會吃滿整個右欄，
-   跟旁邊兩張圖的類別大小差一倍。auto-fill 保留軌道，每張圖都是同一個尺寸
-   （實測 266×200），五類看起來才是同一組東西。 */
-.catShots {
-  display: grid;
-  gap: var(--space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-}
-
-.catMedia {
-  display: block;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  border-radius: var(--radius);
-  background: var(--color-surface);
-}
-
-.catMedia img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* 窄螢幕：圖縮小並置中，與文字同一個中軸（指定）。
-   多張時仍並排，但每張都會等比縮小。 */
-@media (max-width: 767px) {
-  .catText {
-    text-align: center;
-  }
-
-  .catBody {
-    max-width: 34ch;
-    margin-inline: auto;
-  }
-
-  .catShots {
-    max-width: 15rem;
-    margin-inline: auto;
-  }
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* 方形影片的限寬。不限的話在寬螢幕上會變成一個 900px 見方的大區塊。 */
