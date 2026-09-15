@@ -13,7 +13,7 @@ import About from "./pages/About.tsx";
 import DiseaseBasis from "./pages/DiseaseBasis.tsx";
 import DigitalHealth from "./pages/DigitalHealth.tsx";
 import ResearchTopic from "./pages/ResearchTopic.tsx";
-import Technology from "./pages/Technology.tsx";
+import GeneralTechnology from "./pages/GeneralTechnology.tsx";
 import TechnologyTopic from "./pages/TechnologyTopic.tsx";
 import Partnerships from "./pages/Partnerships.tsx";
 import Contact from "./pages/Contact.tsx";
@@ -64,7 +64,13 @@ export default function App() {
             />
             {/* 其餘子頁共用一個元件，靠 slug 分辨（指定 RESEARCH 要有分頁） */}
             <Route path="/research/:slug" element={<ResearchTopic />} />
-            <Route path="/technology" element={<Technology />} />
+            {/* TECHNOLOGY 同樣不再有索引頁：內容已搬到第一個子項目（指定）。
+                保留轉址的理由與 RESEARCH 相同——網址已預渲染過，刪掉會 404。 */}
+            <Route
+              path="/technology"
+              element={<Navigate to="/technology/general" replace />}
+            />
+            <Route path="/technology/general" element={<GeneralTechnology />} />
             <Route path="/technology/:slug" element={<TechnologyTopic />} />
             <Route path="/partnerships" element={<Partnerships />} />
             <Route path="/contact" element={<Contact />} />

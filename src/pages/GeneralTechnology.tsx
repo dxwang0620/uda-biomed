@@ -7,7 +7,15 @@ import Placeholder from "../components/ui/Placeholder.tsx";
 import Section from "../components/ui/Section.tsx";
 import styles from "./Technology.module.css";
 
-/* 文案來源 docs/content-technology.md */
+/**
+ * 「一般醫療研發技術」`/technology/general`。
+ *
+ * 這一頁的內容原本是 TECHNOLOGY 的索引頁（`/technology`）。依指示整份搬到
+ * TECHNOLOGY 的第一個子項目底下，索引頁不再存在——`/technology` 只剩一個
+ * 轉址（見 App.tsx），舊網址因此還是通的。與 RESEARCH 同一套處理。
+ *
+ * 文案來源 docs/content-technology.md。
+ */
 
 const STEPS = [
   {
@@ -33,13 +41,13 @@ const STEPS = [
   },
 ];
 
-export default function Technology() {
+export default function GeneralTechnology() {
   return (
     <>
       <PageHero
-        eyebrow="OUR TECHNOLOGY"
+        eyebrow="TECHNOLOGY"
         title="From Sample to Scientific Insight"
-        titleId="tech-heading"
+        titleId="general-tech-heading"
         lede="An integrated research workflow connecting laboratory processes, analytical systems and data interpretation."
         focal="center"
         media={

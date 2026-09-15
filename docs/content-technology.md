@@ -90,3 +90,19 @@ makes a result reproducible outside the run that produced it.
 
 **不編造。** 專利、申請中專利、技術授權，都需要你提供真實狀態。
 「專利申請中」也是有法律意義的措辭，不能隨手加。
+
+## TECHNOLOGY 索引頁併入第一個子項目（2026-09-15）
+
+指定「科技也是」——與 RESEARCH 同一套處理。
+
+- `src/pages/Technology.tsx` → `src/pages/GeneralTechnology.tsx`（`git mv`，內容原封不動）。
+  Hero 的 eyebrow 由 `OUR TECHNOLOGY` 改成 `TECHNOLOGY`，`titleId` 跟著改名，其餘未動。
+- `/technology/general` 現在就是原本那一頁：Integrated Research Workflow 三張卡、
+  Why It Is Built This Way、底下的佔位區塊。
+- `/technology` **保留成一條轉址**（`<Navigate replace>` 指向第一個子項目）：
+  網址已預渲染過，站內也還有幾條連結指向它（首頁的按鈕、
+  `/research/disease-basis` 的 Explore our technology、`TechnologyTopic` 的返回連結），
+  刪掉會變成 404。
+- `/technology/general` 的 meta description 由 `[待補]` 換成原 TECHNOLOGY 那一段。
+
+`/technology/digital` 仍是 `[待補]` 的共用子頁版型。

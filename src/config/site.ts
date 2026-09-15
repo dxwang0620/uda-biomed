@@ -130,7 +130,8 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     },
     "/technology/general": {
       title: `一般醫療研發技術 — ${SITE.name}`,
-      description: "[待補：一般醫療研發技術]",
+      description:
+        "An integrated research workflow connecting laboratory processes, analytical systems and data interpretation.",
     },
     "/technology/digital": {
       title: `數位醫療研發技術 — ${SITE.name}`,
