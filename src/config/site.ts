@@ -40,9 +40,39 @@ export const RESEARCH_TOPICS = [
   },
 ] as const;
 
+/**
+ * TECHNOLOGY 的兩個子頁（指定）。結構與 RESEARCH_TOPICS 相同。
+ * `to` 一律寫字面值，理由見 NAV_ITEMS 裡的說明。
+ */
+export const TECHNOLOGY_TOPICS = [
+  {
+    slug: "general",
+    to: "/technology/general",
+    zh: "一般醫療研發技術",
+  },
+  {
+    slug: "digital",
+    to: "/technology/digital",
+    zh: "數位醫療研發技術",
+  },
+] as const;
+
+/**
+ * ABOUT 的三個子項目（指定）。
+ *
+ * 這三個**不是**新頁面，而是 /about 既有區塊的錨點——那一頁本來就有
+ * 公司簡介、董事長談話與組織架構三段，再開三個空頁只會把現成的內容拆散。
+ * 所以這裡的 to 帶 #，prerender 會把帶 # 的略過（見 scripts/prerender-routes.mjs）。
+ */
+export const ABOUT_SECTIONS = [
+  { label: "關於宇達生醫", to: "/about#purpose-heading" },
+  { label: "我們有話要說", to: "/about#about-chairman-heading" },
+  { label: "宇達組織架構", to: "/about#org-heading" },
+] as const;
+
 /** 導覽項目。CTA（PARTNER WITH US）不在此列，它不是導覽項目。 */
 export const NAV_ITEMS = [
-  { label: "ABOUT", to: "/about" },
+  { label: "ABOUT", to: "/about", children: ABOUT_SECTIONS },
   {
     label: "RESEARCH",
     to: "/research",
@@ -51,7 +81,11 @@ export const NAV_ITEMS = [
        （這段註解本身也不能寫出那個樣式，否則會被抓成一條假路由。） */
     children: RESEARCH_TOPICS.map((t) => ({ label: t.zh, to: t.to })),
   },
-  { label: "TECHNOLOGY", to: "/technology" },
+  {
+    label: "TECHNOLOGY",
+    to: "/technology",
+    children: TECHNOLOGY_TOPICS.map((t) => ({ label: t.zh, to: t.to })),
+  },
   { label: "PARTNERSHIPS", to: "/partnerships" },
   { label: "CONTACT", to: "/contact" },
 ] as const;
@@ -92,6 +126,14 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     "/research/digital-health": {
       title: `數位醫療研發部門 — ${SITE.name}`,
       description: "[待補：數位醫療研發部門]",
+    },
+    "/technology/general": {
+      title: `一般醫療研發技術 — ${SITE.name}`,
+      description: "[待補：一般醫療研發技術]",
+    },
+    "/technology/digital": {
+      title: `數位醫療研發技術 — ${SITE.name}`,
+      description: "[待補：數位醫療研發技術]",
     },
     "/technology": {
       title: `Technology — ${SITE.name}`,

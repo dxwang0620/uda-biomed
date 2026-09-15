@@ -1,4 +1,4 @@
-@import './tokens.css';
+@import "./tokens.css";
 
 /* ---------- reset ---------- */
 
@@ -65,8 +65,8 @@ a {
   text-underline-offset: 0.2em;
 }
 
-ul[role='list'],
-ol[role='list'] {
+ul[role="list"],
+ol[role="list"] {
   list-style: none;
   padding: 0;
 }
@@ -170,4 +170,15 @@ ol[role='list'] {
   .mainOffset {
     padding-top: var(--header-h);
   }
+}
+
+/* 錨點目標要讓開固定的 header，否則捲過去之後標題被蓋在 header 底下。
+
+   ⚠️ 不能只掛在 `:target` 上。SPA 用 history.pushState 換網址時，
+   Chrome **不會**更新文件的 target element——實測 `h.matches(':target')`
+   是 false，scroll-margin-top 因此算出 0，標題正好被壓在 header 底下。
+   改成掛在主內容區所有帶 id 的元素上；scroll-margin 只在捲動到該元素時
+   起作用，對版面沒有其他影響。 */
+#main [id] {
+  scroll-margin-top: calc(var(--header-h) + var(--space-3));
 }

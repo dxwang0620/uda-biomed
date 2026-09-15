@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { useLocation, useNavigationType } from 'react-router-dom'
+import { useEffect } from "react";
+import { useLocation, useNavigationType } from "react-router-dom";
 
 /**
  * 換頁時把捲動位置帶回頂端。
@@ -14,11 +14,24 @@ import { useLocation, useNavigationType } from 'react-router-dom'
  * 對 prefers-reduced-motion 的使用者也不友善。
  */
 export function useScrollToTop() {
-  const { pathname } = useLocation()
-  const navigationType = useNavigationType()
+  const { pathname, hash } = useLocation();
+  const navigationType = useNavigationType();
 
   useEffect(() => {
-    if (navigationType === 'POP') return
-    window.scrollTo(0, 0)
-  }, [pathname, navigationType])
+    if (navigationType === "POP") return;
+
+    /* 帶錨點的連結（ABOUT 的三個子項目）要捲到那一段，不是捲到頂端。
+       換頁時目標元素得等新頁掛上去才存在，所以找不到就退回頂端。
+       偏移交給 CSS 的 scroll-margin-top 處理，header 是 fixed，
+       不扣掉那段高度的話標題會被蓋住。 */
+    if (hash) {
+      const el = document.getElementById(hash.slice(1));
+      if (el) {
+        el.scrollIntoView();
+        return;
+      }
+    }
+
+    window.scrollTo(0, 0);
+  }, [pathname, hash, navigationType]);
 }

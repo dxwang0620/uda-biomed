@@ -697,3 +697,30 @@ RESEARCH 底下三個子項目原本在手機選單裡直接攤開，改成可�
 > 其實只要把 `transition` 暫時關掉再量就是 140px。
 > （進一步用 `requestAnimationFrame` 去確認時，那個 iframe 直接讓 renderer 卡死。）
 > 結論：**在這個探針裡量任何帶轉場的元素，都要先關掉 `transition` 再量。**
+
+## 導覽新增 ABOUT 與 TECHNOLOGY 的子項目（2026-09-15）
+
+| 父項目 | 子項目 | 去向 |
+| --- | --- | --- |
+| ABOUT | 關於宇達生醫 / 我們有話要說 / 宇達組織架構 | `/about` 的**頁內錨點** |
+| TECHNOLOGY | 一般醫療研發技術 / 數位醫療研發技術 | `/technology/general`、`/technology/digital`（新頁，`[待補]`） |
+
+ABOUT 那三個做成錨點而不是新頁：那一頁本來就有公司簡介、董事長談話與組織架構
+三段，再開三個空頁只會把現成的內容拆散。TECHNOLOGY 那兩個沒有對應的現成內容，
+依確認開成新頁，內文全是 `[待補]`。
+
+實作上踩到的三件事：
+
+1. **prerender 會把帶 `#` 的當成路由。** `scripts/prerender-routes.mjs` 用正規式
+   從 site.ts 抓 `to:`，不濾掉的話會產生 `dist/about#org-heading/` 這種目錄。
+   已加 `.filter((r) => !r.includes('#'))`。
+2. **`:target` 在 SPA 裡不成立。** 錨點要讓開固定的 header，本來想掛
+   `:target { scroll-margin-top }`，但 Chrome 在 `history.pushState` 換網址時
+   **不會**更新文件的 target element——實測 `matches(':target')` 是 false，
+   算出來的 scroll-margin-top 是 0，標題正好被壓在 header 底下。
+   改掛 `#main [id]`，三個錨點都落在 header 下方 24px。
+3. **NavLink 的 `aria-current` 只比對 pathname。** 三個錨點的 pathname 都是
+   `/about`，在那一頁上會同時被標成「目前頁面」，讀屏唸出三個 current。
+   帶 `#` 的子項目改用一般 `Link`（見 Header 的 `SubLink`）。
+
+`useScrollToTop` 也跟著改：網址帶 hash 時捲到該元素，找不到才退回頂端。

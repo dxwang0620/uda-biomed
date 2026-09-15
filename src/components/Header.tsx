@@ -257,7 +257,38 @@ export default function Header() {
 }
 
 /**
- * 手機選單裡帶子項目的那一組（目前只有 RESEARCH）。
+ * 子項目的連結。
+ *
+ * ABOUT 的三個子項目是 /about 的頁內錨點，TECHNOLOGY 與 RESEARCH 的是獨立頁面。
+ * NavLink 的 aria-current 只比對 pathname、不看 hash——在 /about 上三個錨點
+ * 會同時被標成「目前頁面」，讀屏會唸出三個 current。所以帶 # 的改用一般 Link。
+ */
+function SubLink({
+  to,
+  className,
+  children,
+}: {
+  to: string;
+  className: string;
+  children: React.ReactNode;
+}) {
+  if (to.includes("#")) {
+    return (
+      <Link to={to} className={className} lang="zh-Hant">
+        {children}
+      </Link>
+    );
+  }
+
+  return (
+    <NavLink to={to} className={className} lang="zh-Hant">
+      {children}
+    </NavLink>
+  );
+}
+
+/**
+ * 手機選單裡帶子項目的那一組（ABOUT／RESEARCH／TECHNOLOGY）。
  *
  * 父項目維持連結、展開交給旁邊那顆箭頭鈕——與桌機下拉同一套分工。
  * 整行都做成按鈕的話，RESEARCH 那一頁在手機上就沒有入口了。
@@ -312,14 +343,13 @@ function PanelGroup({
       >
         <div className={styles.panelCollapseInner}>
           {item.children.map((child) => (
-            <NavLink
+            <SubLink
               key={child.to}
               to={child.to}
               className={styles.panelSubLink}
-              lang="zh-Hant"
             >
               {child.label}
-            </NavLink>
+            </SubLink>
           ))}
         </div>
       </div>
@@ -328,7 +358,7 @@ function PanelGroup({
 }
 
 /**
- * 帶下拉選單的導覽項目（目前只有 RESEARCH）。
+ * 帶下拉選單的導覽項目（ABOUT／RESEARCH／TECHNOLOGY）。
  *
  * 父項目維持連結：RESEARCH 本身是一個有內容的頁面，把它換成純按鈕會讓
  * 那一頁在導覽上消失。展開改用旁邊那顆箭頭鈕，它有自己的 aria-expanded／
@@ -387,9 +417,9 @@ function NavDropdown({
       <ul id={menuId} className={styles.subMenu} hidden={!open}>
         {item.children.map((child) => (
           <li key={child.to}>
-            <NavLink to={child.to} className={styles.subLink} lang="zh-Hant">
+            <SubLink to={child.to} className={styles.subLink}>
               {child.label}
-            </NavLink>
+            </SubLink>
           </li>
         ))}
       </ul>

@@ -31,6 +31,9 @@ const site = readFileSync(join(root, 'src/config/site.ts'), 'utf8')
 const routes = [...site.matchAll(/to:\s*['"](\/[^'"]*)['"]/g)]
   .map((m) => m[1])
   .filter((r) => r !== '/')
+  /* 帶 # 的是頁內錨點（ABOUT 的三個子項目），不是路由。
+     不濾掉的話會產生 dist/about#org-heading/ 這種目錄。 */
+  .filter((r) => !r.includes('#'))
 
 const unique = [...new Set(routes)]
 if (unique.length === 0) {
