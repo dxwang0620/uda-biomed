@@ -196,3 +196,18 @@ result can be traced back to the conditions that produced it.
   只有三行，再加一層展開收合是多按一次卻沒有收益
 - 選單用一般的 `<ul>` / `<a>`，**沒有用 `role="menu"`**——那組角色是給會執行
   動作的應用程式選單用的，這裡是一組連結，用一般標記讀屏才會唸成「連結，共 3 個」
+
+## RESEARCH 索引頁併入第一個子項目（2026-09-15）
+
+指定「把研究路由的內容全部搬移至第一個細項，就不要有研究了」。
+
+- `src/pages/Research.tsx` → `src/pages/DiseaseBasis.tsx`（`git mv`，內容原封不動搬過去）。
+  Hero 的 eyebrow 由 `OUR RESEARCH` 改成 `RESEARCH`，`titleId` 跟著改名，其餘未動。
+- `/research/disease-basis` 現在就是原本那一頁：Research Focus 三張卡、
+  研發焦點滑軌（FocusStack）、How We Work、Publications／Clinical Progress 兩個佔位。
+- `/research` **保留成一條轉址**（`<Navigate replace>` 指向第一個子項目），不是整條刪掉：
+  這個網址已經預渲染過，首頁的兩則消息也指向它，刪掉會變成 404。
+- `/research/disease-basis` 的 meta description 由 `[待補]` 換成原 RESEARCH 那一段。
+
+導覽不變：RESEARCH 仍是有連結的父項目，點下去經轉址落在第一個子項目。
+`/research/cancer-prevention` 仍是 `[待補]` 的共用子頁版型。

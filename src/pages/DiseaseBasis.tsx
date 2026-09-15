@@ -8,7 +8,15 @@ import Placeholder from "../components/ui/Placeholder.tsx";
 import Section from "../components/ui/Section.tsx";
 import styles from "./Research.module.css";
 
-/* 文案來源 docs/content-research.md */
+/**
+ * 「暸解疾病的基礎」`/research/disease-basis`。
+ *
+ * 這一頁的內容原本是 RESEARCH 的索引頁（`/research`）。依指示整份搬到
+ * RESEARCH 的第一個子項目底下，索引頁不再存在——`/research` 只剩一個
+ * 轉址（見 App.tsx），舊網址與名片上印過的連結因此還是通的。
+ *
+ * 文案來源 docs/content-research.md。
+ */
 
 const FOCUS = [
   {
@@ -34,13 +42,13 @@ const FOCUS = [
   },
 ];
 
-export default function Research() {
+export default function DiseaseBasis() {
   return (
     <>
       <PageHero
-        eyebrow="OUR RESEARCH"
+        eyebrow="RESEARCH"
         title="Researching Disease at Its Foundations"
-        titleId="research-heading"
+        titleId="disease-basis-heading"
         lede="Connecting molecular investigation, analytical methods and collaborative research."
         focal="center"
         media={

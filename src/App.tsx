@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/Footer.tsx";
 import Header from "./components/Header.tsx";
 import { usePageMeta } from "./hooks/usePageMeta.ts";
@@ -10,7 +10,7 @@ import {
 } from "./context/heroRegistry.ts";
 import Home from "./pages/Home.tsx";
 import About from "./pages/About.tsx";
-import Research from "./pages/Research.tsx";
+import DiseaseBasis from "./pages/DiseaseBasis.tsx";
 import DigitalHealth from "./pages/DigitalHealth.tsx";
 import ResearchTopic from "./pages/ResearchTopic.tsx";
 import Technology from "./pages/Technology.tsx";
@@ -48,7 +48,14 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/research" element={<Research />} />
+            {/* RESEARCH 不再有索引頁：內容已搬到第一個子項目（指定）。
+                保留這條轉址而不是整條刪掉——這個網址已經預渲染過，
+                首頁的消息也指向它，刪掉會變成 404。 */}
+            <Route
+              path="/research"
+              element={<Navigate to="/research/disease-basis" replace />}
+            />
+            <Route path="/research/disease-basis" element={<DiseaseBasis />} />
             {/* 數位醫療有自己的版面，必須排在 :slug 之前——
                 react-router 取第一個相符的路由，:slug 會先吃掉它。 */}
             <Route

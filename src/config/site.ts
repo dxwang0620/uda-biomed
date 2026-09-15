@@ -117,7 +117,8 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     },
     "/research/disease-basis": {
       title: `暸解疾病的基礎 — ${SITE.name}`,
-      description: "[待補：暸解疾病的基礎]",
+      description:
+        "Connecting molecular investigation, analytical methods and collaborative research.",
     },
     "/research/cancer-prevention": {
       title: `居家癌症檢測研發 — ${SITE.name}`,
