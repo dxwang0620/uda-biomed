@@ -1,13 +1,19 @@
-/* 置中，與 Research.module.css 的 .sectionCta 同一個作法。
+/* 靠右 ＋ 上方一條細分隔線（指定），像文章的「下一篇」。
 
-   上下只留一段收尾的留白，不是一整格區塊：包 <Section> 的話桌機會拿到
-   6rem×2 的內距，一條連結佔掉一整個區塊的高度太刻意。
-   下緣比上緣多一點，與 footer 之間才不會貼著。 */
+   為什麼不是置中也不包 <Section>：
+   - 包 <Section> 會拿到桌機 6rem×2 的內距，一條連結佔掉一整格太刻意
+   - 置中的版本在頁尾 CTA 底下會變成第二個「視覺焦點」，跟 CTA 打架
+
+   細線用 --color-border，與 header 捲過 hero 之後那條同一個值。 */
 .cta {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   padding-top: var(--space-3);
   padding-bottom: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  /* 線要跟內容等寬：這一塊自己就是 .container，所以線的兩端
+     對齊的是內容欄，不是視窗邊緣。 */
+  margin-top: var(--space-6);
 }
 
 /* 整條連結都斜體（指定「其他字也斜體」）。
