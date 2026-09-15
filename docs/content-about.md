@@ -330,3 +330,36 @@ PDF 共 3 頁，第 2–3 頁是各部執掌說明（每個轄下單位一句職
 **要恢復把 `SHOW_UNITS` 改成 `true` 就好**，資料（`OFFICES`、`DEPARTMENTS`）
 與 JSX 都原封不動留在檔案裡。那些內容取自
 `web_img/about/UDA_BIOMED_組織架構.pdf` 第 1 頁，不要憑記憶重打。
+
+## ABOUT 索引頁拆成三個子頁（2026-09-15）
+
+指定「about 也是」——比照 RESEARCH 與 TECHNOLOGY。這一頁的三段內容本來就
+對應導覽上的三個子項目，所以不是全部堆到第一個子項目，而是各自歸位：
+
+| 子頁 | 內容 |
+| --- | --- |
+| `/about/company` 關於宇達生醫 | 原索引頁的 hero、Our Purpose／Our Perspective、Our Approach、Founder's Philosophy、Our Story／Team 佔位、CtaBand |
+| `/about/message` 我們有話要說 | 董事長談話（整段搬過去，一字未改；⚠️ 仍是草稿） |
+| `/about/organisation` 宇達組織架構 | 組織圖 |
+
+- `src/pages/About.tsx` → `src/pages/AboutCompany.tsx`（`git mv`）。
+- `/about` 保留成轉址，指向 `/about/company`。
+- 後兩頁原本各自有 eyebrow ＋ h2 ＋ 一句話，獨立成頁後那組改由 hero 承擔，
+  區塊裡只剩內容本身，不然會有兩個層級相同的標題。
+- 這三個子項目**一度做成 `/about` 的頁內錨點**（見 design-node.md），
+  現在是真正的頁面，所以 Header 裡為錨點寫的 `SubLink`（避開 NavLink 的
+  aria-current 誤判）已經沒有 caller，一併移除。`useScrollToTop` 的 hash 處理
+  與 `#main [id]` 的 scroll-margin 留著——那兩項是通用的，不綁這次的用法。
+
+## 子頁之間的「下一個細項」（2026-09-15）
+
+指定「每頁都要有連結，點去下一個細項」。
+
+- `src/components/NextTopic.tsx`，掛在 `App` 的 `<main>` 裡、`<Routes>` 之後，
+  **不是逐頁貼一次**：八個子頁分屬五個元件（三個獨立頁、兩個共用版型），
+  逐頁貼會漏，之後新增子頁也要記得補。不在清單裡的路徑回傳 null。
+- 順序是 `site.ts` 的 `SUB_PAGES`：ABOUT 三頁 → RESEARCH 三頁 → TECHNOLOGY 兩頁，
+  最後一頁繞回開頭。**三組串成一條線而不是各自成環**——在同一組裡繞圈的話，
+  每組最後一頁只能回到剛讀過的那一頁。
+- 實測走完整圈八頁：`/about/company` → message → organisation →
+  disease-basis → cancer-prevention → digital-health → general → digital → 回到起點。

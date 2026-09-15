@@ -58,21 +58,37 @@ export const TECHNOLOGY_TOPICS = [
 ] as const;
 
 /**
- * ABOUT 的三個子項目（指定）。
+ * ABOUT 的三個子頁（指定）。
  *
- * 這三個**不是**新頁面，而是 /about 既有區塊的錨點——那一頁本來就有
- * 公司簡介、董事長談話與組織架構三段，再開三個空頁只會把現成的內容拆散。
- * 所以這裡的 to 帶 #，prerender 會把帶 # 的略過（見 scripts/prerender-routes.mjs）。
+ * 一度做成 /about 的頁內錨點——那一頁本來就有這三段內容。後來依指示
+ * 「about 也是」，比照 RESEARCH 與 TECHNOLOGY 拆成獨立頁面，索引頁只剩轉址。
+ * `to` 一律寫字面值，理由見 NAV_ITEMS 裡的說明。
  */
-export const ABOUT_SECTIONS = [
-  { label: "關於宇達生醫", to: "/about#purpose-heading" },
-  { label: "我們有話要說", to: "/about#about-chairman-heading" },
-  { label: "宇達組織架構", to: "/about#org-heading" },
+export const ABOUT_TOPICS = [
+  {
+    slug: "company",
+    to: "/about/company",
+    zh: "關於宇達生醫",
+  },
+  {
+    slug: "message",
+    to: "/about/message",
+    zh: "我們有話要說",
+  },
+  {
+    slug: "organisation",
+    to: "/about/organisation",
+    zh: "宇達組織架構",
+  },
 ] as const;
 
 /** 導覽項目。CTA（PARTNER WITH US）不在此列，它不是導覽項目。 */
 export const NAV_ITEMS = [
-  { label: "ABOUT", to: "/about", children: ABOUT_SECTIONS },
+  {
+    label: "ABOUT",
+    to: "/about",
+    children: ABOUT_TOPICS.map((t) => ({ label: t.zh, to: t.to })),
+  },
   {
     label: "RESEARCH",
     to: "/research",
@@ -90,6 +106,21 @@ export const NAV_ITEMS = [
   { label: "CONTACT", to: "/contact" },
 ] as const;
 
+/**
+ * 全站子頁的閱讀順序（指定「每頁都要有連結，點去下一個細項」）。
+ *
+ * 三組串成一條線而不是各自成環：讀完 ABOUT 的最後一頁接到 RESEARCH 的第一頁，
+ * 一路到底再繞回開頭。在同一組裡繞圈的話，最後一頁只能回到剛讀過的那一頁。
+ *
+ * 這裡不新增任何路徑字面值，全部由上面三份常數組出來——
+ * 兩邊各記一份遲早會走鐘。
+ */
+export const SUB_PAGES = [
+  ...ABOUT_TOPICS,
+  ...RESEARCH_TOPICS,
+  ...TECHNOLOGY_TOPICS,
+] as const;
+
 /** PARTNER WITH US 的去向。已確認 CONTACT 頁不做表單，故直接指向 /contact。 */
 export const CTA = { label: "PARTNER WITH US", to: "/contact" } as const;
 
@@ -104,6 +135,20 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     "/": {
       title: `${SITE.name} — ${SITE.tagline}`,
       description: SITE.description,
+    },
+    "/about/company": {
+      title: `關於宇達生醫 — ${SITE.name}`,
+      description:
+        "We investigate disease through the molecular foundations of life.",
+    },
+    "/about/message": {
+      title: `我們有話要說 — ${SITE.name}`,
+      description: "A message from the chairman of UDA BIOMED.",
+    },
+    "/about/organisation": {
+      title: `宇達組織架構 — ${SITE.name}`,
+      description:
+        "How responsibility is divided across governance, oversight and the operating departments.",
     },
     "/about": {
       title: `About — ${SITE.name}`,

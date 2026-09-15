@@ -257,37 +257,6 @@ export default function Header() {
 }
 
 /**
- * 子項目的連結。
- *
- * ABOUT 的三個子項目是 /about 的頁內錨點，TECHNOLOGY 與 RESEARCH 的是獨立頁面。
- * NavLink 的 aria-current 只比對 pathname、不看 hash——在 /about 上三個錨點
- * 會同時被標成「目前頁面」，讀屏會唸出三個 current。所以帶 # 的改用一般 Link。
- */
-function SubLink({
-  to,
-  className,
-  children,
-}: {
-  to: string;
-  className: string;
-  children: React.ReactNode;
-}) {
-  if (to.includes("#")) {
-    return (
-      <Link to={to} className={className} lang="zh-Hant">
-        {children}
-      </Link>
-    );
-  }
-
-  return (
-    <NavLink to={to} className={className} lang="zh-Hant">
-      {children}
-    </NavLink>
-  );
-}
-
-/**
  * 手機選單裡帶子項目的那一組（ABOUT／RESEARCH／TECHNOLOGY）。
  *
  * 父項目維持連結、展開交給旁邊那顆箭頭鈕——與桌機下拉同一套分工。
@@ -343,13 +312,14 @@ function PanelGroup({
       >
         <div className={styles.panelCollapseInner}>
           {item.children.map((child) => (
-            <SubLink
+            <NavLink
               key={child.to}
               to={child.to}
               className={styles.panelSubLink}
+              lang="zh-Hant"
             >
               {child.label}
-            </SubLink>
+            </NavLink>
           ))}
         </div>
       </div>
@@ -417,9 +387,9 @@ function NavDropdown({
       <ul id={menuId} className={styles.subMenu} hidden={!open}>
         {item.children.map((child) => (
           <li key={child.to}>
-            <SubLink to={child.to} className={styles.subLink}>
+            <NavLink to={child.to} className={styles.subLink} lang="zh-Hant">
               {child.label}
-            </SubLink>
+            </NavLink>
           </li>
         ))}
       </ul>

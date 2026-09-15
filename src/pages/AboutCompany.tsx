@@ -1,5 +1,3 @@
-import ChairmanMessage from "../components/ChairmanMessage.tsx";
-import OrgChart from "../components/OrgChart.tsx";
 import PageHero from "../components/PageHero.tsx";
 import Card from "../components/ui/Card.tsx";
 import CtaBand from "../components/ui/CtaBand.tsx";
@@ -7,8 +5,17 @@ import Placeholder from "../components/ui/Placeholder.tsx";
 import Section from "../components/ui/Section.tsx";
 import styles from "./About.module.css";
 
-/* 文案來源 docs/content-about.md。
-   [稿] = 設計稿既有文字；[草稿] = 待你潤稿；[待補] 一律用 <Placeholder>。 */
+/**
+ * 「關於宇達生醫」`/about/company`。
+ *
+ * 這一頁原本是 ABOUT 的索引頁（`/about`）。依指示比照 RESEARCH 與 TECHNOLOGY
+ * 拆到子項目底下，索引頁只剩轉址（見 App.tsx）。
+ * 原本同一頁的另外兩段各自獨立成頁：董事長談話 → `/about/message`、
+ * 組織架構 → `/about/organisation`，內容整段搬過去，沒有改動。
+ *
+ * 文案來源 docs/content-about.md。
+ * [稿] = 設計稿既有文字；[草稿] = 待你潤稿；[待補] 一律用 <Placeholder>。
+ */
 
 /* 創辦人理念。文案逐字取自 docs/founder_philosophy.txt 的英文版
    （原檔同時有中文版，站上目前是全英文，之後要做雙語再接中文段落）。
@@ -53,7 +60,7 @@ const APPROACH = [
   },
 ];
 
-export default function About() {
+export default function AboutCompany() {
   return (
     <>
       <PageHero
@@ -157,19 +164,6 @@ export default function About() {
         <p className={styles.founderSignature}>{FOUNDER_SIGNATURE}</p>
       </Section>
 
-      {/* 組織架構。資料在 OrgChart 元件裡，之後改組織只動那一份常數。 */}
-      <Section tone="tint" labelledBy="org-heading">
-        <div className={styles.founderHead}>
-          <p className={styles.eyebrow}>ORGANISATION</p>
-          <h2 id="org-heading">Organisational Structure</h2>
-          <p className={styles.lede}>
-            How responsibility is divided across governance, oversight and the
-            seven operating departments.
-          </p>
-        </div>
-        <OrgChart />
-      </Section>
-
       <Section>
         <div className={styles.todos}>
           <Placeholder title="Our Story">
@@ -177,13 +171,6 @@ export default function About() {
           </Placeholder>
           <Placeholder title="Team">需要姓名、職稱、經歷、照片。</Placeholder>
         </div>
-      </Section>
-
-      {/* 董事長談話（指定加在最下層；首頁那份已依指示移除）。
-          深藍實底：這一頁沒有背景影片，半透明白疊在白底上等於看不見卡片邊界，
-          實底同時把這一區從前面的白／淺灰區塊區隔出來。 */}
-      <Section tone="tint">
-        <ChairmanMessage headingId="about-chairman-heading" />
       </Section>
 
       <CtaBand

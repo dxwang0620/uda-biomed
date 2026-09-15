@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/Footer.tsx";
 import Header from "./components/Header.tsx";
+import NextTopic from "./components/NextTopic.tsx";
 import { usePageMeta } from "./hooks/usePageMeta.ts";
 import { useScrollToTop } from "./hooks/useScrollToTop.ts";
 import {
@@ -9,7 +10,9 @@ import {
   HeroRegistryContext,
 } from "./context/heroRegistry.ts";
 import Home from "./pages/Home.tsx";
-import About from "./pages/About.tsx";
+import AboutCompany from "./pages/AboutCompany.tsx";
+import AboutMessage from "./pages/AboutMessage.tsx";
+import AboutOrganisation from "./pages/AboutOrganisation.tsx";
 import DiseaseBasis from "./pages/DiseaseBasis.tsx";
 import DigitalHealth from "./pages/DigitalHealth.tsx";
 import ResearchTopic from "./pages/ResearchTopic.tsx";
@@ -47,7 +50,15 @@ export default function App() {
         <main id="main" className={isHome ? undefined : "mainOffset"}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
+            {/* ABOUT 同樣不再有索引頁：三段內容各自獨立成頁（指定）。
+                轉址保留的理由與 RESEARCH／TECHNOLOGY 相同。 */}
+            <Route
+              path="/about"
+              element={<Navigate to="/about/company" replace />}
+            />
+            <Route path="/about/company" element={<AboutCompany />} />
+            <Route path="/about/message" element={<AboutMessage />} />
+            <Route path="/about/organisation" element={<AboutOrganisation />} />
             {/* RESEARCH 不再有索引頁：內容已搬到第一個子項目（指定）。
                 保留這條轉址而不是整條刪掉——這個網址已經預渲染過，
                 首頁的消息也指向它，刪掉會變成 404。 */}
@@ -76,6 +87,10 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+
+          {/* 子頁底部的「下一個細項」。放在這裡而不是逐頁貼一次，
+              不在清單裡的路徑它自己回傳 null。 */}
+          <NextTopic />
         </main>
 
         <Footer />
