@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom";
 import ArrowLink from "./ui/ArrowLink.tsx";
-import Section from "./ui/Section.tsx";
 import { SUB_PAGES } from "../config/site.ts";
 import styles from "./NextTopic.module.css";
 
@@ -9,6 +8,10 @@ import styles from "./NextTopic.module.css";
  *
  * 樣式就是 RESEARCH 那顆 `Explore our technology →`（指定「那樣就好，簡單」），
  * 所以直接用同一個 ArrowLink，不另外做一條有底色的色帶。
+ *
+ * 也不包 <Section>：那會給它一整格的上下內距（桌機 6rem×2），
+ * 一條連結佔掉一整個區塊的高度太刻意（回報「不要這麼刻意給他一大格」）。
+ * 改成只留一段收尾的留白。
  *
  * 掛在 App 的 <main> 裡、<Routes> 之後，而不是逐頁貼一次：八個子頁分屬
  * 五個元件（三個獨立頁、兩個共用版型），逐頁貼會漏，之後新增子頁也要記得補。
@@ -26,15 +29,13 @@ export default function NextTopic() {
   const next = SUB_PAGES[(i + 1) % SUB_PAGES.length];
 
   return (
-    <Section>
-      {/* 連結的名稱是「Next: 下一頁的標題」。只唸標題的話，
-          離開上下文就不知道它要去哪。 */}
-      <div className={styles.cta}>
-        <ArrowLink to={next.to}>
-          <span className="visually-hidden">Next: </span>
-          <span lang="zh-Hant">{next.zh}</span>
-        </ArrowLink>
-      </div>
-    </Section>
+    /* 連結的名稱是「Next: 下一頁的標題」。只唸標題的話，
+       離開上下文就不知道它要去哪。 */
+    <div className={`container ${styles.cta}`}>
+      <ArrowLink to={next.to}>
+        <span className="visually-hidden">Next: </span>
+        <span lang="zh-Hant">{next.zh}</span>
+      </ArrowLink>
+    </div>
   );
 }

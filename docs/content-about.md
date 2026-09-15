@@ -356,8 +356,11 @@ PDF 共 3 頁，第 2–3 頁是各部執掌說明（每個轄下單位一句職
 指定「每頁都要有連結，點去下一個細項」。
 
 - 樣式就是 RESEARCH 那顆 `Explore our technology →`（指定「那樣就好，簡單」）：
-  同一個 `ArrowLink`、置中，沒有底色色帶。一度做成一條 `--color-tint` 的色帶
-  配大字標題，太重了。
+  同一個 `ArrowLink`、置中，沒有底色色帶，**也不包 `<Section>`**——
+  那會給它一整格的上下內距（桌機 6rem×2），一條連結佔掉一整個區塊的高度
+  太刻意。現在上 24px、下 48px（下緣多一點，與 footer 之間才不會貼著），
+  整塊高 116px。走過的兩版：先是 `--color-tint` 色帶配大字標題，再是包在
+  `<Section>` 裡的 ArrowLink，兩版都太重。
 - 連結的可讀名稱是「Next: 下一頁的標題」，`Next: ` 是唯讀文字——
   只唸標題的話，離開上下文就不知道它要去哪。
 - `src/components/NextTopic.tsx`，掛在 `App` 的 `<main>` 裡、`<Routes>` 之後，

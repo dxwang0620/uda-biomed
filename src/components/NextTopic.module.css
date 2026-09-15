@@ -1,5 +1,11 @@
-/* 與 Research.module.css 的 .sectionCta 同一組值：置中、上面留一段。 */
+/* 置中，與 Research.module.css 的 .sectionCta 同一個作法。
+
+   上下只留一段收尾的留白，不是一整格區塊：包 <Section> 的話桌機會拿到
+   6rem×2 的內距，一條連結佔掉一整個區塊的高度太刻意。
+   下緣比上緣多一點，與 footer 之間才不會貼著。 */
 .cta {
   display: flex;
   justify-content: center;
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-6);
 }
