@@ -847,6 +847,32 @@
      箭頭本身維持 44×44 不動——那是觸控目標的下限，收小就按不準了。 */
   .newsItem {
     padding: var(--space-2);
+    /* 每一則等高（指定）。手機版的照片是鋪滿整列的背景，所以「圖片等高」
+       就是列等高。
+
+       高度往矮的那一階對齊（回報「太高了」）：標題兩行、摘要三行之下
+       內容最高 212px，取 216px。一度改成對齊最高的那一則（15.5rem／248px），
+       好處是標題不用截斷，但那是把每一則都拉高，不是要的。 */
+    min-height: 13.5rem;
+    align-items: stretch;
+  }
+
+  /* 內文要跟著列一起拉高，箭頭才會落在列底而不是黏在摘要下面。
+     四列＝分類／標題／摘要／箭頭，最後一列吃掉剩餘空間，
+     箭頭本身再靠 margin-top: auto 沉到底。
+     基準規則是 align-content: start，會把四列全擠在上方，所以要蓋掉。 */
+  .newsBody {
+    grid-template-rows: auto auto auto 1fr;
+    align-content: stretch;
+  }
+
+  /* 標題收到兩行。有兩則原本是三行（會多 20px），不收就對不齊。
+     line-clamp 會自己補上刪節號。 */
+  .newsTitle {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
 
   .newsExcerpt {
