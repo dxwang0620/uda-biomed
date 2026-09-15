@@ -173,10 +173,13 @@ export default function AboutCompany() {
         </div>
       </Section>
 
+      {/* 兩句依指示對調：原本大標是 Let's look at it together.、
+          小字是 Our work depends on...，現在反過來。
+          CtaBand 本身沒改，只換這一頁傳進去的兩個值。 */}
       <CtaBand
         titleId="about-cta"
-        title="Let's look at it together."
-        body="Our work depends on the questions other people bring us."
+        title="Our work depends on the questions other people bring us."
+        body="Let's look at it together."
       />
     </>
   );

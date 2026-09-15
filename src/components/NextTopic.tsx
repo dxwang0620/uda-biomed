@@ -29,11 +29,12 @@ export default function NextTopic() {
   const next = SUB_PAGES[(i + 1) % SUB_PAGES.length];
 
   return (
-    /* 連結的名稱是「Next: 下一頁的標題」。只唸標題的話，
-       離開上下文就不知道它要去哪。 */
     <div className={`container ${styles.cta}`}>
       <ArrowLink to={next.to}>
-        <span className="visually-hidden">Next: </span>
+        {/* NEXT: 改成看得見並且斜體（指定）。原本是唯讀文字。
+            斜體只給這一段拉丁字；中文沒有真正的義大利體，瀏覽器會用
+            傾斜變形硬做，字面會歪掉，所以標題維持正體。 */}
+        <span className={styles.next}>Next:</span>
         <span lang="zh-Hant">{next.zh}</span>
       </ArrowLink>
     </div>

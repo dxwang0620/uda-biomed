@@ -9,3 +9,9 @@
   padding-top: var(--space-3);
   padding-bottom: var(--space-6);
 }
+
+/* 「NEXT:」。ArrowLink 本身已經是全大寫、拉丁字體，這裡只加斜體。
+   與後面的標題之間靠 ArrowLink 的 gap（--space-1）隔開，不另外加空白字元。 */
+.next {
+  font-style: italic;
+}
