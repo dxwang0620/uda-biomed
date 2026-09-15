@@ -162,8 +162,8 @@ result can be traced back to the conditions that produced it.
 
 | 子頁 | 網址 |
 | --- | --- |
-| 研究疾病的基礎 | `/research/disease-basis` |
-| 研究如何預防癌症 | `/research/cancer-prevention` |
+| 暸解疾病的基礎 | `/research/disease-basis` |
+| 居家癌症檢測研發 | `/research/cancer-prevention` |
 | 研究數位醫療 | `/research/digital-health` |
 
 標題是你給的原話，沒有改寫也沒有自行翻成英文。

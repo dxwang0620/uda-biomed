@@ -76,7 +76,7 @@
    漸層是 background-image，沒辦法像 background-color 那樣平滑轉場，
    所以固定畫在 .header 上、改用 opacity 過渡。 */
 .header::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -163,8 +163,8 @@
 }
 
 /* 目前所在頁面：底部橫線。用 ::after 才不會在切換時擠動版面。 */
-.navLink[aria-current='page']::after {
-  content: '';
+.navLink[aria-current="page"]::after {
+  content: "";
   position: absolute;
   left: 0;
   right: 0;
@@ -243,7 +243,7 @@
 }
 
 /* 連結全部轉粗體後，當前頁不能再靠字重區分，改用底線。 */
-.panelLink[aria-current='page'] {
+.panelLink[aria-current="page"] {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 6px;
@@ -282,7 +282,7 @@
   transition: transform var(--duration) var(--ease);
 }
 
-.navToggle[aria-expanded='true'] svg {
+.navToggle[aria-expanded="true"] svg {
   transform: rotate(180deg);
 }
 
@@ -328,7 +328,7 @@
   background: var(--color-tint);
 }
 
-.subLink[aria-current='page'] {
+.subLink[aria-current="page"] {
   font-weight: 700;
   color: var(--color-primary);
 }
@@ -344,10 +344,79 @@
   display: contents;
 }
 
+/* 父項目那一行：連結佔滿剩餘寬度，箭頭鈕收在右端。
+   底線由這一行負責，不再由連結負責，不然線只會畫到連結的寬度為止。 */
+.panelRow {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panelRow .panelLink {
+  flex: 1 1 auto;
+  border-bottom: none;
+}
+
+/* 展開／收合鈕。44×44 是觸控目標的下限；
+   負的右邊距讓圖示視覺上對齊選單右緣，而不是留出一格空白。 */
+.panelToggle {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  color: var(--color-navy);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.panelToggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -4px;
+  border-radius: var(--radius-sm);
+}
+
+.panelChevron {
+  transition: transform 0.22s ease;
+}
+
+.panelToggle[aria-expanded="true"] .panelChevron {
+  transform: rotate(180deg);
+}
+
+/* 收合區。grid-template-rows 由 0fr 轉 1fr，是能對「高度 auto」做轉場的做法；
+   用 max-height 猜一個上限，在子項目變多時會截斷。與 ChairmanMessage 同一套。
+   內層必須 overflow:hidden 且 min-height:0，格線列才收得起來。 */
+.panelCollapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.24s ease;
+}
+
+.panelCollapseOpen {
+  grid-template-rows: 1fr;
+}
+
+.panelCollapseInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panelChevron,
+  .panelCollapse {
+    transition: none;
+  }
+}
+
 .panelSubLink {
   display: block;
   /* 縮排標示層級。左邊那條線讓三個子項目在視覺上收成一組 */
   margin-left: var(--space-2);
+  /* 第一個子項目與上方那條底線之間要有呼吸 */
+  margin-top: 0;
   padding: 11px var(--space-2);
   font-family: var(--font-body);
   font-size: var(--text-small);
@@ -357,7 +426,7 @@
   border-left: 2px solid var(--color-border);
 }
 
-.panelSubLink[aria-current='page'] {
+.panelSubLink[aria-current="page"] {
   font-weight: 700;
   color: var(--color-primary);
   border-left-color: var(--color-primary);

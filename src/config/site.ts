@@ -26,17 +26,17 @@ export const RESEARCH_TOPICS = [
   {
     slug: "disease-basis",
     to: "/research/disease-basis",
-    zh: "研究疾病的基礎",
+    zh: "暸解疾病的基礎",
   },
   {
     slug: "cancer-prevention",
     to: "/research/cancer-prevention",
-    zh: "研究如何預防癌症",
+    zh: "居家癌症檢測研發",
   },
   {
     slug: "digital-health",
     to: "/research/digital-health",
-    zh: "數位醫療研發部",
+    zh: "數位醫療研發部門",
   },
 ] as const;
 
@@ -82,16 +82,16 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
         "Connecting molecular investigation, analytical methods and collaborative research.",
     },
     "/research/disease-basis": {
-      title: `研究疾病的基礎 — ${SITE.name}`,
-      description: "[待補：研究疾病的基礎]",
+      title: `暸解疾病的基礎 — ${SITE.name}`,
+      description: "[待補：暸解疾病的基礎]",
     },
     "/research/cancer-prevention": {
-      title: `研究如何預防癌症 — ${SITE.name}`,
-      description: "[待補：研究如何預防癌症]",
+      title: `居家癌症檢測研發 — ${SITE.name}`,
+      description: "[待補：居家癌症檢測研發]",
     },
     "/research/digital-health": {
-      title: `數位醫療研發部 — ${SITE.name}`,
-      description: "[待補：數位醫療研發部]",
+      title: `數位醫療研發部門 — ${SITE.name}`,
+      description: "[待補：數位醫療研發部門]",
     },
     "/technology": {
       title: `Technology — ${SITE.name}`,

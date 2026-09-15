@@ -676,3 +676,24 @@ Actions workflow（`actions/deploy-pages`），Source 必須是 **GitHub Actions
 
 > 分辨方式：base 設錯的話，線上 HTML 會是 build 產物（有 hash 過的 assets 路徑），
 > 只是路徑前綴錯而 404；Source 設錯的話，線上 HTML 直接就是原始碼那一份。
+
+## 手機選單的子項目收合（2026-09-15）
+
+RESEARCH 底下三個子項目原本在手機選單裡直接攤開，改成可收合（指定「手機版要有收合箭頭」）。
+
+- 父項目**維持連結**，展開交給旁邊那顆箭頭鈕——與桌機下拉同一套分工。
+  整行都做成按鈕的話，RESEARCH 那一頁在手機上就沒有入口了。
+- 箭頭鈕 44×44（觸控目標下限），帶 `aria-expanded` / `aria-controls`，
+  只有圖示所以另外給一段唯讀的名稱（「展開／收合 RESEARCH 子選單」）。
+- 開啟選單時，**自動展開目前所在頁所屬的那一組**。全部收起來的話，
+  看不到自己在哪一頁底下，而那正是 `aria-current` 要標的資訊。
+- 收合用 `grid-template-rows: 0fr → 1fr`（與 ChairmanMessage 同一套），
+  `prefers-reduced-motion: reduce` 時整組轉場關掉。
+- 父項目那一行的底線改由 `.panelRow` 負責，不再由 `.panelLink` 負責——
+  留在連結上的話，線只會畫到連結的寬度為止，右邊那顆箭頭鈕底下會斷掉。
+
+> ⚠️ **量測環境的陷阱**：375px 的 iframe 探針裡，CSS transition 不會前進，
+> 停在起始值。展開後量到的高度因此是 0，看起來像 `grid-template-rows` 壞掉——
+> 其實只要把 `transition` 暫時關掉再量就是 140px。
+> （進一步用 `requestAnimationFrame` 去確認時，那個 iframe 直接讓 renderer 卡死。）
+> 結論：**在這個探針裡量任何帶轉場的元素，都要先關掉 `transition` 再量。**

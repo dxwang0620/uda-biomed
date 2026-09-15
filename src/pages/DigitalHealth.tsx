@@ -1,12 +1,12 @@
-import FlowRail, { type FlowStep } from '../components/FlowRail.tsx'
-import SectionNav, { type SectionLink } from '../components/SectionNav.tsx'
-import VideoBlock from '../components/VideoBlock.tsx'
-import Section from '../components/ui/Section.tsx'
-import ArrowLink from '../components/ui/ArrowLink.tsx'
-import styles from './DigitalHealth.module.css'
+import FlowRail, { type FlowStep } from "../components/FlowRail.tsx";
+import SectionNav, { type SectionLink } from "../components/SectionNav.tsx";
+import VideoBlock from "../components/VideoBlock.tsx";
+import Section from "../components/ui/Section.tsx";
+import ArrowLink from "../components/ui/ArrowLink.tsx";
+import styles from "./DigitalHealth.module.css";
 
 /**
- * 數位醫療研發部。
+ * 數位醫療研發部門。
  *
  * 版型參考 exo-one.com 的核心技術頁（指定）：側邊章節錨點 ＋ 一路往下的
  * 圖文說明，而不是輪播式的行銷頁。另外加上該頁沒有的兩樣東西：
@@ -28,36 +28,36 @@ import styles from './DigitalHealth.module.css'
  */
 
 const NAV: SectionLink[] = [
-  { id: 'what', label: 'AFL System' },
-  { id: 'how', label: 'How it works' },
-  { id: 'applications', label: 'Applications' },
-  { id: 'video', label: 'Video' },
-]
+  { id: "what", label: "AFL System" },
+  { id: "how", label: "How it works" },
+  { id: "applications", label: "Applications" },
+  { id: "video", label: "Video" },
+];
 
 /* 流程四步。取自 about_img/digital_healthcare 圖面上既有的中文標籤
    （S__216956956／959 的底排），不是我擬的詞。 */
 const FLOW: FlowStep[] = [
   {
-    zh: '氣味偵測',
-    en: 'Odour sensing',
-    body: 'Air or breath passes over the chip, where the sample meets the sensing layer.',
+    zh: "氣味偵測",
+    en: "Odour sensing",
+    body: "Air or breath passes over the chip, where the sample meets the sensing layer.",
   },
   {
-    zh: 'AI 分析',
-    en: 'AI analysis',
-    body: 'The resulting pattern is compared against known patterns rather than read as a single value.',
+    zh: "AI 分析",
+    en: "AI analysis",
+    body: "The resulting pattern is compared against known patterns rather than read as a single value.",
   },
   {
-    zh: '即時警示',
-    en: 'Real-time alert',
-    body: 'When a pattern falls outside the expected range, the device reports it immediately.',
+    zh: "即時警示",
+    en: "Real-time alert",
+    body: "When a pattern falls outside the expected range, the device reports it immediately.",
   },
   {
-    zh: '自動應變',
-    en: 'Automated response',
-    body: 'Connected systems can act on that report — cutting power, closing a valve, or notifying someone.',
+    zh: "自動應變",
+    en: "Automated response",
+    body: "Connected systems can act on that report — cutting power, closing a valve, or notifying someone.",
   },
-]
+];
 
 /* 五大應用方向。**文案由你提供**（2026-09-11），英文是翻譯，見
    docs/content-digital-health.md 的對照表。
@@ -67,41 +67,41 @@ const FLOW: FlowStep[] = [
    dh-3／dh-5／dh-7／dh-8 目前沒有用到，留著隨時可換。 */
 const CATEGORIES = [
   {
-    key: 'medical',
-    en: 'Medical',
-    zh: '醫療與健康',
-    body: 'Analysing human breath and volatile biomarkers, exploring what non-invasive scent analysis might make possible.',
-    image: 'dh-1',
+    key: "medical",
+    en: "Medical",
+    zh: "醫療與健康",
+    body: "Analysing human breath and volatile biomarkers, exploring what non-invasive scent analysis might make possible.",
+    image: "dh-1",
   },
   {
-    key: 'food',
-    en: 'Food safety',
-    zh: '食品安全',
-    body: 'From freshness and changes in quality through to abnormal odours and signs of contamination, opening up non-destructive scent monitoring.',
-    image: 'dh-2',
+    key: "food",
+    en: "Food safety",
+    zh: "食品安全",
+    body: "From freshness and changes in quality through to abnormal odours and signs of contamination, opening up non-destructive scent monitoring.",
+    image: "dh-2",
   },
   {
-    key: 'environment',
-    en: 'Environment',
-    zh: '環境監測',
-    body: 'Continuously sensing abnormal odours and chemical signals in the air, for indoor, industrial and environmental monitoring.',
-    image: 'dh-6',
+    key: "environment",
+    en: "Environment",
+    zh: "環境監測",
+    body: "Continuously sensing abnormal odours and chemical signals in the air, for indoor, industrial and environmental monitoring.",
+    image: "dh-6",
   },
   {
-    key: 'safety',
-    en: 'Safety',
-    zh: '安全防護',
-    body: 'Building detection models for hazardous gases, abnormal chemicals and particular scent patterns, so that a system can notice a problem early.',
-    image: 'dh-4',
+    key: "safety",
+    en: "Safety",
+    zh: "安全防護",
+    body: "Building detection models for hazardous gases, abnormal chemicals and particular scent patterns, so that a system can notice a problem early.",
+    image: "dh-4",
   },
   {
-    key: 'security',
-    en: 'Security',
-    zh: '智慧安全',
-    body: 'Combining scent sensing with AI analysis to explore the identification of narcotics, dangerous substances and other distinctive scents.',
-    image: 'dh-9',
+    key: "security",
+    en: "Security",
+    zh: "智慧安全",
+    body: "Combining scent sensing with AI analysis to explore the identification of narcotics, dangerous substances and other distinctive scents.",
+    image: "dh-9",
   },
-]
+];
 
 export default function DigitalHealth() {
   return (
@@ -140,9 +140,9 @@ export default function DigitalHealth() {
           <p className={styles.eyebrow}>RESEARCH</p>
           {/* 英文主標＋中文副標，與站上其他雙語標題同一個處理 */}
           <h1 className={styles.title}>
-            Digital Health R&amp;D
+            WHAT DO YOU THINK IT CAN DETECT ?
             <span className={styles.titleZh} lang="zh-Hant">
-              數位醫療研發部
+              數位醫療研發部門
             </span>
           </h1>
           <p className={styles.lede}>
@@ -167,19 +167,17 @@ export default function DigitalHealth() {
                 </span>
               </h2>
 
-              <p className={styles.leadIn}>
-                Humans cannot see scent.
-              </p>
+              <p className={styles.leadIn}>Humans cannot see scent.</p>
               <p className={styles.prose}>
                 But many substances, once they enter the air, leave behind a
-                distinctive volatile chemical signal. AFL System turns the sense of
-                smell into data.
+                distinctive volatile chemical signal. AFL System turns the sense
+                of smell into data.
               </p>
               <p className={styles.prose}>
-                Through a new sensing architecture, signal analysis and artificial
-                intelligence models, AFL sets out to build an intelligent olfactory
-                system — one that can sense, identify and analyse the scent
-                characteristics of an environment.
+                Through a new sensing architecture, signal analysis and
+                artificial intelligence models, AFL sets out to build an
+                intelligent olfactory system — one that can sense, identify and
+                analyse the scent characteristics of an environment.
               </p>
 
               {/* 圖文並排。左圖右文，窄螢幕自動堆疊。 */}
@@ -211,8 +209,8 @@ export default function DigitalHealth() {
             <section id="how" className={styles.block}>
               <h2>How it works</h2>
               <p className={styles.prose}>
-                The same four steps run in every application below. What changes is
-                where the device sits and who receives the alert.
+                The same four steps run in every application below. What changes
+                is where the device sits and who receives the alert.
               </p>
 
               {/* 窄螢幕做成橫向滑軌（指定），768 以上回到四欄並排。 */}
@@ -265,9 +263,7 @@ export default function DigitalHealth() {
 
             <section id="video" className={styles.block}>
               <h2>Video</h2>
-              <p className={styles.prose}>
-                The chip itself, up close.
-              </p>
+              <p className={styles.prose}>The chip itself, up close.</p>
               {/* 素材是 720×720 的方形產品動畫，所以框也走 1:1；
                   外面再限寬，不然方形影片在寬螢幕上會高得離譜。 */}
               <div className={styles.videoWrap}>
@@ -287,5 +283,5 @@ export default function DigitalHealth() {
         </div>
       </Section>
     </>
-  )
+  );
 }
