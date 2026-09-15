@@ -10,8 +10,13 @@
   padding-bottom: var(--space-6);
 }
 
-/* 「NEXT:」。ArrowLink 本身已經是全大寫、拉丁字體，這裡只加斜體。
-   與後面的標題之間靠 ArrowLink 的 gap（--space-1）隔開，不另外加空白字元。 */
-.next {
+/* 整條連結都斜體（指定「其他字也斜體」）。
+   「NEXT:」與後面的標題之間靠 ArrowLink 的 gap（--space-1）隔開，
+   不另外加空白字元。
+
+   ⚠️ 中文沒有真正的義大利體，瀏覽器是把正體硬傾斜（synthetic oblique），
+   筆畫會跟著歪。已回報過這件事，仍指定要斜體，所以照做。
+   選擇器下在 .cta 底下的連結上，不是改 ArrowLink——那顆元件還有別處在用。 */
+.cta a {
   font-style: italic;
 }

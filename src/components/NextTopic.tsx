@@ -31,10 +31,9 @@ export default function NextTopic() {
   return (
     <div className={`container ${styles.cta}`}>
       <ArrowLink to={next.to}>
-        {/* NEXT: 改成看得見並且斜體（指定）。原本是唯讀文字。
-            斜體只給這一段拉丁字；中文沒有真正的義大利體，瀏覽器會用
-            傾斜變形硬做，字面會歪掉，所以標題維持正體。 */}
-        <span className={styles.next}>Next:</span>
+        {/* NEXT: 改成看得見（指定）。原本是唯讀文字。
+            斜體下在 .cta 的連結上，整條含中文標題都斜體（指定）。 */}
+        <span>Next:</span>
         <span lang="zh-Hant">{next.zh}</span>
       </ArrowLink>
     </div>
