@@ -821,23 +821,42 @@
 /* ---------- 手機版的消息區塊（指定） ---------- */
 
 /* 這一段刻意用 max-width，與檔案其他地方的 mobile-first 相反。
-   理由：這兩條只在手機成立，寫成基準值就得在 768 再寫一組還原，
+   理由：這幾條只在手機成立，寫成基準值就得在 768 再寫一組還原，
    而還原 display 要把 .newsItem 的 grid 值抄第二份——抄錯就壞。
    位置必須留在檔案最後：與前面的 .newsBlock／.newsItem 同權重，
-   CSS Modules 依原始順序輸出，後面的才蓋得掉。 */
-@media (max-width: 767px) {
-  /* 整塊收窄（指定）。滿版時卡片邊緣貼著容器內距，看起來與頁面等寬；
-     留出左右各約 6%，這一塊才從背景裡浮起來。
-     30rem 的上限是給 430–767px 的機型用的，不然收窄比例會讓它太寬。 */
-  .newsBlock {
-    width: 88%;
-    max-width: 30rem;
-    margin-inline: auto;
-  }
+   CSS Modules 依原始順序輸出，後面的才蓋得掉。
 
+   ⚠️ 一度把整塊收窄到 88%／30rem，讓卡片從背景裡浮起來，
+   但回報「整個區塊回復跟最初一樣大、不用縮減」——已移除，維持滿版。 */
+@media (max-width: 767px) {
   /* 解決方案分析只列三則。第四則之後仍在 DOM 裡但不算進無障礙樹，
      桌機（≥768）維持六則。 */
   .newsListTrim > li:nth-child(n + 4) {
     display: none;
+  }
+
+  /* 每一則矮一點（指定「裡面的圖片高度不用太高」）。
+
+     手機版的照片是鋪滿整列的背景，所以「照片的高度」就是這一列的高度，
+     而列高完全由文字決定——收高度只能從文字下手，不能給照片一個固定高度
+     （那會讓文字溢出卡片）。三件事一起做：
+       1. 摘要收到三行（line-clamp），原本最長到五行
+       2. 內距由 24px 收到 16px
+       3. 箭頭與摘要之間的留白由 16px 收到 8px
+
+     箭頭本身維持 44×44 不動——那是觸控目標的下限，收小就按不準了。 */
+  .newsItem {
+    padding: var(--space-2);
+  }
+
+  .newsExcerpt {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .newsCta {
+    padding-top: var(--space-1);
   }
 }
