@@ -458,6 +458,11 @@
   overscroll-behavior: contain;
 }
 
+/* 捲軸寬度。列表的左內距要補上同一個值才會左右對稱，見 .newsList。 */
+.newsScroll {
+  --news-scrollbar: 6px;
+}
+
 /* 捲軸只在滑到區塊上時出現。
 
    寬度（6px）永遠保留，只切換 thumb 的顏色——若改成 hover 才給寬度，
@@ -470,7 +475,7 @@
    路徑而整組忽略 ::-webkit-scrollbar。所以標準屬性放進
    @supports not selector(::-webkit-scrollbar)，只給 Firefox。 */
 .newsScroll::-webkit-scrollbar {
-  width: 6px;
+  width: var(--news-scrollbar);
 }
 
 .newsScroll::-webkit-scrollbar-track {
@@ -526,7 +531,14 @@
   gap: 0;
   width: 100%;
   margin: 0;
-  padding: 0 var(--space-2) 0 0;
+  /* 左右留白要對稱。
+
+     ⚠️ 捲軸吃掉右邊 6px（.newsScroll 的 ::-webkit-scrollbar 固定保留寬度），
+     所以「左右各給一樣的 padding」實際上是左窄右寬——回報「因為滾輪的關係
+     沒有很置中」。左邊要多補一個捲軸的寬度，兩側的視覺留白才相等：
+     左 8+6=14、右 8+6(捲軸)=14。 */
+  padding-inline: calc(var(--space-1) + var(--news-scrollbar))
+    var(--space-1);
   list-style: none;
 }
 
