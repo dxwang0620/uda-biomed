@@ -1,5 +1,9 @@
-/* 數字統計。手機兩格、900 以上四格（指定）。
-   兩格之後每格寬度變成兩倍多，字級與內距可以大幅放大。 */
+/* 數字統計。**直排，每格吃滿寬度**（指定）。
+
+   比例照「One Technology. Multiple Possibilities.」底下那幾張應用類別卡：
+   桌機 `aspect-ratio: 21 / 9`、窄螢幕不綁比例改用 `min-height`。
+   原本是「所有寬度都橫排兩格、第三格跨滿」，但兩格與一格的寬度不同，
+   沒辦法共用同一個 21:9——要套那個比例，三格就得同寬。 */
 
 .wrap {
   margin-top: var(--space-4);
@@ -7,8 +11,8 @@
 
 .grid {
   display: grid;
-  /* 所有寬度都橫排兩格 */
-  grid-template-columns: repeat(2, 1fr);
+  /* 一排一格。三格同寬，才有辦法共用同一個長寬比 */
+  grid-template-columns: 1fr;
   gap: var(--space-2);
   margin: 0;
   padding: 0;
@@ -17,17 +21,7 @@
   perspective: 1200px;
 }
 
-/* 奇數個時，最後一格跨滿整列。
-
-   「所有寬度都橫排兩格」是指定的排法，但項目數變成 3 之後，
-   最後一格會單獨佔半排、右邊空一塊，看起來像少了一格。
-   跨滿之後那一列是完整的，也不必為了湊數去補一個佔位格。
-   用 :last-child:nth-child(odd) 而不是寫死第 3 格——之後增減項目自動適應。 */
-.cell:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
-}
-
-/* 900 以上維持兩格（指定），只把間距放大。
+/* 寬螢幕把格與格之間拉開一點。
    格子高度的覆寫要放在 .cell 之後，見檔案下方 */
 @media (min-width: 900px) {
   .grid {
@@ -44,8 +38,10 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-1);
-  /* 格子放大 */
-  min-height: clamp(9rem, 22vw, 12rem);
+  /* 窄螢幕不綁比例：21:9 在 343px 寬之下只有 147px 高，數字與兩行標籤
+     塞不下。改成下限＋內容撐高，與參考的應用類別卡同一個作法。
+     桌機的比例覆寫見檔案下方。 */
+  min-height: 11rem;
   padding: var(--space-4) var(--space-2);
   text-align: center;
   /* 依指示改成與底下「Solution Analysis」那張玻璃卡同一個濃度
@@ -230,12 +226,15 @@
   }
 }
 
-/* 兩格之後每格很寬，高度要跟著長一點才不會變成扁條。
+/* 桌機套 21:9（指定，比照應用類別卡）。
+   min-height 要一起歸零，否則兩者取大值、比例在窄一階的桌機上不會成立。
+
    這段必須排在 .cell 之後——CSS Modules 依原始順序輸出，
-   同權重下後面的贏，寫在前面的話會被 .cell 的 min-height 蓋掉 */
-@media (min-width: 900px) {
+   同權重下後面的贏，寫在前面的話會被 .cell 的 min-height 蓋掉。 */
+@media (min-width: 768px) {
   .cell {
-    min-height: 14rem;
+    aspect-ratio: 21 / 9;
+    min-height: 0;
   }
 }
 
