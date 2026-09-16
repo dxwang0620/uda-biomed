@@ -539,6 +539,13 @@
   }
 }
 
+/* 解決方案分析只列三則（指定「電腦版也要保持三個」）。
+   一度只在 767 以下生效、桌機維持六則，現在所有寬度都是三則。
+   資料仍是六則，第四則之後不算進無障礙樹。 */
+.newsListTrim > li:nth-child(n + 4) {
+  display: none;
+}
+
 /* 一列 = 縮圖 + 內容，依 index_img/part1.jpeg。
 
    手機（基準）：縮圖改成鋪滿整列的模糊背景（指定）。窄螢幕放不下並排的
@@ -835,25 +842,20 @@
     padding: var(--space-2);
   }
 
-  /* 解決方案分析只列三則。第四則之後仍在 DOM 裡但不算進無障礙樹，
-     桌機（≥768）維持六則。 */
-  .newsListTrim > li:nth-child(n + 4) {
-    display: none;
-  }
-
   /* 每一則就是一張 21:9 的卡（指定，比例比照上面那三格數字）。
 
      手機版的照片是鋪滿整列的背景，所以「圖片的長寬比」就是這一列的長寬比，
      給 aspect-ratio 就同時解決了兩件事。min-height 要一起歸零，
      否則兩者取大值、比例不會成立。
 
-     ⚠️ 代價：375px 下這一則只有約 133px 高，**摘要塞不下**，
-     手機版因此不顯示摘要（已確認）。右下角要留給箭頭，所以整則多一段
-     右內距，文字不會跑到箭頭底下。 */
+     高度很緊：375px 下只有約 122px。內距因此收到 12px，摘要收到一行，
+     才排得進去（實測 分類 20 ＋ 標題兩行 41 ＋ 摘要一行 20 ＋ 列距 8
+     ＋ 上下內距 24 ＝ 113px）。右下角要留給箭頭，所以整則多一段右內距，
+     文字不會跑到箭頭底下。 */
   .newsItem {
     aspect-ratio: 21 / 9;
     min-height: 0;
-    padding: var(--space-2);
+    padding: 12px;
     padding-right: 56px;
   }
 
@@ -865,9 +867,13 @@
     overflow: hidden;
   }
 
-  /* 摘要在 21:9 之下沒有空間，見上面的說明 */
+  /* 摘要收到一行。一度整段收掉（21:9 之下確實排不進去），
+     但回報「裡面的文案不見了」——改成內距收緊、摘要留一行。 */
   .newsExcerpt {
-    display: none;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
   }
 
   /* 箭頭改成壓在右下角。留在文件流裡的話它會佔掉一整列的高度，
@@ -875,8 +881,8 @@
      44×44 維持不動——那是觸控目標的下限。 */
   .newsCta {
     position: absolute;
-    right: var(--space-2);
-    bottom: var(--space-2);
+    right: 12px;
+    bottom: 12px;
     margin: 0;
     padding: 0;
   }
