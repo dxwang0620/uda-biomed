@@ -829,45 +829,35 @@
    ⚠️ 一度把整塊收窄到 88%／30rem，讓卡片從背景裡浮起來，
    但回報「整個區塊回復跟最初一樣大、不用縮減」——已移除，維持滿版。 */
 @media (max-width: 767px) {
+  /* 外框內距由 32px 收到 16px（指定）。每一則因此寬 32px，
+     21:9 之下高度也跟著多 14px，文字比較好塞。 */
+  .newsBlock {
+    padding: var(--space-2);
+  }
+
   /* 解決方案分析只列三則。第四則之後仍在 DOM 裡但不算進無障礙樹，
      桌機（≥768）維持六則。 */
   .newsListTrim > li:nth-child(n + 4) {
     display: none;
   }
 
-  /* 每一則矮一點（指定「裡面的圖片高度不用太高」）。
+  /* 每一則就是一張 21:9 的卡（指定，比例比照上面那三格數字）。
 
-     手機版的照片是鋪滿整列的背景，所以「照片的高度」就是這一列的高度，
-     而列高完全由文字決定——收高度只能從文字下手，不能給照片一個固定高度
-     （那會讓文字溢出卡片）。三件事一起做：
-       1. 摘要收到三行（line-clamp），原本最長到五行
-       2. 內距由 24px 收到 16px
-       3. 箭頭與摘要之間的留白由 16px 收到 8px
+     手機版的照片是鋪滿整列的背景，所以「圖片的長寬比」就是這一列的長寬比，
+     給 aspect-ratio 就同時解決了兩件事。min-height 要一起歸零，
+     否則兩者取大值、比例不會成立。
 
-     箭頭本身維持 44×44 不動——那是觸控目標的下限，收小就按不準了。 */
+     ⚠️ 代價：375px 下這一則只有約 133px 高，**摘要塞不下**，
+     手機版因此不顯示摘要（已確認）。右下角要留給箭頭，所以整則多一段
+     右內距，文字不會跑到箭頭底下。 */
   .newsItem {
+    aspect-ratio: 21 / 9;
+    min-height: 0;
     padding: var(--space-2);
-    /* 每一則等高（指定）。手機版的照片是鋪滿整列的背景，所以「圖片等高」
-       就是列等高。
-
-       高度往矮的那一階對齊（回報「太高了」）：標題兩行、摘要三行之下
-       內容最高 212px，取 216px。一度改成對齊最高的那一則（15.5rem／248px），
-       好處是標題不用截斷，但那是把每一則都拉高，不是要的。 */
-    min-height: 13.5rem;
-    align-items: stretch;
+    padding-right: 56px;
   }
 
-  /* 內文要跟著列一起拉高，箭頭才會落在列底而不是黏在摘要下面。
-     四列＝分類／標題／摘要／箭頭，最後一列吃掉剩餘空間，
-     箭頭本身再靠 margin-top: auto 沉到底。
-     基準規則是 align-content: start，會把四列全擠在上方，所以要蓋掉。 */
-  .newsBody {
-    grid-template-rows: auto auto auto 1fr;
-    align-content: stretch;
-  }
-
-  /* 標題收到兩行。有兩則原本是三行（會多 20px），不收就對不齊。
-     line-clamp 會自己補上刪節號。 */
+  /* 標題收到兩行。line-clamp 會自己補上刪節號。 */
   .newsTitle {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -875,14 +865,19 @@
     overflow: hidden;
   }
 
+  /* 摘要在 21:9 之下沒有空間，見上面的說明 */
   .newsExcerpt {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
+    display: none;
   }
 
+  /* 箭頭改成壓在右下角。留在文件流裡的話它會佔掉一整列的高度，
+     133px 裡放不下分類、標題再加一顆 44px 的鈕。
+     44×44 維持不動——那是觸控目標的下限。 */
   .newsCta {
-    padding-top: var(--space-1);
+    position: absolute;
+    right: var(--space-2);
+    bottom: var(--space-2);
+    margin: 0;
+    padding: 0;
   }
 }
