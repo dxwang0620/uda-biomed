@@ -431,3 +431,63 @@
     transition: none;
   }
 }
+
+/* ---------- 釘住捲動：三張卡先翻完才繼續往下（指定） ---------- */
+
+/* 做法是「把區塊拉高三個畫面、內層 sticky 釘住、卡片列的位移綁在捲動進度上」，
+   **不是攔截滾輪事件**。攔 wheel／preventDefault 那一類的 scroll-jacking 會吃掉
+   慣性捲動、觸控板兩指、Page Down 與讀屏的移動，而且捲不動時使用者沒有退路。
+   這裡整段捲動仍然是瀏覽器原生的。
+
+   進度（--p）由元件在捲動時算出來寫進 .pin，位移與進度線都吃它。
+
+   ⚠️ **不要改用 CSS 的具名 scroll timeline**（`view-timeline-name` ＋
+   `animation-timeline: --名稱`）。實測在這個位置整條時間軸是 inactive：
+   timeline 物件建得出來、subject 與 source 都正確，但 `currentTime` 永遠是 null，
+   四種 animation-range 都一樣；同一個 subject 用 JS `new ViewTimeline()` 反而
+   立刻回報 57.41%。--p 由 JS 寫入沒有這個問題，而且 Safari／Firefox 也能跑。 */
+
+/* --p 註冊型別，值才保證是數字；沒註冊時任何一次寫入失誤都會讓整個 calc 失效。 */
+@property --p {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.pin {
+  position: relative;
+}
+
+/* 窄螢幕不釘住：手機上沒有滾輪，把三個畫面的高度壓在小螢幕上只會讓人
+   以為頁面卡住，維持原本使用者自己橫滑的卡片列。
+   prefers-reduced-motion 同樣退回橫滑。 */
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  /* 三張卡＝三個畫面的捲動距離。可捲距離是 300vh − 100vh = 200vh，
+     剛好等於 sticky 釘住的長度，位移因此在鬆開的同一刻走完。 */
+  .pin {
+    height: 300vh;
+  }
+
+  .pinInner {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    /* header 是 fixed、不佔版面，用內距讓開 */
+    padding-top: var(--header-h);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* 釘住時不要再有一層自己的橫向捲動，兩套捲動會互相打架 */
+  .viewport {
+    overflow: hidden;
+  }
+
+  /* 三張卡：走完是往左兩張卡寬加兩段間距。
+     卡片各佔 .rail 寬度的 100%（見 .card 的 flex: 0 0 100%）。
+     張數改了這裡要跟著改。 */
+  .rail {
+    transform: translateX(calc(var(--p, 0) * (-200% - var(--gap) * 2)));
+  }
+}

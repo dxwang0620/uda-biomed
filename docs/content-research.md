@@ -211,3 +211,34 @@ result can be traced back to the conditions that produced it.
 
 導覽不變：RESEARCH 仍是有連結的父項目，點下去經轉址落在第一個子項目。
 `/research/cancer-prevention` 仍是 `[待補]` 的共用子頁版型。
+
+## 研發焦點三張卡改成釘住捲動（2026-09-16）
+
+`/research/disease-basis` 指定「這三格可以透過滾輪移動，讓他先翻完三頁再往下」。
+
+做法是 **把區塊拉高三個畫面、內層 sticky 釘住、卡片列的位移綁在捲動進度上**，
+不是攔截滾輪事件。攔 `wheel` / `preventDefault` 那一類的 scroll-jacking 會吃掉
+慣性捲動、觸控板兩指、Page Down 與讀屏的移動，而且捲不動時使用者沒有退路。
+這裡整段捲動仍然是瀏覽器原生的。
+
+- `.pin` 高 `300vh`、`.pinInner` `position: sticky; height: 100vh`。
+  兩者的高度差（200vh）就是釘住的長度，位移因此在鬆開的同一刻走完。
+- 進度 `--p`（0～1）由元件在捲動時算出來寫進 `.pin`，
+  卡片列的 `translateX` 與進度線的寬度都靠繼承讀同一個值。
+- 釘住時 `.viewport` 改成 `overflow: hidden`，不讓兩套捲動打架。
+- **窄螢幕與 `prefers-reduced-motion: reduce` 不釘住**，維持原本使用者自己橫滑
+  的卡片列。手機上沒有滾輪，把三個畫面的高度壓在小螢幕上只會讓人以為頁面卡住。
+- CSS 的 media query 與元件裡的 `PIN_QUERY` 必須一字不差——對不上就會變成
+  「版面釘住了但卡片不動」或反過來。
+
+實測（1200×800）：`--p` 0 → 0.25 → 0.5 → 0.75 → 1，
+`translateX` 0 → −2304px，剛好是兩張卡寬加兩段間距（1136×2 + 16×2）；
+圓點 reached 0 → 1 → 2 → 3。375px 下 `.pin` 是自然高度 581px、`.pinInner` 不 sticky、
+`.viewport` 仍可橫向捲動，行為與改動前相同。
+
+> ⚠️ **不要改用 CSS 的具名 scroll timeline**（`view-timeline-name` ＋
+> `animation-timeline: --名稱`）。實測在這個位置整條時間軸是 inactive：
+> timeline 物件建得出來、`subject` 與 `source` 都正確，但 `currentTime` 永遠是
+> `null`，四種 `animation-range`（contain / cover / entry-exit / normal）都一樣；
+> 同一個 subject 用 JS `new ViewTimeline()` 反而立刻回報 57.41%。
+> `--p` 由 JS 寫入沒有這個問題，Safari 與 Firefox 也能跑。
