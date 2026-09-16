@@ -300,7 +300,8 @@
    .newsList 的兩欄格線解決——欄寬約 45rem，摘要一行落在可讀範圍內。 */
 .newsBlock {
   composes: card;
-  padding: var(--space-4);
+  /* 上下比左右多一階（指定「整個邊框的上下 padding 再加一點」） */
+  padding: var(--space-6) var(--space-4);
 }
 
 /* 主題標題。與底下第一則之間要有明顯的間距（指定），
@@ -431,6 +432,8 @@
 }
 
 .blockTitle {
+  /* 兩個主題標題都置中（指定） */
+  text-align: center;
   margin-bottom: var(--space-4);
   font-size: 1.375rem;
   line-height: 1.25;
@@ -512,10 +515,13 @@
 }
 
 /* 第二個主題的標題。與上一組清單之間要有明顯的段落感，
-   不然兩組會黏成一整片。 */
+   不然兩組會黏成一整片——那段距離現在全由 margin-top 負責。
+
+   分隔線上方的 padding 依指示拿掉（原本 --space-4），
+   標題因此直接接在線下方。 */
 .topicNext {
   margin-top: var(--space-6);
-  padding-top: var(--space-4);
+  padding-top: 0;
   border-top: 1px solid var(--color-on-navy-border);
 }
 
@@ -851,7 +857,7 @@
   /* 外框內距由 32px 收到 16px（指定）。每一則因此寬 32px，
      21:9 之下高度也跟著多 14px，文字比較好塞。 */
   .newsBlock {
-    padding: var(--space-2);
+    padding: var(--space-4) var(--space-2);
   }
 
   /* 每一則就是一張 21:9 的卡（指定，比例比照上面那三格數字）。
