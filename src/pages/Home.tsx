@@ -2,6 +2,7 @@ import { ArrowRight, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import HeroCarousel from "../components/HeroCarousel.tsx";
 import LatestRail from "../components/LatestRail.tsx";
+import { useHeroVideoEnabled } from "../hooks/useHeroVideoEnabled.ts";
 import HeroVideo from "../components/HeroVideo.tsx";
 import Button from "../components/ui/Button.tsx";
 import Section from "../components/ui/Section.tsx";
@@ -36,24 +37,23 @@ import styles from "./Home.module.css";
  * 刻意不含任何成果、數據、時程、臨床階段、論文、專利或合作對象：
  * 那些是 CLAUDE.md 明訂不能編的。參考網站的三個數字（影片中看似 18／27／43）
  * 一樣沒有採用。上線前需要你或客戶改寫確認。 */
+/* 三格的配圖原本是辦公環境照（snap-1～3）。依指示改成共用一支影片，
+   檔名寫在下方的 JSX 裡，所以這裡不再帶 file。 */
 const SNAPSHOT = [
   {
     n: "01",
     title: "Research organization",
     body: "Research is organized around cancer detection, with molecular recognition, material interfaces and signal analysis run as parallel workstreams rather than a single linear pipeline.",
-    file: "snap-1",
   },
   {
     n: "02",
     title: "Technical planning",
     body: "Each workstream is planned in stages, from question definition through reproducibility and interference assessment, so that a method advances only when the previous stage holds.",
-    file: "snap-2",
   },
   {
     n: "03",
     title: "Collaboration structure",
     body: "Discussions with clinical, academic and industry groups are held at defined maturity points, keeping intellectual property and co-development terms aligned with what has been validated.",
-    file: "snap-3",
   },
 ];
 
@@ -213,6 +213,10 @@ export default function Home() {
      手機上點消息區塊完全沒反應。這裡補一個按壓狀態，與四格數字同一個 hook。 */
   const news = usePress();
 
+  /* 研發快照三格共用的那支影片要不要掛上 DOM。
+     與首頁 hero 同一個 hook：prefers-reduced-motion 時只留 poster。 */
+  const snapVideo = useHeroVideoEnabled();
+
   /* 董事長談話預設收合，點藍色區塊下緣的箭頭展開。 */
 
   return (
@@ -279,26 +283,59 @@ export default function Home() {
           </h2>
 
           <ul role="list" className={styles.snapCards}>
-            {SNAPSHOT.map(({ n, title, body, file }) => (
+            {SNAPSHOT.map(({ n, title, body }) => (
               <li key={title} className={styles.snapCard}>
-                {/* 配圖是辦公環境照，與這一格的內容沒有對應關係，alt="" 當裝飾 */}
-                <picture className={styles.snapMedia}>
-                  <source
-                    srcSet={`${import.meta.env.BASE_URL}media/${file}.webp`}
-                    type="image/webp"
-                  />
-                  <img
-                    src={`${import.meta.env.BASE_URL}media/${file}.jpg`}
-                    alt=""
-                    width={800}
-                    height={450}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </picture>
-                <p className={styles.snapTag}>{n}</p>
-                <h3 className={styles.snapTitle}>{title}</h3>
-                <p className={styles.snapBody}>{body}</p>
+                {/* 三格共用同一支影片（指定）：background_video/chip.mp4 降速
+                    一倍之後的版本。三個 <video> 指向同一個檔，瀏覽器只會抓一次。
+
+                    純裝飾，aria-hidden；內容全在底下的文字上。
+                    prefers-reduced-motion 時整個 <video> 不掛上 DOM，
+                    只留 poster——擋顯示擋不住下載，所以要在 JS 這一層判斷。 */}
+                <div className={styles.snapMedia}>
+                  {snapVideo ? (
+                    <video
+                      className={styles.snapVideo}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      poster={`${import.meta.env.BASE_URL}media/snap-chip.jpg`}
+                      aria-hidden="true"
+                    >
+                      {/* mp4 排在前面：這支片 VP9 壓完比 H.264 大，
+                          瀏覽器取第一個支援的來源，順序反了就會抓到大的那個。
+                          實測 mp4 458KB、webm 349KB——webm 重壓到 crf 48 之後
+                          才比較小，所以這裡仍是 webm 優先。 */}
+                      <source
+                        src={`${import.meta.env.BASE_URL}media/snap-chip.webm`}
+                        type="video/webm"
+                      />
+                      <source
+                        src={`${import.meta.env.BASE_URL}media/snap-chip.mp4`}
+                        type="video/mp4"
+                      />
+                    </video>
+                  ) : (
+                    <img
+                      className={styles.snapVideo}
+                      src={`${import.meta.env.BASE_URL}media/snap-chip.jpg`}
+                      alt=""
+                      width={960}
+                      height={450}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
+
+                  {/* 文字內嵌在影片上（指定）。影片是淺底的工程圖，
+                      白字直接疊上去會消失，所以壓一層由下而上的深藍漸層。 */}
+                  <div className={styles.snapText}>
+                    <p className={styles.snapTag}>{n}</p>
+                    <h3 className={styles.snapTitle}>{title}</h3>
+                    <p className={styles.snapBody}>{body}</p>
+                  </div>
+                </div>
               </li>
             ))}
           </ul>

@@ -135,6 +135,46 @@ ffprobe -v error -show_entries stream=codec_type -of csv=p=0 public/media/hero.m
 
 ---
 
+
+### 研發快照三格的晶片影片（`snap-chip.*`）
+
+來源 `background_video/chip.mp4`（1280×600、6 秒、30fps、含音軌）。
+依指示**降速一倍**後用在首頁 R&D Portfolio Snapshot 三格，三格共用同一個檔。
+
+```bash
+SRC="background_video/chip.mp4"
+
+# setpts=2.0*PTS        播放時間拉長一倍：6 秒 → 12 秒
+# minterpolate          單純放慢會變成 15fps 的頓畫面，用動態補幀補回 30fps
+#   mi_mode=mci         以移動補償產生中間幀（不是複製前一幀）
+#   mc_mode=aobmc       重疊區塊補償，線條交界比較不會撕裂
+#   vsbmc=1             可變區塊大小，細線的部分切得更細
+# scale=960:450         卡片最寬約 464px，960 已足夠（dpr 2 也夠），省一半解碼成本
+VF="setpts=2.0*PTS,minterpolate=fps=30:mi_mode=mci:mc_mode=aobmc:vsbmc=1,scale=960:450:flags=lanczos"
+
+ffmpeg -y -i "$SRC" -an -filter:v "$VF" -c:v libx264 -profile:v high -crf 27 -preset slow \
+  -pix_fmt yuv420p -movflags +faststart public/media/snap-chip.mp4
+
+# ⚠️ crf 40 的 VP9 壓出來是 587KB，比 mp4 還大；重壓到 48 才降到 349KB。
+#    這支片是淺底線稿，VP9 在這種內容上不像在實景影片那麼有優勢。
+ffmpeg -y -i "$SRC" -an -filter:v "$VF" -c:v libvpx-vp9 -crf 48 -b:v 0 -row-mt 1 \
+  -deadline good -cpu-used 2 public/media/snap-chip.webm
+
+# poster —— 取第 150 格（晶片本體已經畫完的時間點）
+ffmpeg -y -i public/media/snap-chip.mp4 -vf "select='eq(n\,150)'" -vframes 1 -q:v 4 \
+  public/media/snap-chip.jpg
+```
+
+| 檔案 | 大小 |
+| --- | --- |
+| `snap-chip.webm` | 349 KB |
+| `snap-chip.mp4` | 458 KB |
+| `snap-chip.jpg` | 22 KB |
+
+三格指向同一個檔，瀏覽器只會下載一次。
+`prefers-reduced-motion: reduce` 時 `<video>` 整個不掛上 DOM，只顯示 poster
+（沿用 `useHeroVideoEnabled`）——擋顯示擋不住下載，必須在 JS 這一層判斷。
+
 ## 內頁與卡片照片
 
 原始檔在 `web_img/`（內頁 hero）與 `index_img/`（研發重點三張卡）。
