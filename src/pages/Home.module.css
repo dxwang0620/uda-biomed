@@ -265,10 +265,31 @@
   border-radius: var(--radius-sm);
 }
 
-.snapTitle {
+/* 分類。標題上方的一行小字，層級低一階 */
+.snapCategory {
   margin: var(--space-1) 0 0;
-  font-size: var(--text-body);
+  font-size: var(--text-small);
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.snapTitle {
+  margin: 2px 0 0;
+  font-size: var(--text-h2);
   font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-white);
+}
+
+/* 英文標語。全大寫、字距放寬，與站上其他眉標同一套語彙；
+   這一行是標語不是眉標，所以字級比眉標大一階。 */
+.snapTagline {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-latin);
+  font-size: var(--text-small);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: var(--tracking-eyebrow);
   color: var(--color-white);
 }
 
@@ -278,9 +299,10 @@
   color: rgba(255, 255, 255, 0.88);
 }
 
-@media (min-width: 1024px) {
+/* 兩格（指定由三格改成兩格） */
+@media (min-width: 768px) {
   .snapCards {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

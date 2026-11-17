@@ -37,23 +37,23 @@ import styles from "./Home.module.css";
  * 刻意不含任何成果、數據、時程、臨床階段、論文、專利或合作對象：
  * 那些是 CLAUDE.md 明訂不能編的。參考網站的三個數字（影片中看似 18／27／43）
  * 一樣沒有採用。上線前需要你或客戶改寫確認。 */
-/* 三格的配圖原本是辦公環境照（snap-1～3）。依指示改成共用一支影片，
-   檔名寫在下方的 JSX 裡，所以這裡不再帶 file。 */
+/* 研發快照。依指示由三格改成兩格，文案是你提供的原話，一字未改
+   （分類／標題／英文標語／中文標語）。配圖原本是辦公環境照（snap-1～3），
+   現在三格共用一支晶片影片，檔名寫在下方的 JSX 裡，所以這裡不帶 file。 */
 const SNAPSHOT = [
   {
     n: "01",
-    title: "Research organization",
-    body: "Research is organized around cancer detection, with molecular recognition, material interfaces and signal analysis run as parallel workstreams rather than a single linear pipeline.",
+    category: "數位醫療研發",
+    title: "嗅覺語言系統",
+    tagline: "THE FUTURE IS NOT JUST SEEN. IT IS SENSED.",
+    taglineZh: "未來，不只是被看見，更是被感知。",
   },
   {
     n: "02",
-    title: "Technical planning",
-    body: "Each workstream is planned in stages, from question definition through reproducibility and interference assessment, so that a method advances only when the previous stage holds.",
-  },
-  {
-    n: "03",
-    title: "Collaboration structure",
-    body: "Discussions with clinical, academic and industry groups are held at defined maturity points, keeping intellectual property and co-development terms aligned with what has been validated.",
+    category: "一般數位醫療",
+    title: "癌症檢測專案",
+    tagline: "SENSING BEYOND HUMAN PERCEPTION.",
+    taglineZh: "突破人類認知的界線。",
   },
 ];
 
@@ -283,7 +283,7 @@ export default function Home() {
           </h2>
 
           <ul role="list" className={styles.snapCards}>
-            {SNAPSHOT.map(({ n, title, body }) => (
+            {SNAPSHOT.map(({ n, category, title, tagline, taglineZh }) => (
               <li key={title} className={styles.snapCard}>
                 {/* 三格共用同一支影片（指定）：background_video/chip.mp4 降速
                     一倍之後的版本。三個 <video> 指向同一個檔，瀏覽器只會抓一次。
@@ -330,10 +330,14 @@ export default function Home() {
 
                   {/* 文字內嵌在影片上（指定）。影片是淺底的工程圖，
                       白字直接疊上去會消失，所以壓一層由下而上的深藍漸層。 */}
-                  <div className={styles.snapText}>
+                  <div className={styles.snapText} lang="zh-Hant">
                     <p className={styles.snapTag}>{n}</p>
+                    <p className={styles.snapCategory}>{category}</p>
                     <h3 className={styles.snapTitle}>{title}</h3>
-                    <p className={styles.snapBody}>{body}</p>
+                    <p className={styles.snapTagline} lang="en">
+                      {tagline}
+                    </p>
+                    <p className={styles.snapBody}>{taglineZh}</p>
                   </div>
                 </div>
               </li>
