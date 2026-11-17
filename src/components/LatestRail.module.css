@@ -2,7 +2,8 @@
 
    在那一版上實測取樣的規格：
    - 整塊沒有底色、沒有外框、沒有圓角
-   - 標題 10px / 字距 1px / 全大寫 / `rgba(240, 240, 250, 0.9)`，上方一條細線
+   - 標題 10px / 字距 1px / 全大寫 / `rgba(240, 240, 250, 0.9)`
+     （細線依指示改畫在標題下方）
    - 每一筆之間一條 1px `rgba(255, 255, 255, 0.25)` 的分隔線
    - 主要那行 16px / 400 / `rgb(240, 240, 250)`
    - 次要那行 12px / `rgba(240, 240, 250, 0.8)`
@@ -22,10 +23,12 @@
   max-width: 34rem;
 }
 
-/* 標題。規格取自參考版的 section title：小字、字距、全大寫，上方一條細線。 */
+/* 標題。規格取自參考版的 section title：小字、字距、全大寫。
+   細線在標題**下方**（指定），所以是 border-bottom 不是 border-top——
+   線同時也是標題與第一則之間的分隔，第一則上方因此不再另外畫一條。 */
 .heading {
-  padding-top: var(--space-2);
-  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   font-family: var(--font-latin);
   font-size: 0.75rem;
   font-weight: 600;
