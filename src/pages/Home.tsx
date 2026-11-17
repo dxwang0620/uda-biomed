@@ -1,7 +1,7 @@
 import { ArrowRight, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import HeroCarousel from "../components/HeroCarousel.tsx";
-import StatCounters from "../components/StatCounters.tsx";
+import LatestRail from "../components/LatestRail.tsx";
 import HeroVideo from "../components/HeroVideo.tsx";
 import Button from "../components/ui/Button.tsx";
 import Section from "../components/ui/Section.tsx";
@@ -80,34 +80,9 @@ const NEWS_THUMBS = [
   },
 ];
 
-/* 最新消息三則。**全是草稿**，依指示先擬（「幫我加三則最新消息」）。
-   刻意不含任何成果、數據、臨床階段、論文、專利或合作對象——
-   那些是 CLAUDE.md 明訂不能編的。日期同樣是排版用的假值。
-   上線前需要真實內容替換。 */
-const LATEST: NewsItem[] = [
-  /* 前兩則依指示指向實際的內頁，並用各自主題的圖。
-     ⚠️ 標題與摘要仍是草稿，寫的時候不含任何成果、數據、期別或時程。 */
-  {
-    category: "Research",
-    date: "02 Sep 2026",
-    title: "Cancer detection research: where the work currently stands",
-    excerpt:
-      "How UDA frames detection as a question of telling a real signal apart from ordinary biological variation.",
-    to: "/research",
-    thumb: "news-detection",
-    thumbAlt: "",
-  },
-  {
-    category: "Technology",
-    date: "19 Aug 2026",
-    title: "AFL System: turning scent into data that can be understood",
-    excerpt:
-      "An olfactory language sensing chip that reads the volatile chemical signals a substance leaves in the air.",
-    to: "/research/digital-health",
-    thumb: "news-afl",
-    thumbAlt: "",
-  },
-];
+/* 原本這裡還有一份 LATEST（最新消息兩則）。依指示搬到核心定位底下的
+   細線列表，資料改放在 src/components/LatestRail.tsx 裡，這裡不再保留一份——
+   兩邊各記一份文案遲早會走鐘。 */
 
 const NEWS: NewsItem[] = [
   {
@@ -282,14 +257,15 @@ export default function Home() {
           </Button>
         </p>
 
-        {/* 數字統計。刻意不放標題與出處說明（指定），所以沒有可指向的標題，
-            改用 aria-label 說明它是什麼。
-            ⚠️ 後兩個數字是佔位值，見 StatCounters 內的說明。
+        {/* 最新消息，細線列表。依指示取代原本那三格數字（全球人口／新增癌症
+            病例／研發中項目數），文案是原本排在底下 Latest News 的那兩則，
+            那一塊同時移除。刻意不放標題（沿用三格數字的作法），
+            元件內用 aria-label 說明它是什麼。
 
-            依指示排在核心定位底下。放在同一個 Section 裡而不是自成一段，
-            是為了不讓兩段的 Section 內距相加、中間空出兩倍的距離。 */}
+            位置維持在核心定位底下、同一個 Section 裡，
+            這樣兩段的 Section 內距才不會相加、中間空出兩倍的距離。 */}
         <div className={styles.statsBlock}>
-          <StatCounters />
+          <LatestRail />
         </div>
       </Section>
       {/* 企業責任那段（CORPORATE RESPONSIBILITY ＋ Protecting every life…）
@@ -396,16 +372,8 @@ export default function Home() {
                 ))}
               </ol>
 
-              {/* 第二個主題。⚠️ 三則都是草稿，見 LATEST 的說明。 */}
-              <h2 className={`${styles.blockTitle} ${styles.topicNext}`}>
-                Latest News
-              </h2>
-
-              <ol className={styles.newsList}>
-                {LATEST.map((item, i) => (
-                  <NewsRow key={item.title} item={item} thumbIndex={i + 3} />
-                ))}
-              </ol>
+              {/* 原本這裡還有第二個主題 Latest News。依指示移除——
+                  那兩則的文案搬到上面核心定位底下的細線列表（LatestRail）。 */}
             </div>
           </div>
         </div>

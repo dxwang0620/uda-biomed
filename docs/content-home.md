@@ -1428,3 +1428,25 @@ Approach 同一類；放在創辦人理念之前，剛好當那一段的引子�
 眉標 `R&D PORTFOLIO SNAPSHOT` 升格為區塊自己的 `<h2>`（樣式不變）——
 每個 Section 都要有自己的標題，原本那個 `h2` 已經跟著搬走了，
 `aria-labelledby` 也改指向它。
+
+## 三格數字換成「Latest News」細線列表（2026-11-17）
+
+指定「把底下的 Latest News 文案搬到這三格、底下的 Latest News 不要」
+「參考 spacex.com 的 upcoming launches、不需要圖片、在兩則前方加入 Latest News」。
+
+- 新元件 `src/components/LatestRail.tsx`，排在核心定位底下，
+  **取代原本的三格數字**（全球人口／全球每年新增癌症病例／研發中項目數）。
+  三格的數字與 `StatCounters` 一起退場；元件檔案留著沒刪，之後要放回來不必重寫。
+- 底下消息區塊的第二個主題 `Latest News` 整段移除，該區塊現在只剩 Solution Analysis。
+  `Home.tsx` 裡的 `LATEST` 常數一併刪掉，文案改放在 `LatestRail.tsx`——
+  兩邊各記一份遲早會走鐘。
+- 版型照 spacex.com 的 Upcoming Launches 取樣：無底色、無外框、無圓角；
+  標題 12px／字距 0.1em／全大寫，上方一條 1px `rgba(255,255,255,.25)` 細線；
+  每一筆之間一條同樣的細線；標題 16px／600，次要行 12px／`rgba(255,255,255,.8)`；
+  右側一顆箭頭；**沒有圖片**（指定）。整筆都是連結。
+- 整塊限寬 34rem：列表是縱向的，不限寬會拉到整個容器寬，而右半正好是
+  背景遮罩最淡的地方。
+
+> ⚠️ 沒有遮罩，文字直接疊在影片上。以影片最亮的畫面為最壞情況，
+> 這一段位置的遮罩殘量約 0.58–0.60，白字 **3.5–3.7:1**，未達 AA 的 4.5:1。
+> 補救選項見 docs/design-node.md。
