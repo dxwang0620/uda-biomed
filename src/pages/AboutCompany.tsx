@@ -139,6 +139,28 @@ export default function AboutCompany() {
         </ol>
       </Section>
 
+      {/* 企業責任。依指示從首頁搬過來，文案一字未改。
+
+          位置排在 Our Approach 與創辦人理念之間：這是公司層級的價值主張，
+          與上面三段（Purpose / Perspective / Approach）同一類，
+          同時也是底下創辦人理念的引子——那一段講的正是對生命的責任。
+
+          版型沿用這一頁既有的 .founderHead（眉標＋h2＋一句話），
+          與組織架構那一段同一套，不另外做一組樣式。 */}
+      <Section labelledBy="responsibility-heading">
+        <div className={styles.founderHead}>
+          <p className={styles.eyebrow}>CORPORATE RESPONSIBILITY</p>
+          <h2 id="responsibility-heading">
+            Protecting every life through responsibility
+          </h2>
+          <p className={styles.lede}>
+            UDA builds long-term trust through scientific integrity, privacy
+            governance and respect for life, advancing R&amp;D value alongside
+            social responsibility.
+          </p>
+        </div>
+      </Section>
+
       {/* 創辦人理念。這一段是全站最長的閱讀型文字，桌機分兩欄，
           行長才不會拉到難讀。 */}
       <Section labelledBy="founder-heading">

@@ -1411,3 +1411,20 @@ hover 時**九則的文字轉藍**（`--color-primary` `#0f3661`，依指示）�
 
 保留：平台整合了什麼、以及「訊號要能比對與驗證」這個重點。
 拿掉：逐項列舉（microscale engineering、signal transduction）與最後的揭露策略那一句。
+
+## 企業責任那段搬到 ABOUT（2026-11-17）
+
+`CORPORATE RESPONSIBILITY / Protecting every life through responsibility /
+UDA builds long-term trust…` 依指示搬到 **`/about/company`**，排在
+Our Approach 與 Founder's Philosophy 之間。文案一字未改。
+
+為什麼是那一頁：這是公司層級的價值主張，與那一頁的 Purpose / Perspective /
+Approach 同一類；放在創辦人理念之前，剛好當那一段的引子——創辦人理念講的
+正是對生命的責任。（另外評估過 `/about/message` 與 `/partnerships`：
+前者目前只有一塊談話引文，再加一個區塊會殘掉它的力道；後者講的是合作條件，
+契合度較低。）
+
+首頁原本那個 Section 因此只剩 **R&D Portfolio Snapshot 三格**（指定留在首頁）。
+眉標 `R&D PORTFOLIO SNAPSHOT` 升格為區塊自己的 `<h2>`（樣式不變）——
+每個 Section 都要有自己的標題，原本那個 `h2` 已經跟著搬走了，
+`aria-labelledby` 也改指向它。

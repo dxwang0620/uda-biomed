@@ -292,21 +292,15 @@ export default function Home() {
           <StatCounters />
         </div>
       </Section>
-      <Section tone="translucent" labelledBy="responsibility-heading">
-        <div className={styles.intro}>
-          <p className={styles.eyebrow}>CORPORATE RESPONSIBILITY</p>
-          <h2 id="responsibility-heading" className={styles.sectionTitle}>
-            Protecting every life through responsibility
-          </h2>
-          <p className={styles.lede}>
-            UDA builds long-term trust through scientific integrity, privacy
-            governance and respect for life, advancing R&amp;D value alongside
-            social responsibility.
-          </p>
-        </div>
-
+      {/* 企業責任那段（CORPORATE RESPONSIBILITY ＋ Protecting every life…）
+          依指示搬到 /about/company，排在 Our Approach 與創辦人理念之間。
+          這一塊因此只剩研發快照，眉標升格為區塊自己的 h2——
+          每個 Section 都要有自己的標題，原本那個 h2 已經跟著搬走了。 */}
+      <Section tone="translucent" labelledBy="snapshot-heading">
         <div className={styles.snapshot}>
-          <p className={styles.eyebrow}>R&amp;D PORTFOLIO SNAPSHOT</p>
+          <h2 id="snapshot-heading" className={styles.eyebrow}>
+            R&amp;D PORTFOLIO SNAPSHOT
+          </h2>
 
           <ul role="list" className={styles.snapCards}>
             {SNAPSHOT.map(({ n, title, body, file }) => (
